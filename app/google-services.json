@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1034660110926",
+    "firebase_url": "https://letmeattend-aed43.firebaseio.com",
+    "project_id": "letmeattend-aed43",
+    "storage_bucket": "letmeattend-aed43.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1034660110926:android:ba9b7e451cea949c",
+        "android_client_info": {
+          "package_name": "com.attendance.letmeattend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1034660110926-10q0lrvkkmrac5jo691oig1rtt9di44s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.attendance.letmeattend",
+            "certificate_hash": "ecdd61e0d69f46300dbda8ab6e102afb07383a84"
+          }
+        },
+        {
+          "client_id": "1034660110926-u1qnj5ua1v2loef3ot2s1nh3o1345pem.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiClVJ01rJBpA3sr44kJ5Dxwfm6iPXnVY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1034660110926-u1qnj5ua1v2loef3ot2s1nh3o1345pem.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

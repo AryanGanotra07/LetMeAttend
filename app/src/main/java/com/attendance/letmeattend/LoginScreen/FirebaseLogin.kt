@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.attendance.letmeattend.Maps.MapFragment
 import com.attendance.letmeattend.R
 import com.firebase.ui.auth.AuthUI
 import kotlinx.android.synthetic.main.screen_login.*
@@ -26,8 +27,8 @@ class FirebaseLogin: AppCompatActivity(),View.OnClickListener {
                     startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(
                         arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())).setTheme(R.style.FirebaseAuthUi).build(),
                         RC_SIGN_IN_GOOGLE)
-                skin_signin_textview.id->
-                    Log.i("UserScreen","Entered")
+                skin_signin_textview.id->startActivity(Intent(this@FirebaseLogin, MapFragment::class.java))
+
 
 
 
@@ -63,7 +64,7 @@ class FirebaseLogin: AppCompatActivity(),View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode== RC_SIGN_IN_GOOGLE){
             if(resultCode==Activity.RESULT_OK){
-                Log.i("UserScreen","Entered")
+                startActivity(Intent(this@FirebaseLogin, MapFragment::class.java))
             }
             else{
                 Log.i("UserScreen","Failed")
@@ -71,7 +72,8 @@ class FirebaseLogin: AppCompatActivity(),View.OnClickListener {
         }
         if(requestCode== RC_SIGN_IN_EMAIL){
             if(requestCode==Activity.RESULT_OK){
-                Log.i("UserScreen","Entered")
+
+                startActivity(Intent(this@FirebaseLogin, MapFragment::class.java))
             }
             else{
                 Log.i("UserScreen","Failed")

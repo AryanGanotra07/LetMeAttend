@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#369BFF</color>
-    <color name="colorPrimaryDark">#0A1F33</color>
+    <color name="colorPrimary">#673ab7</color>
+    <color name="colorPrimaryDark">#311b92</color>
     <color name="colorAccent">#ff00a6</color>
     <color name="windowBackground">#000022</color>
     <color name="textColorPrimary">#ffffff</color>
     <color name="colorError">#ff1744</color>
+    <color name="mapStroke">#2196f3</color>
+
+    <!-- Copied from colorpickerlibrary -->
+    <array name="material_colors">
+        <item>#F44336</item>
+        <item>#9C27B0</item>
+        <item>#3F51B5</item>
+        <item>#03A9F4</item>
+        <item>#009688</item>
+        <item>#8BC34A</item>
+        <item>#FFEB3B</item>
+        <item>#FF9800</item>
+        <item>#795548</item>
+        <item>#607D8B</item>
+    </array>
+
 
 
 </resources>

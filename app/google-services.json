@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1034660110926-a1o5h4u81kr33f760iejo83iq9gr9h2e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.attendance.letmeattend",
+            "certificate_hash": "1e7bab757b200e8ff379844c93a8cfb2fffc3a33"
+          }
+        },
+        {
           "client_id": "1034660110926-10q0lrvkkmrac5jo691oig1rtt9di44s.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

@@ -5,4 +5,28 @@
     <string name="google_login">Continue with Google</string>
     <string name="email_login">Continue with Email</string>
     <string name="skip_sign_in">\u2014\u2014OR SIGN IN LATER\u2014\u2014</string>
+    <string name="next">Next</string>
+    <string name="save">Save</string>
+    <string name="attendance_criteria">Set Attendance Criteria</string>
+    <string name="dialog_subject">Subject:</string>
+    <string name="dialog_From">From:</string>
+    <string name="dialog_to">To:</string>
+    <string name="dialog_cancel">cancel</string>
+    <string name="dialog_select_time">SELECT START TIME</string>
+    <string name="dialog_select_date">SELECT END TIME</string>
+    <string name="dialog_select_color">Select Color</string>
+    <string name="dialog_title">Add Subject</string>
+    <string name="edit_text_error">Field can\'t be empty</string>
+    <string name="time_error">Time field can\'t be empty</string>
+    <string name="choose_time">Choose Time</string>
+
+
+    <!-- Copied from colorpickerlibrary -->
+    <array name="colors">
+        <item>#3F51B5</item>
+        <item>#303F9F</item>
+        <item>#FF4081</item>
+    </array>
+
+
 </resources>

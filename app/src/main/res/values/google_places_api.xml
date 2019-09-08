@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="google_places_key" translatable="false" templateMergeStrategy="preserve">AIzaSyCELTTpxeOvEd0kqxy4knr8hscj0XxXJ-I</string>
+</resources>

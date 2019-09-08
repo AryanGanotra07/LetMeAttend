@@ -2,6 +2,7 @@ package com.attendance.letmeattend
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.FragmentActivity
 import com.attendance.letmeattend.LoginScreen.FirebaseLogin
 
 class MainActivity : AppCompatActivity() {
@@ -10,10 +11,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val  firebaseLogin:FirebaseLogin
+
 
     }
 
-    ///helloooooooooo
+
 
 }

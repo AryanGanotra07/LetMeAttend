@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center"
+
+
+
+>
+
+
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/attendance_criteria"
+            android:layout_gravity="center"
+            android:textAppearance="@style/ConnectWith"
+            android:textSize="25sp"
+
+    />
+
+
+    <com.ramotion.fluidslider.FluidSlider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            app:size="normal"
+
+
+            android:id="@+id/fluidSlider"
+            app:bar_color="@color/colorPrimary"
+            app:bubble_color="@color/colorAccent"
+            app:bubble_text_color="@color/textColorPrimary"/>
+
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/save"
+            android:padding="10dp"
+            android:layout_margin="30dp"
+            android:id="@+id/save_attendance"
+            android:onClick="onClick"
+
+    />
+
+
+
+
+
+</LinearLayout>

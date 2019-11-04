@@ -10,13 +10,13 @@ class TabLayoutAdapter(private var fm: FragmentManager, private var behavior: In
 
     override fun getItem(position: Int): Fragment {
          when(position){
-             0->return AttendanceCriteriaFragment()
-             1-> return Monday()
-             2-> return Tuesday()
-             3-> return Wednesday()
-             4-> return Thursday()
-             5-> return Friday()
-             6-> return Saturday()
+          //   0->return AttendanceCriteriaFragment()
+             0-> return Monday()
+             1-> return Tuesday()
+             2-> return Wednesday()
+             3-> return Thursday()
+             4-> return Friday()
+             5-> return Saturday()
              else->return Saturday()
          }
 
@@ -26,13 +26,13 @@ class TabLayoutAdapter(private var fm: FragmentManager, private var behavior: In
 
     override fun getPageTitle(position: Int): CharSequence? {
         when(position){
-            0->return "Attendance"
-            1-> return "Monday"
-            2-> return "Tuesday"
-            3-> return "Wednesday"
-            4-> return "Thursday"
-            5-> return "Friday"
-            6-> return "Saturday"
+            //0->return "Attendance"
+            0-> return "Monday"
+            1-> return "Tuesday"
+            2-> return "Wednesday"
+            3-> return "Thursday"
+            4-> return "Friday"
+            5-> return "Saturday"
             else->return null
         }
     }

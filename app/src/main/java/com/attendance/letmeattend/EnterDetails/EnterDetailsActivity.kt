@@ -29,7 +29,7 @@ class EnterDetailsActivity: AppCompatActivity(), SaveClickListener {
        val fragment : Fragment? = fragmentManager.findFragmentByTag("attendance");
         fragment?.let { fragmentManager.beginTransaction().remove(it).commit() }
 
-        val tabLayoutAdapter:TabLayoutAdapter= TabLayoutAdapter(fragmentManager,7)
+        val tabLayoutAdapter:TabLayoutAdapter= TabLayoutAdapter(fragmentManager,6)
         val view_pager:ViewPager=findViewById(R.id.view_pager) as ViewPager
         view_pager.adapter=tabLayoutAdapter
         tab_layout.setupWithViewPager(view_pager)

@@ -20,7 +20,7 @@ class SubjectDialogHelper {
 
 
 
-     fun addSubject(activity:Activity,alertView: View,adapter: TabLayoutAdapter,viewPager:ViewPager){
+      fun addSubject(activity:Activity,alertView: View,adapter: TabLayoutAdapter,viewPager:ViewPager){
 
         var subject:EditText=alertView.findViewById(R.id.subject) as EditText
         var save_btn=alertView.findViewById(R.id.save) as Button

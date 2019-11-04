@@ -6,6 +6,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.DatabaseError
+import java.util.logging.Handler
 
 
 
@@ -15,6 +16,12 @@ class FirebaseDatabaseLiveData(var query: DatabaseReference?) : LiveData<DataSna
 
 
     private val eventListener : MyValueEventListener = MyValueEventListener();
+    private var listenerRemovePending : Boolean = false
+    private val handler = android.os.Handler()
+    private val removeListener = Runnable {
+        query?.removeEventListener(eventListener)
+        listenerRemovePending = false
+    }
 
 
 
@@ -25,12 +32,19 @@ class FirebaseDatabaseLiveData(var query: DatabaseReference?) : LiveData<DataSna
 
     override fun onActive() {
         super.onActive()
-        query?.addValueEventListener(eventListener)
+        if(listenerRemovePending) {
+           handler.removeCallbacks(removeListener)
+        }
+        else{
+            query?.addValueEventListener(eventListener)
+        }
+        listenerRemovePending = false
     }
 
     override fun onInactive() {
         super.onInactive()
-        query?.removeEventListener(eventListener)
+        handler.postDelayed(removeListener, 2000)
+        listenerRemovePending = true
     }
 
     private inner class MyValueEventListener : ValueEventListener {

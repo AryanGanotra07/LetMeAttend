@@ -29,7 +29,7 @@ object Repository {
         })
 
     }
-    private fun getUserLiveData() : MediatorLiveData<User> {
+    public fun getUserLiveData() : MediatorLiveData<User> {
         return user;
     }
 }

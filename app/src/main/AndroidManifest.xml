@@ -19,8 +19,6 @@
         <activity android:name=".LoginScreen.FirebaseLogin"
         android:theme="@style/FirebaseAuthUi">
 
-
-
         </activity>
 
         <activity android:name=".MainActivity"/>
@@ -28,14 +26,20 @@
         android:theme="@style/FirebaseAuthUi">
 
 
+
+
         </activity>
         <activity android:name=".EnterDetails.EnterDetailsActivity"
                   android:theme="@style/FirebaseAuthUi">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
+
+
         </activity>
     </application>
 

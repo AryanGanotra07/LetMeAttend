@@ -20,34 +20,47 @@ import java.util.zip.Inflater
 
 class EnterDetailsActivity: AppCompatActivity(), SaveClickListener {
 
+    val fragmentManager:FragmentManager=supportFragmentManager
+    val attendanceCriteriaFragment:AttendanceCriteriaFragment= AttendanceCriteriaFragment()
+
     override fun onSave(attendance: Int) {
-        add_btn.visibility = View.VISIBLE
+      //  add_btn.visibility = View.VISIBLE
+
+       val fragment : Fragment? = fragmentManager.findFragmentByTag("attendance");
+        fragment?.let { fragmentManager.beginTransaction().remove(it).commit() }
+
+        val tabLayoutAdapter:TabLayoutAdapter= TabLayoutAdapter(fragmentManager,7)
+        val view_pager:ViewPager=findViewById(R.id.view_pager) as ViewPager
+        view_pager.adapter=tabLayoutAdapter
+        tab_layout.setupWithViewPager(view_pager)
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.enter_details_activity)
 
-        val attendanceCriteriaFragment:AttendanceCriteriaFragment= AttendanceCriteriaFragment()
 
 
-        val fragmentManager:FragmentManager=supportFragmentManager
+
+
         val fragmentTransaction:FragmentTransaction=fragmentManager.beginTransaction()
-       // fragmentTransaction.add(R.id.frame_layout,timeTableFragment)
-       // fragmentTransaction.commit()
+        fragmentTransaction.add(R.id.frame_layout,attendanceCriteriaFragment,"attendance")
+        fragmentTransaction.addToBackStack("attendance")
+        fragmentTransaction.commit()
 
 
 
-
-        val tabLayoutAdapter:TabLayoutAdapter= TabLayoutAdapter(supportFragmentManager,7)
-        val view_pager:ViewPager=findViewById(R.id.view_pager) as ViewPager
-        view_pager.adapter=tabLayoutAdapter
-        tab_layout.setupWithViewPager(view_pager)
-
-
-        val dialogHelper:SubjectDialogHelper= SubjectDialogHelper()
-        val alertView: View = LayoutInflater.from(this).inflate(R.layout.alert_save_subject,null,false)
-        dialogHelper.addSubject(this,alertView,tabLayoutAdapter,view_pager)
+//
+//        val tabLayoutAdapter:TabLayoutAdapter= TabLayoutAdapter(supportFragmentManager,7)
+//        val view_pager:ViewPager=findViewById(R.id.view_pager) as ViewPager
+//        view_pager.adapter=tabLayoutAdapter
+//        tab_layout.setupWithViewPager(view_pager)
+//
+//
+//        val dialogHelper:SubjectDialogHelper= SubjectDialogHelper()
+//        val alertView: View = LayoutInflater.from(this).inflate(R.layout.alert_save_subject,null,false)
+//        dialogHelper.addSubject(this,alertView,tabLayoutAdapter,view_pager)
 
 
 

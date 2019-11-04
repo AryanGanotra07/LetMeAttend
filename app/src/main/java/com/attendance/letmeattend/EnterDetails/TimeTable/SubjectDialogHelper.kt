@@ -29,13 +29,13 @@ class SubjectDialogHelper {
         var colorSeekBar=alertView.findViewById(R.id.colorSlider) as ColorSeekBar
         var from_time=alertView.findViewById(R.id.start_time) as TextView
         var to_time=alertView.findViewById(R.id.end_time) as TextView
-        var add_btn=activity.findViewById(R.id.add_btn) as ImageButton
+       // var add_btn=activity.findViewById(R.id.add_btn) as ImageButton
         var alert:AlertDialog.Builder=AlertDialog.Builder(activity,R.style.MyDialogTheme)
         alert.setTitle(R.string.dialog_title)
         alert.setCancelable(false)
         alert.setView(alertView)
         val dialog:AlertDialog=alert.create()
-        add_btn.setOnClickListener { dialog.show() }
+      //  add_btn.setOnClickListener { dialog.show() }
         cancel_btn.setOnClickListener { dialog.dismiss() }
         save_btn.setOnClickListener {
 

@@ -11,7 +11,7 @@ import com.google.android.gms.internal.phenotype.zzh.init
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
-object Repository {
+class Repository() {
 
     private val userId : String?  = FirebaseAuth.getInstance()?.currentUser?.uid?.let {
         it
@@ -36,6 +36,7 @@ object Repository {
     private val firebaseDatabaseLiveData = FirebaseDatabaseLiveData(DB_REF_USER)
     private val collegeLocationLiveData = FirebaseDatabaseLiveData(DB_REF_COLLEGE_LOC)
     private val collegeAttendanceLiveData = FirebaseDatabaseLiveData(DB_REF_ATTENDANCE)
+    private val database : FirebaseSetData = FirebaseSetData()
 
 
     private val user : MediatorLiveData<User> = MediatorLiveData()
@@ -74,10 +75,10 @@ object Repository {
     }
     fun setCollegeLocation(location: CollegeLocation)
     {
-
+        database.setCollegeLocation(location)
     }
     fun setAttendance(attendance: Attendance) {
-
+        database.setAttendance(attendance)
     }
     fun getUserId(): String? {
         return userId

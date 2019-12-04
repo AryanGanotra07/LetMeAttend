@@ -56,4 +56,5 @@ class FirebaseDatabaseLiveData(var query: DatabaseReference?) : LiveData<DataSna
             Log.e(LOG_TAB, "Can't listen to query $query", databaseError.toException())
         }
     }
+
 }

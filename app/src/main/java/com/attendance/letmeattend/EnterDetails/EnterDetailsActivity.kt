@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -16,6 +17,7 @@ import com.attendance.letmeattend.Model.Attendance
 import com.attendance.letmeattend.R
 import com.attendance.letmeattend.Utils.toast
 import com.attendance.letmeattend.ViewModels.EnterDetailsViewModel
+import com.attendance.letmeattend.databinding.EnterDetailsActivityBinding
 import kotlinx.android.synthetic.main.enter_details_activity.*
 
 
@@ -52,7 +54,8 @@ class EnterDetailsActivity: AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.enter_details_activity)
+
+        val binding : EnterDetailsActivityBinding = DataBindingUtil.setContentView(this, R.layout.enter_details_activity)
 
         viewModel = ViewModelProviders.of(this).get(EnterDetailsViewModel::class.java)
         viewPager = findViewById(R.id.view_pager) as ViewPager

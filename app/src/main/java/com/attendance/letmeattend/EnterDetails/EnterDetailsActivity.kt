@@ -32,11 +32,6 @@ class EnterDetailsActivity: AppCompatActivity(),
     private lateinit var alertView : View
     private lateinit var dialogHelper : SubjectDialogHelper
 
-
-
-
-
-
     val tabLayoutAdapter:TabLayoutAdapter= TabLayoutAdapter(fragmentManager,6)
 
 
@@ -58,7 +53,9 @@ class EnterDetailsActivity: AppCompatActivity(),
         val binding : EnterDetailsActivityBinding = DataBindingUtil.setContentView(this, R.layout.enter_details_activity)
 
         viewModel = ViewModelProviders.of(this).get(EnterDetailsViewModel::class.java)
-        viewPager = findViewById(R.id.view_pager) as ViewPager
+        binding.vm = viewModel
+        binding.lifecycleOwner = this
+        viewPager = binding.viewPager
         alertView = LayoutInflater.from(this).inflate(R.layout.alert_save_subject,null,false)
         dialogHelper = SubjectDialogHelper(this@EnterDetailsActivity,alertView,viewModel)
 

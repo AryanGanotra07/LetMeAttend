@@ -5,6 +5,8 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DatabaseReference
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import androidx.lifecycle.MediatorLiveData
+import com.attendance.letmeattend.EnterDetails.Listeners.AddSubjectListener
+import com.attendance.letmeattend.EnterDetails.Listeners.SaveClickListener
 import com.attendance.letmeattend.FirebaseRepository.Repository
 import com.attendance.letmeattend.Model.Attendance
 import com.attendance.letmeattend.Model.CollegeLocation
@@ -13,7 +15,7 @@ import com.attendance.letmeattend.Model.User
 import com.google.firebase.auth.FirebaseAuth
 
 
-class EnterDetailsViewModel : ViewModel() {
+class EnterDetailsViewModel : ViewModel() , AddSubjectListener, SaveClickListener   {
 
 
 //    private val user : MediatorLiveData<User> = Repository.getUserLiveData()
@@ -49,6 +51,13 @@ class EnterDetailsViewModel : ViewModel() {
         return repository.getLectures()
     }
 
+    override fun onAddSubject(day: Int) {
+
+    }
+
+    override fun onSave(attendance: Int) {
+
+    }
 
 
 }

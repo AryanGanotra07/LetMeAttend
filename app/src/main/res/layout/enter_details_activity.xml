@@ -4,8 +4,8 @@
 
     <data>
 <variable
-        name="vm"
-        type="com.attendance.letmeattend.ViewModels.EnterDetailsViewModel" />
+        name="viewmodel"
+        type="com.attendance.letmeattend.viewmodels.EnterDetailsViewModel" />
 
     </data>
 

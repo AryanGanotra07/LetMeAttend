@@ -11,26 +11,26 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:name=".Application.AppApplication"
+            android:name=".application.AppApplication"
             android:theme="@style/AppTheme">
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
                 android:value="@string/google_maps_key"/>
 
-        <activity android:name=".LoginScreen.FirebaseLogin"
+        <activity android:name=".authentication.FirebaseLogin"
         android:theme="@style/FirebaseAuthUi">
 
         </activity>
 
         <activity android:name=".MainActivity"/>
-        <activity android:name=".Maps.MapFragment"
+        <activity android:name=".maps.MapFragment"
         android:theme="@style/FirebaseAuthUi">
 
 
 
 
         </activity>
-        <activity android:name=".EnterDetails.EnterDetailsActivity"
+        <activity android:name=".details.EnterDetailsActivity"
                   android:theme="@style/FirebaseAuthUi">
 
             <intent-filter>

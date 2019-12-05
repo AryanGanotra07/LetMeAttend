@@ -8,6 +8,7 @@ import androidx.lifecycle.MediatorLiveData
 import com.attendance.letmeattend.FirebaseRepository.Repository
 import com.attendance.letmeattend.Model.Attendance
 import com.attendance.letmeattend.Model.CollegeLocation
+import com.attendance.letmeattend.Model.Lecture
 import com.attendance.letmeattend.Model.User
 import com.google.firebase.auth.FirebaseAuth
 
@@ -37,6 +38,15 @@ class EnterDetailsViewModel : ViewModel() {
     fun setCollegeLocation(collegeLocation: CollegeLocation)
     {
         repository.setCollegeLocation(collegeLocation)
+    }
+    fun addLecture(lecture : Lecture)
+    {
+        repository.addLecture(lecture)
+    }
+
+    fun getLectures() : MediatorLiveData<ArrayList<Lecture>>
+    {
+        return repository.getLectures()
     }
 
 

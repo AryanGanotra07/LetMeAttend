@@ -6,6 +6,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import com.attendance.letmeattend.Model.Attendance
 import com.attendance.letmeattend.Model.CollegeLocation
+import com.attendance.letmeattend.Model.Lecture
 import com.attendance.letmeattend.Model.User
 import com.google.android.gms.internal.phenotype.zzh.init
 import com.google.firebase.auth.FirebaseAuth
@@ -32,16 +33,23 @@ class Repository() {
             userId).child("attendance")
     }
 
+    private val DB_REF_LECTURES =  userId?.let {
+        FirebaseDatabase.getInstance().reference.child("User").child(
+            userId).child("lectures")
+    }
+
 
     private val firebaseDatabaseLiveData = FirebaseDatabaseLiveData(DB_REF_USER)
     private val collegeLocationLiveData = FirebaseDatabaseLiveData(DB_REF_COLLEGE_LOC)
     private val collegeAttendanceLiveData = FirebaseDatabaseLiveData(DB_REF_ATTENDANCE)
-    private val database : FirebaseSetData = FirebaseSetData()
+    private val lecturesLiveData = FirebaseDatabaseLiveData(DB_REF_LECTURES)
+    private val database : FirebaseSetData = FirebaseSetData(userId!!)
 
 
     private val user : MediatorLiveData<User> = MediatorLiveData()
     private val collegeLocation : MediatorLiveData<CollegeLocation> = MediatorLiveData()
     private val attendance : MediatorLiveData<Attendance> = MediatorLiveData()
+    private val lectures : MediatorLiveData<ArrayList<Lecture>> = MediatorLiveData()
     init {
         user.addSource(firebaseDatabaseLiveData, Observer {
             if (it != null) Thread(Runnable { user.postValue(it.getValue(User::class.java))
@@ -49,8 +57,6 @@ class Repository() {
             }).start()
              else  user.setValue(null)
         })
-
-
 
         collegeLocation.addSource(collegeLocationLiveData, Observer {
             if(it != null)  Thread(Runnable { collegeLocation.postValue(it.getValue(CollegeLocation::class.java)) }).start()
@@ -60,6 +66,20 @@ class Repository() {
         attendance.addSource(collegeAttendanceLiveData, Observer {
             if (it != null) Thread(Runnable { attendance.postValue(it.getValue(Attendance :: class.java)) }).start()
         })
+
+        lectures.addSource(lecturesLiveData, Observer {
+            if (it!=null && it.hasChildren()) {
+                val lecturesList: ArrayList<Lecture> = ArrayList()
+                for (lecture in it.children)
+                {
+                    val lect : Lecture = lecture.getValue(Lecture::class.java)!!
+                    lecturesList.add(lect)
+                }
+                Thread(Runnable { lectures.postValue(lecturesList) }).start()
+            }
+            else lectures.value = null
+        })
+
 
     }
 
@@ -82,5 +102,14 @@ class Repository() {
     }
     fun getUserId(): String? {
         return userId
+    }
+    fun addLecture(lecture : Lecture)
+    {
+        database.addLecture(lecture)
+    }
+
+    fun getLectures() : MediatorLiveData<ArrayList<Lecture>>
+    {
+        return lectures
     }
 }

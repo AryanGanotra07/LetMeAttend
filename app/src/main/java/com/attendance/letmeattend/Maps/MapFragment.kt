@@ -10,8 +10,11 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProviders
 import com.attendance.letmeattend.EnterDetails.EnterDetailsActivity
+import com.attendance.letmeattend.Model.CollegeLocation
 import com.attendance.letmeattend.R
+import com.attendance.letmeattend.ViewModels.EnterDetailsViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
@@ -30,7 +33,10 @@ class MapFragment : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerD
     override fun onClick(v: View?)
     {
         when(v){
-            button_next->startActivity(Intent(this@MapFragment, EnterDetailsActivity::class.java))
+            button_next-> {
+                viewModel.setCollegeLocation(CollegeLocation(circle.radius,circle.center.latitude,circle.center.longitude))
+                startActivity(Intent(this@MapFragment, EnterDetailsActivity::class.java))
+            }
             search_btn->   launchPlacesIntent()
         }
     }
@@ -44,6 +50,7 @@ class MapFragment : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerD
 
     }
 
+    private lateinit var viewModel : EnterDetailsViewModel
 
     override fun onMarkerDrag(p0: Marker?) {
         //finding markers with tag then setting new locations and radius
@@ -179,8 +186,8 @@ class MapFragment : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerD
                 Log.e(TAG, place!!.name)
                 mMap.clear()
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(place.latLng))
-                place.latLng?.let { addCircle(it) }
-                button_next.visibility=View.VISIBLE
+                  place.latLng?.let { addCircle(it) }
+                   button_next.visibility=View.VISIBLE
 
 
             }
@@ -194,6 +201,7 @@ class MapFragment : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerD
 
         //Inititating places
         Places.initialize(applicationContext, resources.getString(R.string.google_places_key))
+        viewModel = ViewModelProviders.of(this).get(EnterDetailsViewModel::class.java)
         var placeClient: PlacesClient = Places.createClient(this)
 
         getLocationPermission() //asking permission for user's location (also check manifest for declaring permission)

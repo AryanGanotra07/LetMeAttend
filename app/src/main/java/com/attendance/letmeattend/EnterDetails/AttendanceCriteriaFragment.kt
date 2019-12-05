@@ -1,21 +1,21 @@
 package com.attendance.letmeattend.EnterDetails
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.attendance.letmeattend.EnterDetails.Listeners.SaveClickListener
 import com.attendance.letmeattend.R
 import com.ramotion.fluidslider.FluidSlider
 import kotlinx.android.synthetic.main.attendance_criteria_fragment.*
-import javax.security.auth.callback.Callback
 import kotlin.math.abs
 
 class AttendanceCriteriaFragment(): Fragment() {
 
     private lateinit var callback : SaveClickListener
+
 
 
 

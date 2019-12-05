@@ -49,6 +49,7 @@ class FirebaseDatabaseLiveData(var query: DatabaseReference?) : LiveData<DataSna
 
     private inner class MyValueEventListener : ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
+
             value = dataSnapshot
         }
 

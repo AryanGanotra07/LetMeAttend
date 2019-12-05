@@ -9,16 +9,8 @@ class TabLayoutAdapter(private var fm: FragmentManager, private var behavior: In
 
 
     override fun getItem(position: Int): Fragment {
-         when(position){
-          //   0->return AttendanceCriteriaFragment()
-             0-> return Monday()
-             1-> return Tuesday()
-             2-> return Wednesday()
-             3-> return Thursday()
-             4-> return Friday()
-             5-> return Saturday()
-             else->return Saturday()
-         }
+
+          return Monday()
 
 
     }

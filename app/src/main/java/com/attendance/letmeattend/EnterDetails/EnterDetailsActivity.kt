@@ -1,53 +1,63 @@
 package com.attendance.letmeattend.EnterDetails
 
-import android.location.Location
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
+import com.attendance.letmeattend.EnterDetails.Listeners.AddSubjectListener
+import com.attendance.letmeattend.EnterDetails.Listeners.SaveClickListener
 import com.attendance.letmeattend.EnterDetails.TimeTable.SubjectDialogHelper
-import com.attendance.letmeattend.FirebaseRepository.Repository
-import com.attendance.letmeattend.Model.User
+import com.attendance.letmeattend.Model.Attendance
 import com.attendance.letmeattend.R
-import com.google.android.gms.maps.model.LatLng
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthSettings
-import com.google.firebase.database.FirebaseDatabase
-import com.ramotion.fluidslider.FluidSlider
+import com.attendance.letmeattend.Utils.toast
+import com.attendance.letmeattend.ViewModels.EnterDetailsViewModel
 import kotlinx.android.synthetic.main.enter_details_activity.*
-import kotlinx.android.synthetic.main.enter_details_activity.view.*
-import java.sql.Time
-import java.util.zip.Inflater
 
 
-class EnterDetailsActivity: AppCompatActivity(), SaveClickListener {
+class EnterDetailsActivity: AppCompatActivity(),
+    SaveClickListener, AddSubjectListener {
 
     val fragmentManager:FragmentManager=supportFragmentManager
     val attendanceCriteriaFragment:AttendanceCriteriaFragment= AttendanceCriteriaFragment()
 
+    private lateinit var viewModel : EnterDetailsViewModel
+    private lateinit var viewPager: ViewPager
+    private lateinit var alertView : View
+    private lateinit var dialogHelper : SubjectDialogHelper
+
+
+
+
+
+
+    val tabLayoutAdapter:TabLayoutAdapter= TabLayoutAdapter(fragmentManager,6)
+
+
     override fun onSave(attendance: Int) {
       //  add_btn.visibility = View.VISIBLE
 
-       val fragment : Fragment? = fragmentManager.findFragmentByTag("attendance");
-        fragment?.let { fragmentManager.beginTransaction().remove(it).commit() }
+        //viewModel.setAttendance(Attendance(attendance = attendance))
 
-        val tabLayoutAdapter:TabLayoutAdapter= TabLayoutAdapter(fragmentManager,6)
-        val view_pager:ViewPager=findViewById(R.id.view_pager) as ViewPager
-        view_pager.adapter=tabLayoutAdapter
-        tab_layout.setupWithViewPager(view_pager)
+        val fragment : Fragment? = fragmentManager.findFragmentByTag("attendance");
+        fragment?.let { fragmentManager.beginTransaction().remove(it).commit() }
+        viewPager.adapter=tabLayoutAdapter
+        tab_layout.setupWithViewPager(viewPager)
 
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.enter_details_activity)
+
+        viewModel = ViewModelProviders.of(this).get(EnterDetailsViewModel::class.java)
+        viewPager = findViewById(R.id.view_pager) as ViewPager
+        alertView = LayoutInflater.from(this).inflate(R.layout.alert_save_subject,null,false)
+        dialogHelper = SubjectDialogHelper(this@EnterDetailsActivity,alertView,viewModel)
 
 
 
@@ -116,9 +126,6 @@ class EnterDetailsActivity: AppCompatActivity(), SaveClickListener {
 //        tab_layout.setupWithViewPager(view_pager)
 //
 //
-//        val dialogHelper:SubjectDialogHelper= SubjectDialogHelper()
-//        val alertView: View = LayoutInflater.from(this).inflate(R.layout.alert_save_subject,null,false)
-//        dialogHelper.addSubject(this,alertView,tabLayoutAdapter,view_pager)
 
 
 
@@ -131,5 +138,16 @@ class EnterDetailsActivity: AppCompatActivity(), SaveClickListener {
         if (fragment is AttendanceCriteriaFragment ){
             fragment.setAttendanceListener(this)
         }
+       else if (fragment is Monday ){
+            fragment.setAddSubjectListener(this)
+        }
     }
+
+    override fun onAddSubject(day: Int) {
+        //applicationContext.toast("Called")
+       dialogHelper.addSubject(day)
+
+    }
+
+
 }

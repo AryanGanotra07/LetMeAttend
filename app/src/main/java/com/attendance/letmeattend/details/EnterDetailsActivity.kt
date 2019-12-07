@@ -3,6 +3,8 @@ package com.attendance.letmeattend.details
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.TabHost
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -12,10 +14,12 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.attendance.letmeattend.details.listeners.AddSubjectListener
 import com.attendance.letmeattend.details.listeners.SaveClickListener
-import com.attendance.letmeattend.details.timetable.SubjectDialogHelper
 import com.attendance.letmeattend.R
 import com.attendance.letmeattend.viewmodels.EnterDetailsViewModel
 import com.attendance.letmeattend.databinding.EnterDetailsActivityBinding
+import com.attendance.letmeattend.details.timetable.*
+import com.attendance.letmeattend.models.Attendance
+import com.attendance.letmeattend.utils.toast
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.enter_details_activity.*
 
@@ -31,6 +35,7 @@ class EnterDetailsActivity: AppCompatActivity(),
     private lateinit var tabLayout : TabLayout
     private lateinit var alertView : View
     private lateinit var dialogHelper : SubjectDialogHelper
+    private var id : Int = 0
 
     val tabLayoutAdapter:TabLayoutAdapter= TabLayoutAdapter(fragmentManager,6)
 
@@ -38,11 +43,12 @@ class EnterDetailsActivity: AppCompatActivity(),
     override fun onSave(attendance: Int) {
       //  add_btn.visibility = View.VISIBLE
 
-        //viewModel.setAttendance(Attendance(attendance = attendance))
+        viewModel.setAttendance(Attendance(attendance = attendance))
 
         val fragment : Fragment? = fragmentManager.findFragmentByTag("attendance");
         fragment?.let { fragmentManager.beginTransaction().remove(it).commit() }
         viewPager.adapter=tabLayoutAdapter
+        viewPager.currentItem = 0
         tabLayout.setupWithViewPager(viewPager)
 
     }
@@ -92,12 +98,6 @@ class EnterDetailsActivity: AppCompatActivity(),
 //        days.add(fri)
 //        days.add(sat)
 //
-//
-//
-//
-//
-//
-//
 //        var user : com.attendance.letmeattend.Model.User = com.attendance.letmeattend.Model.User("1001",
 //            75,
 //            User.CollegeLocation(123,123.4),
@@ -108,17 +108,15 @@ class EnterDetailsActivity: AppCompatActivity(),
 //        FirebaseDatabase.getInstance().reference.child("User").child("11001").setValue(user)
 //
 
-
-
-
-
-
         val fragmentTransaction:FragmentTransaction=fragmentManager.beginTransaction()
         fragmentTransaction.add(R.id.frame_layout,attendanceCriteriaFragment,"attendance")
         fragmentTransaction.addToBackStack("attendance")
         fragmentTransaction.commit()
 
-
+//        viewPager.addOnPageChangeListener(onPageChangeListener)
+//        viewPager.post(Runnable {
+//            onPageChangeListener.onPageSelected(viewPager.currentItem)
+//        })
 
 //
 //        val tabLayoutAdapter:TabLayoutAdapter= TabLayoutAdapter(supportFragmentManager,7)
@@ -126,11 +124,27 @@ class EnterDetailsActivity: AppCompatActivity(),
 //        view_pager.adapter=tabLayoutAdapter
 //        tab_layout.setupWithViewPager(view_pager)
 //
+
 //
+    }
 
+    val onPageChangeListener : ViewPager.OnPageChangeListener = object  : ViewPager.OnPageChangeListener {
+        override fun onPageScrollStateChanged(state: Int) {
 
+        }
 
+        override fun onPageScrolled(
+            position: Int,
+            positionOffset: Float,
+            positionOffsetPixels: Int
+        ) {
+           // this@EnterDetailsActivity.toast(positionOffsetPixels.toString())
 
+        }
+
+        override fun onPageSelected(position: Int) {
+            id = position
+        }
 
     }
 
@@ -142,6 +156,26 @@ class EnterDetailsActivity: AppCompatActivity(),
        else if (fragment is Monday ){
             fragment.setAddSubjectListener(this)
         }
+        else if (fragment is Tuesday)
+        {
+            fragment.setAddSubjectListener(this)
+        }
+        else if (fragment is Wednesday)
+        {
+            fragment.setAddSubjectListener(this)
+        }
+        else if (fragment is Thursday)
+        {
+            fragment.setAddSubjectListener(this)
+        }
+        else if (fragment is Friday)
+        {
+            fragment.setAddSubjectListener(this)
+        }
+        else if (fragment is Saturday)
+        {
+            fragment.setAddSubjectListener(this)
+        }
     }
 
     override fun onAddSubject(day: Int) {
@@ -149,6 +183,14 @@ class EnterDetailsActivity: AppCompatActivity(),
        dialogHelper.addSubject(day)
 
     }
+
+    fun getFragmentId(): Int {
+       return viewPager.currentItem
+
+
+    }
+
+
 
 
 }

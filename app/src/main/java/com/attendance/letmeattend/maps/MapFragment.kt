@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.attendance.letmeattend.details.EnterDetailsActivity
 import com.attendance.letmeattend.models.CollegeLocation
 import com.attendance.letmeattend.R
+import com.attendance.letmeattend.utils.toast
 import com.attendance.letmeattend.viewmodels.EnterDetailsViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -182,14 +183,18 @@ class MapFragment : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerD
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                val place: Place? = data?.let { Autocomplete.getPlaceFromIntent(it) }
+                val place: Place? = data?.let { it -> Autocomplete.getPlaceFromIntent(it) }
                 Log.e(TAG, place!!.name)
+                place!!.name?.let { this@MapFragment.toast(it) }
                 mMap.clear()
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(place.latLng))
                   place.latLng?.let { addCircle(it) }
                    button_next.visibility=View.VISIBLE
 
 
+            }
+            else {
+                this@MapFragment.toast("Failed Request: ")
             }
         }
     }

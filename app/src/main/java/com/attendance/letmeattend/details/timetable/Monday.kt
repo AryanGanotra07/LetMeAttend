@@ -14,6 +14,7 @@ import com.attendance.letmeattend.R
 import com.attendance.letmeattend.databinding.MondayBinding
 
 import com.attendance.letmeattend.details.listeners.AddSubjectListener
+import com.attendance.letmeattend.details.listeners.OnLectureClickListener
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.viewmodels.EnterDetailsViewModel
 
@@ -36,9 +37,17 @@ class Monday(): Fragment() {
     }
 
 
+
+
     fun setAddSubjectListener (callback: AddSubjectListener)
     {
         add_sub_callback = callback
+    }
+    private lateinit var onLectureClickListener: OnLectureClickListener
+
+    fun setOnLectureClickListener(callback : OnLectureClickListener)
+    {
+        onLectureClickListener = callback
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -63,6 +72,7 @@ class Monday(): Fragment() {
 
             Log.i("FragmentID",position.toString())
             binding.lifecycleOwner = this
+            viewModel.getMonLectureRecyclerAdapter().setClickListener(onLectureClickListener)
 //            binding.recyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL,false)
 //            binding.recyclerView.adapter = viewModel.getLectureRecyclerAdapter()
         }

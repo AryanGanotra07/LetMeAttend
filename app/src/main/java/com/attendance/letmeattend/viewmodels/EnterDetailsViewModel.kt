@@ -78,6 +78,11 @@ class EnterDetailsViewModel : ViewModel() ,  SaveClickListener   {
         return satAdapter
     }
 
+    fun updateLecture(lecture: Lecture)
+    {
+        repository.updateLecture(lecture)
+    }
+
 
 
 

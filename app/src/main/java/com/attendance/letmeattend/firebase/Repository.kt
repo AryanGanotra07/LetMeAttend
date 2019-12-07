@@ -109,4 +109,9 @@ class Repository() {
     {
         return lectures
     }
+
+    fun updateLecture(lecture : Lecture)
+    {
+        database.updateLecture(lecture)
+    }
 }

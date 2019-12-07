@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
 import com.attendance.letmeattend.R
 import com.attendance.letmeattend.databinding.LectureTtBinding
+import com.attendance.letmeattend.details.listeners.OnLectureClickListener
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.utils.toast
 import com.attendance.letmeattend.viewmodels.LectureViewModel
@@ -15,6 +16,7 @@ import com.attendance.letmeattend.viewmodels.LectureViewModel
 class LectureRecyclerAdapter() : RecyclerView.Adapter<LectureRecyclerAdapter.ViewHolder>() {
 
     private lateinit var lectures : ArrayList<Lecture>
+    private lateinit var clickListener: OnLectureClickListener
 
     fun setLectures(lectures : ArrayList<Lecture>)
     {
@@ -23,12 +25,24 @@ class LectureRecyclerAdapter() : RecyclerView.Adapter<LectureRecyclerAdapter.Vie
 
     }
 
-    class ViewHolder(val binding: LectureTtBinding) : RecyclerView.ViewHolder(binding.root) {
+    fun setClickListener(callback : OnLectureClickListener)
+    {
+        this.clickListener = callback
+        notifyDataSetChanged()
+    }
+
+    class ViewHolder(val binding: LectureTtBinding, val clickListener: OnLectureClickListener) : RecyclerView.ViewHolder(binding.root) {
         val vm : LectureViewModel = LectureViewModel()
         fun bind(lecture : Lecture)
         {
             binding.vm = vm
             vm.bind(lecture)
+            if (clickListener != null)
+            {
+                itemView.setOnClickListener {
+                    clickListener.onLectureClick(lecture)
+                }
+            }
 
 
         }
@@ -39,7 +53,7 @@ class LectureRecyclerAdapter() : RecyclerView.Adapter<LectureRecyclerAdapter.Vie
         val binding : LectureTtBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context),
             R.layout.lecture_tt,parent,false)
         parent.context.toast(itemCount.toString())
-        return ViewHolder(binding)
+        return ViewHolder(binding,clickListener)
     }
 
     override fun getItemCount(): Int {

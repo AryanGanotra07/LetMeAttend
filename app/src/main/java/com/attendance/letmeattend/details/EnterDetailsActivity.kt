@@ -16,13 +16,15 @@ import com.attendance.letmeattend.R
 import com.attendance.letmeattend.adapters.TabLayoutAdapter
 import com.attendance.letmeattend.viewmodels.EnterDetailsViewModel
 import com.attendance.letmeattend.databinding.EnterDetailsActivityBinding
+import com.attendance.letmeattend.details.listeners.OnLectureClickListener
 import com.attendance.letmeattend.details.timetable.*
 import com.attendance.letmeattend.models.Attendance
+import com.attendance.letmeattend.models.Lecture
 import com.google.android.material.tabs.TabLayout
 
 
 class EnterDetailsActivity: AppCompatActivity(),
-    SaveClickListener, AddSubjectListener {
+    SaveClickListener, AddSubjectListener, OnLectureClickListener {
 
     val fragmentManager:FragmentManager=supportFragmentManager
     val attendanceCriteriaFragment:AttendanceCriteriaFragment= AttendanceCriteriaFragment()
@@ -150,29 +152,36 @@ class EnterDetailsActivity: AppCompatActivity(),
         super.onAttachFragment(fragment)
         if (fragment is AttendanceCriteriaFragment ){
             fragment.setAttendanceListener(this)
+
         }
        else if (fragment is Monday ){
             fragment.setAddSubjectListener(this)
+            fragment.setOnLectureClickListener(this)
         }
         else if (fragment is Tuesday)
         {
             fragment.setAddSubjectListener(this)
+            fragment.setOnLectureClickListener(this)
         }
         else if (fragment is Wednesday)
         {
             fragment.setAddSubjectListener(this)
+            fragment.setOnLectureClickListener(this)
         }
         else if (fragment is Thursday)
         {
             fragment.setAddSubjectListener(this)
+            fragment.setOnLectureClickListener(this)
         }
         else if (fragment is Friday)
         {
             fragment.setAddSubjectListener(this)
+            fragment.setOnLectureClickListener(this)
         }
         else if (fragment is Saturday)
         {
             fragment.setAddSubjectListener(this)
+            fragment.setOnLectureClickListener(this)
         }
     }
 
@@ -188,7 +197,9 @@ class EnterDetailsActivity: AppCompatActivity(),
 
     }
 
-
+    override fun onLectureClick(lecture: Lecture) {
+           dialogHelper.updateSubject(lecture)
+    }
 
 
 }

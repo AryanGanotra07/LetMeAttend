@@ -13,6 +13,7 @@ import com.attendance.letmeattend.R
 import com.attendance.letmeattend.databinding.ThursdayBinding
 
 import com.attendance.letmeattend.details.listeners.AddSubjectListener
+import com.attendance.letmeattend.details.listeners.OnLectureClickListener
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.viewmodels.EnterDetailsViewModel
 
@@ -29,6 +30,13 @@ class Thursday():Fragment() {
         val day : Thursday = Thursday()
         day.position = page
         return day
+    }
+
+    private lateinit var onLectureClickListener: OnLectureClickListener
+
+    fun setOnLectureClickListener(callback : OnLectureClickListener)
+    {
+        onLectureClickListener = callback
     }
 
 
@@ -56,6 +64,7 @@ class Thursday():Fragment() {
             viewModel = ViewModelProviders.of(activity!!).get(EnterDetailsViewModel::class.java)
             binding.vm = viewModel
             binding.id = 3
+            viewModel.getThurLectureRecyclerAdapter().setClickListener(onLectureClickListener)
 
             //Log.i("FragmentID",position.toString())
             binding.lifecycleOwner = this

@@ -1,11 +1,12 @@
 package com.attendance.letmeattend.firebase
 
+import android.util.Log
 import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.models.Attendance
 import com.attendance.letmeattend.models.CollegeLocation
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.utils.toast
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 
 class FirebaseSetData(val userId:String){
 //    private val userId = FirebaseAuth.getInstance().currentUser?.uid
@@ -31,6 +32,22 @@ class FirebaseSetData(val userId:String){
 
     fun addLecture(lecture: Lecture)
     {
+        ref?.child("lectures").
+            orderByChild("name").
+            equalTo(lecture.name).
+            addListenerForSingleValueEvent(object : ValueEventListener{
+                override fun onCancelled(p0: DatabaseError) {
+
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                   if (p0.exists())
+                   {
+                       Log.i("EXISTS","YES")
+                   }
+                }
+
+            })
 //        ref?.
 //            child("lectures")?.
 //            setValue(lecture)?.
@@ -54,6 +71,14 @@ class FirebaseSetData(val userId:String){
 
     fun updateLecture(lecture: Lecture)
     {
+
+        ref?.child("lectures")
+            .child(lecture.id)
+            .setValue(lecture)
+            .addOnCompleteListener {
+                if (it.isSuccessful) AppApplication.context?.toast("Lecture Updated Successfuly")
+                else AppApplication.context?.toast("Lecture Update Not Successful")
+        }
 
     }
 

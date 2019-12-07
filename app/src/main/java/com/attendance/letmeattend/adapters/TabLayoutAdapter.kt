@@ -1,9 +1,9 @@
-package com.attendance.letmeattend.details
+package com.attendance.letmeattend.adapters
 
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.attendance.letmeattend.details.Monday
 import com.attendance.letmeattend.details.timetable.*
 
 class TabLayoutAdapter(private var fm: FragmentManager, private var behavior: Int) : FragmentPagerAdapter(fm, behavior) {

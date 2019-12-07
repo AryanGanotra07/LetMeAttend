@@ -3,8 +3,6 @@ package com.attendance.letmeattend.details
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.TabHost
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -15,13 +13,12 @@ import androidx.viewpager.widget.ViewPager
 import com.attendance.letmeattend.details.listeners.AddSubjectListener
 import com.attendance.letmeattend.details.listeners.SaveClickListener
 import com.attendance.letmeattend.R
+import com.attendance.letmeattend.adapters.TabLayoutAdapter
 import com.attendance.letmeattend.viewmodels.EnterDetailsViewModel
 import com.attendance.letmeattend.databinding.EnterDetailsActivityBinding
 import com.attendance.letmeattend.details.timetable.*
 import com.attendance.letmeattend.models.Attendance
-import com.attendance.letmeattend.utils.toast
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.enter_details_activity.*
 
 
 class EnterDetailsActivity: AppCompatActivity(),
@@ -37,7 +34,8 @@ class EnterDetailsActivity: AppCompatActivity(),
     private lateinit var dialogHelper : SubjectDialogHelper
     private var id : Int = 0
 
-    val tabLayoutAdapter:TabLayoutAdapter= TabLayoutAdapter(fragmentManager,6)
+    val tabLayoutAdapter: TabLayoutAdapter =
+        TabLayoutAdapter(fragmentManager, 6)
 
 
     override fun onSave(attendance: Int) {

@@ -43,15 +43,18 @@ class FirebaseSetData(val userId:String) {
 
                 override fun onDataChange(p0: DataSnapshot) {
                     if (p0.exists()) {
-                        val lectureM: Lecture = p0.getValue(Lecture::class.java)!!
-                        lecture.sub_id = lectureM.sub_id
-                        addToLectureList(key, lecture)
+                            val child = p0.children.first()
+                        Log.i("CHILD",child.toString())
+                            val lectureM: Lecture =child.getValue(Lecture::class.java)!!
+                            lecture.sub_id = lectureM.sub_id
+                            Log.i("SUB-KEY", lectureM.name + lectureM.sub_id)
+                            addToLectureList(key, lecture)
 
                     } else {
                         val sub_key = ref?.child("subjects")?.push()?.key
                         if (sub_key != null) {
                            // AppApplication.context?.toast("SUB-KEY-SET")
-                           // Log.i("SUB-KEY","SET")
+                            Log.i("SUB-KEY","SET")
                             lecture.sub_id = sub_key
                         }
                         addToSubjectList(sub_key, lecture)
@@ -80,6 +83,11 @@ class FirebaseSetData(val userId:String) {
             if (it.isSuccessful) AppApplication.context?.toast("Lecture Added")
             else AppApplication.context?.toast("Error in adding lecture")
         }
+        ref
+            .child("subjects")
+            .child(lecture.sub_id)
+            .child("lect_ids")
+            .child(key!!).setValue(key)
     }
 
     private fun addToSubjectList(key: String?, lecture: Lecture) {
@@ -100,7 +108,9 @@ class FirebaseSetData(val userId:String) {
         val childUpdates = HashMap<String, Any>()
         childUpdates["/subjects/$key"] = subject.toMap()
         ref?.updateChildren(childUpdates)?.addOnCompleteListener {
-            if (it.isSuccessful) AppApplication.context?.toast("Added to subject")
+            if (it.isSuccessful) {
+                AppApplication.context?.toast("Added to subject")
+            }
             else AppApplication.context?.toast("Error in adding subject")
         }
 
@@ -118,6 +128,37 @@ class FirebaseSetData(val userId:String) {
 
     fun updateLecture(lecture: Lecture) {
 
+//
+//        ref?.child("lectures")
+//            .orderByChild("sub_id")
+//            .equalTo(lecture.sub_id)
+//            .addListenerForSingleValueEvent(object : ValueEventListener {
+//                override fun onCancelled(p0: DatabaseError) {
+//
+//                }
+//
+//                override fun onDataChange(p0: DataSnapshot) {
+//                   if (p0.exists())
+//                   {
+//                       val lectureM: Lecture = p0.getValue(Lecture::class.java)!!
+//                       if(!lectureM.name.equals(lecture.name)){
+//                           changeSubId(lecture)
+//                       }
+//                       else
+//                       {
+//                           updateLectureFinal(lecture)
+//                       }
+//                   }
+//                }
+//
+//            })
+
+        updateLectureFinal(lecture)
+
+    }
+
+    private fun updateLectureFinal(lecture: Lecture)
+    {
         ref?.child("lectures")
             .child(lecture.id)
             .setValue(lecture)
@@ -125,26 +166,6 @@ class FirebaseSetData(val userId:String) {
                 if (it.isSuccessful) AppApplication.context?.toast("Lecture Updated Successfuly")
                 else AppApplication.context?.toast("Lecture Update Not Successful")
             }
-        ref?.child("lectures")
-            .orderByChild("sub_id")
-            .equalTo(lecture.sub_id)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onCancelled(p0: DatabaseError) {
-
-                }
-
-                override fun onDataChange(p0: DataSnapshot) {
-                   if (p0.exists())
-                   {
-                       val lectureM: Lecture = p0.getValue(Lecture::class.java)!!
-                       if(!lectureM.name.equals(lecture.name)){
-
-                       }
-                   }
-                }
-
-            })
-
     }
 
     private fun changeSubId(lecture: Lecture)
@@ -158,10 +179,37 @@ class FirebaseSetData(val userId:String) {
                 }
 
                 override fun onDataChange(p0: DataSnapshot) {
-
+                    if (p0.exists())
+                    {
+                        val lectureM: Lecture = p0.getValue(Lecture::class.java)!!
+                        lecture.sub_id = lectureM.sub_id
+                        updateLectureFinal(lecture)
+                    }
                 }
 
             })
+    }
+
+    fun deleteLecture(lecture: Lecture)
+    {
+        ref?.child("subjects")
+            .child(lecture.sub_id)
+            .child("lect_ids")
+            .child(lecture.id)
+            .removeValue()
+        ref?.child("lectures")
+            .child(lecture.id)
+            .removeValue()
+            .addOnCompleteListener {
+                if (it.isSuccessful) AppApplication.context?.toast("Lecture Deleted Successfully")
+                else AppApplication.context?.toast("Lecture Deletion Failed")
+            }
+
+    }
+
+    fun checkSubject(key : String?)
+    {
+
     }
 
 }

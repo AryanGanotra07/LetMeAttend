@@ -61,12 +61,13 @@ class SubjectDialogHelper(val context : Activity,val alertView: View, val viewMo
 
     fun updateSubject( lecture : Lecture)
     {
+
         subject.setText(lecture.name)
+        subject.isEnabled = false
         from_time.setText(lecture.s_time)
         to_time.setText(lecture.e_time)
         colorSeekBar.color = lecture.color
-
-
+        colorSeekBar.isEnabled = false
         cancel_btn.setOnClickListener { dialog.dismiss() }
         save_btn.setOnClickListener {
 
@@ -77,10 +78,10 @@ class SubjectDialogHelper(val context : Activity,val alertView: View, val viewMo
                 Snackbar.make(alertView, R.string.time_error,Snackbar.LENGTH_LONG).show()
             }
             else{
-                lecture.name = subject.text.toString()
+                //lecture.name = subject.text.toString()
                 lecture.e_time = to_time.text.toString()
                 lecture.s_time = from_time.text.toString()
-                lecture.color = colorSeekBar.color
+                //lecture.color = colorSeekBar.color
                 viewModel.updateLecture(lecture)
                 dialog.dismiss()
 
@@ -111,6 +112,7 @@ class SubjectDialogHelper(val context : Activity,val alertView: View, val viewMo
             timePickerDialog.show()
         }
 
+
         colorSeekBar.setMaxPosition(100)
         colorSeekBar.setColorSeeds(R.array.material_colors);
         colorSeekBar.colorBarPosition=17
@@ -136,8 +138,11 @@ class SubjectDialogHelper(val context : Activity,val alertView: View, val viewMo
 
           val lecture : Lecture = Lecture("101",day)
 
-
-
+            subject.isEnabled = true
+          colorSeekBar.isEnabled = true
+          subject.setText("")
+          from_time.setText(R.string.dialog_select_time)
+          to_time.setText(R.string.dialog_select_date)
           cancel_btn.setOnClickListener { dialog.dismiss() }
           save_btn.setOnClickListener {
 

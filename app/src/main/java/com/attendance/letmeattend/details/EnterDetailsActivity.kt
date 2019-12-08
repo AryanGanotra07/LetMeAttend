@@ -3,6 +3,7 @@ package com.attendance.letmeattend.details
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -71,9 +72,11 @@ class EnterDetailsActivity: AppCompatActivity(),
         viewModel.getSubjects().observe(this, Observer {
             if (it!=null)
             {
-                Log.i("SUBJECTSLIST",it.size.toString())
+
             }
         })
+
+
 
 
 
@@ -208,6 +211,33 @@ class EnterDetailsActivity: AppCompatActivity(),
 
     override fun onLectureClick(lecture: Lecture) {
            dialogHelper.updateSubject(lecture)
+    }
+
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        var position = -1
+        var adapter = viewModel.getMonLectureRecyclerAdapter()
+        when(item.groupId)
+        {
+            0-> adapter = viewModel.getMonLectureRecyclerAdapter()
+            1 -> adapter = viewModel.getTueLectureRecyclerAdapter()
+            2-> adapter = viewModel.getWedLectureRecyclerAdapter()
+            3->adapter = viewModel.getThurLectureRecyclerAdapter()
+            4->adapter = viewModel.getFriLectureRecyclerAdapter()
+            5->adapter = viewModel.getsatLectureRecyclerAdapter()
+        }
+
+        position = try {
+            adapter.getPosition()
+        } catch (e: Exception) {
+            return super.onContextItemSelected(item)
+        }
+        val lecture = adapter.getLecture(position)
+        when (item.getItemId()) {
+            R.id.edit_lecture -> dialogHelper.updateSubject(lecture)
+            R.id.delete_lecture -> viewModel.deleteLecture(lecture)
+        }
+        return super.onContextItemSelected(item)
     }
 
 

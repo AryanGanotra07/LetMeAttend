@@ -140,11 +140,16 @@ class Repository() {
 
     fun getSubjectsByName(name : String) : List<Subject>?
     {
-       return subjects.value?.filter { value -> value.name.contains(name) }
+       return subjects.value?.filter { value -> value.name.toLowerCase().contains(name.toLowerCase()) }
     }
 
     fun getSubjects() : MediatorLiveData<ArrayList<Subject>>
     {
         return subjects
+    }
+
+    fun deleteLecture(lecture: Lecture)
+    {
+        database.deleteLecture(lecture)
     }
 }

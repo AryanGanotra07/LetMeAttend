@@ -2,6 +2,7 @@ package com.attendance.letmeattend.details.timetable
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
@@ -30,7 +31,7 @@ class Tuesday():Fragment() {
 
     fun newInstance(page: Int): Tuesday? {
         val day : Tuesday = Tuesday()
-        day.position = page
+       // day.position = page
         return day
     }
 
@@ -89,4 +90,19 @@ class Tuesday():Fragment() {
 
 
     }
+//
+//    override fun onContextItemSelected(item: MenuItem): Boolean {
+//        var position = -1
+//        val adapter = viewModel.getTueLectureRecyclerAdapter()
+//        position = try {
+//            adapter.getPosition()
+//        } catch (e: Exception) {
+//            return super.onContextItemSelected(item)
+//        }
+//        val lecture = adapter.getLecture(position)
+//        when (item.getItemId()) {
+//            R.id.edit_lecture -> onLectureClickListener.onLectureClick(lecture)
+//        }
+//        return super.onContextItemSelected(item)
+//    }
 }

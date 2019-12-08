@@ -3,6 +3,7 @@ package com.attendance.letmeattend.details
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
@@ -12,13 +13,10 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModelProviders
 import com.attendance.letmeattend.R
 import com.attendance.letmeattend.databinding.MondayBinding
-
 import com.attendance.letmeattend.details.listeners.AddSubjectListener
 import com.attendance.letmeattend.details.listeners.OnLectureClickListener
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.viewmodels.EnterDetailsViewModel
-
-
 
 class Monday(): Fragment() {
 
@@ -93,4 +91,5 @@ class Monday(): Fragment() {
 
 
     }
+
 }

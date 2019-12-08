@@ -94,6 +94,10 @@ class EnterDetailsViewModel : ViewModel() ,  SaveClickListener   {
         return repository.getSubjects()
     }
 
+    fun deleteLecture(lecture: Lecture)
+    {
+        repository.deleteLecture(lecture)
+    }
 
 
 

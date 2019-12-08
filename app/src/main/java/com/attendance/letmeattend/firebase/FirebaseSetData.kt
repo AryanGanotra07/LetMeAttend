@@ -50,8 +50,8 @@ class FirebaseSetData(val userId:String) {
                     } else {
                         val sub_key = ref?.child("subjects")?.push()?.key
                         if (sub_key != null) {
-                            AppApplication.context?.toast("SUB-KEY-SET")
-                            Log.i("SUB-KEY","SET")
+                           // AppApplication.context?.toast("SUB-KEY-SET")
+                           // Log.i("SUB-KEY","SET")
                             lecture.sub_id = sub_key
                         }
                         addToSubjectList(sub_key, lecture)
@@ -125,7 +125,43 @@ class FirebaseSetData(val userId:String) {
                 if (it.isSuccessful) AppApplication.context?.toast("Lecture Updated Successfuly")
                 else AppApplication.context?.toast("Lecture Update Not Successful")
             }
+        ref?.child("lectures")
+            .orderByChild("sub_id")
+            .equalTo(lecture.sub_id)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
 
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                   if (p0.exists())
+                   {
+                       val lectureM: Lecture = p0.getValue(Lecture::class.java)!!
+                       if(!lectureM.name.equals(lecture.name)){
+
+                       }
+                   }
+                }
+
+            })
+
+    }
+
+    private fun changeSubId(lecture: Lecture)
+    {
+        ref?.child("lectures")
+            .orderByChild("name")
+            .equalTo(lecture.name)
+            .addListenerForSingleValueEvent(object : ValueEventListener{
+                override fun onCancelled(p0: DatabaseError) {
+
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+
+                }
+
+            })
     }
 
 }

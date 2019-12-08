@@ -84,9 +84,9 @@ class EnterDetailsViewModel : ViewModel() ,  SaveClickListener   {
         repository.updateLecture(lecture)
     }
 
-    fun getSubjectByName(name : String) : Subject
+    fun getSubjectByName(name : String) : List<Subject>?
     {
-        return repository.getSubjectByName(name)
+        return repository.getSubjectsByName(name)
     }
 
 

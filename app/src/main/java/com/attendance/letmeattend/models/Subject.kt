@@ -12,6 +12,10 @@ data class Subject(val id : String, val name : String, val c_attendance : Int , 
         )
     }
 
+    override fun toString(): String {
+        return name
+    }
+
 }
 
 

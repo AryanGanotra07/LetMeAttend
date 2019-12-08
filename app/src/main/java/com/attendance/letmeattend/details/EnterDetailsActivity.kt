@@ -1,6 +1,7 @@
 package com.attendance.letmeattend.details
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.attendance.letmeattend.details.listeners.AddSubjectListener
@@ -65,6 +67,13 @@ class EnterDetailsActivity: AppCompatActivity(),
         tabLayout = binding.tabLayout
         alertView = LayoutInflater.from(this).inflate(R.layout.alert_save_subject,null,false)
         dialogHelper = SubjectDialogHelper(this@EnterDetailsActivity,alertView,viewModel)
+
+        viewModel.getSubjects().observe(this, Observer {
+            if (it!=null)
+            {
+                Log.i("SUBJECTSLIST",it.size.toString())
+            }
+        })
 
 
 

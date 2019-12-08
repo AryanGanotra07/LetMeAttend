@@ -89,6 +89,11 @@ class EnterDetailsViewModel : ViewModel() ,  SaveClickListener   {
         return repository.getSubjectsByName(name)
     }
 
+    fun getSubjects() : MediatorLiveData<ArrayList<Subject>>
+    {
+        return repository.getSubjects()
+    }
+
 
 
 

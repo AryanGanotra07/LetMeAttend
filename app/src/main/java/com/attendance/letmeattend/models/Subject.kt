@@ -1,6 +1,6 @@
 package com.attendance.letmeattend.models
 
-data class Subject(val id : String, val name : String, val c_attendance : Int , val t_attendance : Int, val color : Int)
+data class Subject(val id : String = "", val name : String = "", val c_attendance : Int = 0 , val t_attendance : Int = 0, val color : Int = 0)
 {
     fun toMap(): Map<String, Any?> {
         return mapOf(

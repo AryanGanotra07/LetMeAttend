@@ -4,18 +4,21 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.TimePickerDialog
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.core.widget.addTextChangedListener
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.R
 import com.attendance.letmeattend.viewmodels.EnterDetailsViewModel
 import com.attendance.letmeattend.colorseekbar.ColorSeekBar
+import com.attendance.letmeattend.models.Subject
+import com.attendance.letmeattend.utils.toast
 import com.google.android.material.snackbar.Snackbar
 
 class SubjectDialogHelper(val context : Activity,val alertView: View, val viewModel: EnterDetailsViewModel) {
 
-
-    private var subject:EditText=alertView.findViewById(R.id.subject) as EditText
+    private var subject:AutoCompleteTextView=alertView.findViewById(R.id.subject) as AutoCompleteTextView
     private var save_btn=alertView.findViewById(R.id.save) as Button
     private var cancel_btn=alertView.findViewById(R.id.cancel) as Button
     // var change_color_btn=alertView.findViewById(R.id.color_btn) as Button
@@ -24,16 +27,36 @@ class SubjectDialogHelper(val context : Activity,val alertView: View, val viewMo
     private var to_time=alertView.findViewById(R.id.end_time) as TextView
     // var add_btn=activity.findViewById(R.id.add_btn) as ImageButton
     private var alert:AlertDialog.Builder=AlertDialog.Builder(context,R.style.MyDialogTheme)
-
     private var dialog: AlertDialog
-
+    private var results : List<Subject>? = ArrayList<Subject>()
+    val adapter:ArrayAdapter<Subject> = ArrayAdapter(context, R.layout.textview_custom,ArrayList<Subject>())
 
 
     init {
+        subject.setAdapter(adapter)
         alert.setTitle(R.string.dialog_title)
         alert.setCancelable(false)
         alert.setView(alertView)
         dialog = alert.create()
+        subject.addTextChangedListener {
+            context.toast(it.toString())
+            adapter.clear()
+            results = viewModel.getSubjectByName(it.toString())
+            if (!results.isNullOrEmpty())
+            {
+                adapter.addAll(results)
+            }
+        }
+
+       subject.setOnItemClickListener { parent, view, position, id ->
+           val mSubject = parent.adapter.getItem(position) as Subject
+           subject.setText(mSubject.name)
+           alertView.setBackgroundColor(mSubject.color)
+           colorSeekBar.color = mSubject.color
+
+       }
+
+
     }
 
     fun updateSubject( lecture : Lecture)
@@ -99,8 +122,6 @@ class SubjectDialogHelper(val context : Activity,val alertView: View, val viewMo
 
 
         dialog.show()
-
-
 
     }
 

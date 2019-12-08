@@ -1,8 +1,12 @@
 package com.attendance.letmeattend.firebase
 
+import android.util.Log
+import androidx.annotation.MainThread
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
+import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.models.*
+import com.attendance.letmeattend.utils.toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
@@ -66,6 +70,7 @@ class Repository() {
 
         lectures.addSource(lecturesLiveData, Observer {
             if (it!=null && it.hasChildren()) {
+
                 val lecturesList: ArrayList<Lecture> = ArrayList()
                 for (lecture in it.children)
                 {
@@ -84,8 +89,14 @@ class Repository() {
                 {
                     val subj : Subject = subject.getValue(Subject :: class.java)!!
                     subjectList.add(subj)
+
                 }
                 Thread(Runnable { subjects.postValue(subjectList) }).start()
+            }
+            else{
+
+                subjects.value = null
+
             }
         })
 
@@ -130,5 +141,10 @@ class Repository() {
     fun getSubjectsByName(name : String) : List<Subject>?
     {
        return subjects.value?.filter { value -> value.name.contains(name) }
+    }
+
+    fun getSubjects() : MediatorLiveData<ArrayList<Subject>>
+    {
+        return subjects
     }
 }

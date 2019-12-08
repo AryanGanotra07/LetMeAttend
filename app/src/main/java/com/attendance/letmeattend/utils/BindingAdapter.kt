@@ -42,8 +42,6 @@ fun setColor(view: CardView, color:MediatorLiveData<Int>?) {
 }
 
 
-
-
 @BindingAdapter("setupAdapter")
 fun setupAdapter(view: RecyclerView, adapter : LectureRecyclerAdapter)
 {

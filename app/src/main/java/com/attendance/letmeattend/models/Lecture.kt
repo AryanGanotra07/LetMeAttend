@@ -19,10 +19,12 @@ class Lecture(var id : String = "" , var day: Int = 0) {
      var lat:Double = 0.0
      var lng:Double = 0.0
      var color: Int = 0
+     var sub_id = ""
 
     fun toMap(): Map<String, Any?> {
         return mapOf(
             "id" to id,
+            "sub_id" to sub_id,
             "day" to day,
             "name" to name,
             "s_time" to s_time,

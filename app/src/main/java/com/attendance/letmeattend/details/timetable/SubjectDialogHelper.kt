@@ -43,6 +43,7 @@ class SubjectDialogHelper(val context : Activity,val alertView: View, val viewMo
         to_time.setText(lecture.e_time)
         colorSeekBar.color = lecture.color
 
+
         cancel_btn.setOnClickListener { dialog.dismiss() }
         save_btn.setOnClickListener {
 
@@ -94,6 +95,7 @@ class SubjectDialogHelper(val context : Activity,val alertView: View, val viewMo
             alertView.setBackgroundColor(color)
 
         }
+        alertView.setBackgroundColor(lecture.color)
 
 
         dialog.show()

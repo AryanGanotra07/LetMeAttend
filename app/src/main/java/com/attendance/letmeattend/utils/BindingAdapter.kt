@@ -64,8 +64,11 @@ fun updateData(view : RecyclerView, adapter : LectureRecyclerAdapter, lectures :
         if (parentActivity != null) {
 
             lectures.observe(parentActivity, Observer { value ->
-               val lecturesFilter : List<Lecture> = value.filter { it -> it.day == id}
-                adapter.setLectures(lecturesFilter as ArrayList<Lecture>) })
+                if (value != null) {
+                    val lecturesFilter: List<Lecture> = value.filter { it -> it.day == id }
+                    adapter.setLectures(lecturesFilter as ArrayList<Lecture>)
+                }
+            })
 
 //            id.observe(parentActivity, Observer { value ->
 //                val lecturesFilter : List<Lecture> = lectures.value!!.filter { it -> it.day == value }

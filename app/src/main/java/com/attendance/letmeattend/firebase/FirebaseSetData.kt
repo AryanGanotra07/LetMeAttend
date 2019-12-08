@@ -32,6 +32,7 @@ class FirebaseSetData(val userId:String){
 
     fun addLecture(lecture: Lecture)
     {
+
         ref?.child("lectures").
             orderByChild("name").
             equalTo(lecture.name).
@@ -43,7 +44,10 @@ class FirebaseSetData(val userId:String){
                 override fun onDataChange(p0: DataSnapshot) {
                    if (p0.exists())
                    {
-                       Log.i("EXISTS","YES")
+
+                   }
+                    else {
+                       addToSubjectList(lecture)
                    }
                 }
 
@@ -67,6 +71,22 @@ class FirebaseSetData(val userId:String){
                     if (it.isSuccessful) AppApplication.context?.toast("Lecture Added")
                     else AppApplication.context?.toast("Error in adding lecture")
                 }
+    }
+
+    private fun addToSubjectList(lecture: Lecture) {
+            val key = ref?.child("subjects")?.push()?.key
+            if (key != null)
+            {
+                lecture.id = key
+            }
+        val childUpdates = HashMap<String, Any>()
+        childUpdates["/subjects/$key"] = lecture.toMap()
+        ref?.updateChildren(childUpdates)?.
+            addOnCompleteListener {
+                if (it.isSuccessful) AppApplication.context?.toast("Added to subject")
+                else AppApplication.context?.toast("Error in adding subject")
+            }
+
     }
 
     fun updateLecture(lecture: Lecture)

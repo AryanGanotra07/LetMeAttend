@@ -2,10 +2,7 @@ package com.attendance.letmeattend.firebase
 
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
-import com.attendance.letmeattend.models.Attendance
-import com.attendance.letmeattend.models.CollegeLocation
-import com.attendance.letmeattend.models.Lecture
-import com.attendance.letmeattend.models.User
+import com.attendance.letmeattend.models.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
@@ -21,18 +18,19 @@ class Repository() {
    }
 
     private val DB_REF_COLLEGE_LOC = userId?.let {
-        FirebaseDatabase.getInstance().reference.child("User").child(
-           userId).child("college_location")
+       DB_REF_USER?.child("college_location")
     }
 
     private val DB_REF_ATTENDANCE =  userId?.let {
-        FirebaseDatabase.getInstance().reference.child("User").child(
-            userId).child("attendance")
+        DB_REF_USER?.child("attendance")
     }
 
     private val DB_REF_LECTURES =  userId?.let {
-        FirebaseDatabase.getInstance().reference.child("User").child(
-            userId).child("lectures")
+        DB_REF_USER?.child("lectures")
+    }
+
+    private val DB_REF_SUBJECTS = userId?.let {
+        DB_REF_USER?.child("subjects")
     }
 
 
@@ -40,6 +38,7 @@ class Repository() {
     private val collegeLocationLiveData = FirebaseDatabaseLiveData(DB_REF_COLLEGE_LOC)
     private val collegeAttendanceLiveData = FirebaseDatabaseLiveData(DB_REF_ATTENDANCE)
     private val lecturesLiveData = FirebaseDatabaseLiveData(DB_REF_LECTURES)
+    private val subjectsLiveData = FirebaseDatabaseLiveData(DB_REF_SUBJECTS)
     private val database : FirebaseSetData = FirebaseSetData(userId!!)
 
 
@@ -47,6 +46,7 @@ class Repository() {
     private val collegeLocation : MediatorLiveData<CollegeLocation> = MediatorLiveData()
     private val attendance : MediatorLiveData<Attendance> = MediatorLiveData()
     private val lectures : MediatorLiveData<ArrayList<Lecture>> = MediatorLiveData()
+    private val subjects : MediatorLiveData<ArrayList<Subject>> = MediatorLiveData()
     init {
         user.addSource(firebaseDatabaseLiveData, Observer {
             if (it != null) Thread(Runnable { user.postValue(it.getValue(User::class.java))
@@ -75,6 +75,18 @@ class Repository() {
                 Thread(Runnable { lectures.postValue(lecturesList) }).start()
             }
             else lectures.value = null
+        })
+        subjects.addSource(subjectsLiveData, Observer {
+            if (it!=null && it.hasChildren())
+            {
+                val subjectList: ArrayList<Subject> = ArrayList()
+                for (subject in it.children)
+                {
+                    val subj : Subject = subject.getValue(Subject :: class.java)!!
+                    subjectList.add(subj)
+                }
+                Thread(Runnable { subjects.postValue(subjectList) }).start()
+            }
         })
 
 
@@ -113,5 +125,10 @@ class Repository() {
     fun updateLecture(lecture : Lecture)
     {
         database.updateLecture(lecture)
+    }
+
+    fun getSubjectsByName(name : String) : List<Subject>?
+    {
+       return subjects.value?.filter { value -> value.name.contains(name) }
     }
 }

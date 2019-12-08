@@ -9,6 +9,7 @@ import com.attendance.letmeattend.firebase.Repository
 import com.attendance.letmeattend.models.Attendance
 import com.attendance.letmeattend.models.CollegeLocation
 import com.attendance.letmeattend.models.Lecture
+import com.attendance.letmeattend.models.Subject
 
 
 class EnterDetailsViewModel : ViewModel() ,  SaveClickListener   {
@@ -81,6 +82,11 @@ class EnterDetailsViewModel : ViewModel() ,  SaveClickListener   {
     fun updateLecture(lecture: Lecture)
     {
         repository.updateLecture(lecture)
+    }
+
+    fun getSubjectByName(name : String) : Subject
+    {
+        return repository.getSubjectByName(name)
     }
 
 

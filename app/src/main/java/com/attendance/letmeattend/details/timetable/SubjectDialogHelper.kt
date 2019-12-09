@@ -131,16 +131,17 @@ class SubjectDialogHelper(val context : Activity,val alertView: View, val viewMo
 
 
 
-      fun addSubject(day : Int){
+      fun addSubject(day : Int, subj: Subject){
 
 
       //  add_btn.setOnClickListener { dialog.show() }
 
           val lecture : Lecture = Lecture("101",day)
 
-            subject.isEnabled = true
-          colorSeekBar.isEnabled = true
-          subject.setText("")
+            subject.isEnabled = false
+          colorSeekBar.isEnabled = false
+          colorSeekBar.color = subj.color
+          subject.setText(subj.name)
           from_time.setText(R.string.dialog_select_time)
           to_time.setText(R.string.dialog_select_date)
           cancel_btn.setOnClickListener { dialog.dismiss() }
@@ -156,7 +157,7 @@ class SubjectDialogHelper(val context : Activity,val alertView: View, val viewMo
                     lecture.name = subject.text.toString()
                 lecture.e_time = to_time.text.toString()
                 lecture.s_time = from_time.text.toString()
-                lecture.color = colorSeekBar.color
+                lecture.color = subj.color
                 viewModel.addLecture(lecture)
                 dialog.dismiss()
 
@@ -194,9 +195,81 @@ class SubjectDialogHelper(val context : Activity,val alertView: View, val viewMo
            alertView.setBackgroundColor(color)
 
         }
+          alertView.setBackgroundColor(subj.color)
+          colorSeekBar.color = subj.color
 
 
           dialog.show()
+
+
+
+    }
+    fun addSubject(day : Int){
+
+
+        //  add_btn.setOnClickListener { dialog.show() }
+
+        val lecture : Lecture = Lecture("101",day)
+
+        subject.isEnabled = true
+        colorSeekBar.isEnabled = true
+        subject.setText("")
+        from_time.setText(R.string.dialog_select_time)
+        to_time.setText(R.string.dialog_select_date)
+        cancel_btn.setOnClickListener { dialog.dismiss() }
+        save_btn.setOnClickListener {
+
+            if(TextUtils.isEmpty(subject.getText().toString())){
+                subject.error=context.resources.getString(R.string.edit_text_error)
+            }
+            else if(!from_time.text.toString().matches(".*\\d+.*".toRegex()) || !to_time.text.toString().matches(".*\\d+.*".toRegex())){
+                Snackbar.make(alertView, R.string.time_error,Snackbar.LENGTH_LONG).show()
+            }
+            else{
+                lecture.name = subject.text.toString()
+                lecture.e_time = to_time.text.toString()
+                lecture.s_time = from_time.text.toString()
+                lecture.color = colorSeekBar.color
+                viewModel.addLecture(lecture)
+                dialog.dismiss()
+
+            }
+        }
+
+        from_time.setOnClickListener {
+            val c = java.util.Calendar.getInstance()
+            val mHour = c.get(java.util.Calendar.HOUR_OF_DAY)
+            val mMinute = c.get(java.util.Calendar.MINUTE)
+            val timePickerDialog = TimePickerDialog(context,R.style.TimePickerDialog,
+                TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+                    from_time.text = String.format("%02d:%02d", hourOfDay, minute)
+                }, mHour, mMinute, true
+            )
+            timePickerDialog.show()
+        }
+
+        to_time.setOnClickListener {
+            val c=java.util.Calendar.getInstance()
+            val mHour = c.get(java.util.Calendar.HOUR_OF_DAY)
+            val mMinute = c.get(java.util.Calendar.MINUTE)
+            val timePickerDialog = TimePickerDialog(context,R.style.TimePickerDialog,TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+                to_time.text=String.format("%02d:%02d", hourOfDay,minute)
+
+            },mHour,mMinute,true)
+
+            timePickerDialog.show()
+        }
+
+        colorSeekBar.setMaxPosition(100)
+        colorSeekBar.setColorSeeds(R.array.material_colors);
+        colorSeekBar.colorBarPosition=17
+        colorSeekBar.setOnColorChangeListener { colorBarPosition, alphaBarPosition, color ->
+            alertView.setBackgroundColor(color)
+
+        }
+
+
+        dialog.show()
 
 
 

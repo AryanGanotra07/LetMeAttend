@@ -23,6 +23,7 @@ import com.attendance.letmeattend.details.listeners.OnLectureClickListener
 import com.attendance.letmeattend.details.timetable.*
 import com.attendance.letmeattend.models.Attendance
 import com.attendance.letmeattend.models.Lecture
+import com.attendance.letmeattend.models.Subject
 import com.google.android.material.tabs.TabLayout
 
 
@@ -201,6 +202,10 @@ class EnterDetailsActivity: AppCompatActivity(),
         //applicationContext.toast("Called")
        dialogHelper.addSubject(day)
 
+    }
+
+    override fun onAddSubject(day: Int, subject: Subject) {
+        dialogHelper.addSubject(day, subject)
     }
 
     fun getFragmentId(): Int {

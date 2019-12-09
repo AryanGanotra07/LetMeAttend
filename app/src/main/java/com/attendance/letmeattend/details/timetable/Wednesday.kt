@@ -8,14 +8,19 @@ import android.widget.ImageButton
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.attendance.letmeattend.R
 
 import com.attendance.letmeattend.databinding.WednesdayBinding
 import com.attendance.letmeattend.details.listeners.AddSubjectListener
+import com.attendance.letmeattend.details.listeners.CustomOnBoomListener
 import com.attendance.letmeattend.details.listeners.OnLectureClickListener
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.viewmodels.EnterDetailsViewModel
+import com.nightonke.boommenu.Animation.BoomEnum
+import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton
+import kotlinx.android.synthetic.main.monday.*
 
 class Wednesday():Fragment() {
     private lateinit var add_btn : ImageButton
@@ -52,8 +57,8 @@ class Wednesday():Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        add_btn = view.findViewById(R.id.add_btn)
-        add_btn.setOnClickListener { add_sub_callback.onAddSubject(2) }
+      //  add_btn = view.findViewById(R.id.add_btn)
+       // add_btn.setOnClickListener { add_sub_callback.onAddSubject(2) }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -68,6 +73,58 @@ class Wednesday():Fragment() {
 //            binding.recyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL,false)
 //            binding.recyclerView.adapter = viewModel.getLectureRecyclerAdapter()
         }
+        bmb.isInFragment =true
+        bmb.clearBuilders()
+
+        val builder = TextInsideCircleButton.Builder()
+            .normalText("ADD NEW")
+            .normalColor(context!!.getColor(R.color.colorAccent))
+        bmb.addBuilder(builder)
+
+        for (i in 1 until bmb.getPiecePlaceEnum().pieceNumber()) {
+            val builder = TextInsideCircleButton.Builder()
+                .normalTextRes(R.string.edit_text_error)
+                .normalColor(context!!.getColor(R.color.colorAccent))
+                .unable(true)
+                .unableColor(context!!.getColor(R.color.windowBackground))
+            bmb.addBuilder(builder)
+            if (bmb.getBoomButton(i)!=null) {
+                //bmb.getBoomButton(i).setBackgroundColor(context!!.getColor(R.color.colorAccent))
+            }
+        }
+
+
+        viewModel.getSubjects().observe(this, Observer {
+                value ->
+            bmb.clearBuilders()
+
+            val builder = TextInsideCircleButton.Builder()
+                .normalImageDrawable(context!!.getDrawable(R.drawable.ic_create_black_24dp))
+                .normalColor(context!!.getColor(R.color.colorAccent))
+            bmb.addBuilder(builder)
+            for (i in 0 until bmb.getPiecePlaceEnum().pieceNumber()-1) {
+                if (value!=null && value.size>i) {
+                    val builder = TextInsideCircleButton.Builder()
+                        .normalText(value.get(i).name)
+                        .normalImageDrawable(context!!.getDrawable(R.drawable.ic_add_black_24dp))
+                        .normalColor(value.get(i).color)
+                    bmb.addBuilder(builder)
+                } else {
+                    val builder = TextInsideCircleButton.Builder()
+                        .normalColor(context!!.getColor(R.color.windowBackground))
+                        .unable(true)
+                        .unableColor(context!!.getColor(R.color.windowBackground))
+                    bmb.addBuilder(builder)
+                }
+
+            }
+
+            bmb.boomEnum = BoomEnum.PARABOLA_4
+
+
+        })
+
+        bmb.setOnBoomListener(CustomOnBoomListener(2,add_sub_callback,viewModel))
 //
 //        fun setPosition(pos : Int)
 //        {

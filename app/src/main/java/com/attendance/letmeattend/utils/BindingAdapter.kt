@@ -12,10 +12,16 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
+import com.attendance.letmeattend.R
 import com.attendance.letmeattend.adapters.LectureRecyclerAdapter
 import com.attendance.letmeattend.models.Lecture
+import com.attendance.letmeattend.models.Subject
 import com.attendance.letmeattend.utils.extentions.getParentActivity
 import com.google.android.material.tabs.TabLayout
+import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton
+import com.nightonke.boommenu.BoomMenuButton
+import com.nightonke.boommenu.Piece.PiecePlaceEnum
+import kotlinx.android.synthetic.main.monday.*
 
 
 @BindingAdapter("setMutableText")
@@ -52,6 +58,44 @@ fun setupAdapter(view: RecyclerView, adapter : LectureRecyclerAdapter)
         view.adapter = adapter
     }
 }
+
+@BindingAdapter("piece_num")
+fun setPieceNum(view : BoomMenuButton , subjects : MediatorLiveData<ArrayList<Subject>>)
+{
+    val parentActivity : AppCompatActivity? = view.getParentActivity()
+    if (view != null && subjects!=null)
+    {
+        if (parentActivity!=null)
+        {
+            val builder = TextInsideCircleButton.Builder()
+                .normalText("ADD NEW")
+                .normalColor(parentActivity?.getColor(R.color.colorAccent))
+            view.addBuilder(builder)
+
+            subjects.observe(parentActivity!!, Observer {value ->
+
+                for (i in 1 until view.getPiecePlaceEnum().pieceNumber()) {
+//                    if (value.size>i-1) {
+//                        val builder = TextInsideCircleButton.Builder()
+//                            .normalText(value.get(i).name)
+//                            .normalColor(value.get(i).color)
+//                        view.addBuilder(builder)
+//                    } else {
+//
+//                    }
+                    val builder = TextInsideCircleButton.Builder()
+                .normalTextRes(R.string.edit_text_error)
+                .normalColor(parentActivity!!.getColor(R.color.colorAccent))
+                .unable(true)
+                .unableColor(parentActivity!!.getColor(R.color.windowBackground))
+                    view.addBuilder(builder)
+                }
+            })
+        }
+
+    }
+}
+
 
 @BindingAdapter("adapter","lectures","id",requireAll = true)
 fun updateData(view : RecyclerView, adapter : LectureRecyclerAdapter, lectures : MediatorLiveData<ArrayList<Lecture>>, id : Int)

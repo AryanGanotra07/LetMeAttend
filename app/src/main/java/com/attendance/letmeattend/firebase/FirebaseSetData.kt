@@ -197,6 +197,9 @@ class FirebaseSetData(val userId:String) {
             .child("lect_ids")
             .child(lecture.id)
             .removeValue()
+            .addOnCompleteListener {
+                if(it.isSuccessful) checkSubject(lecture.sub_id)
+            }
         ref?.child("lectures")
             .child(lecture.id)
             .removeValue()
@@ -209,7 +212,32 @@ class FirebaseSetData(val userId:String) {
 
     fun checkSubject(key : String?)
     {
+        ref?.child("subjects")
+            .child(key!!)
+            .child("lect_ids")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
 
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    if (!p0.exists())
+                    {
+                        if (!p0.hasChildren())
+                        {
+                            removeSubject(key!!)
+                        }
+                    }
+                }
+
+            })
+    }
+
+    fun removeSubject(key : String)
+    {
+        ref?.child("subjects")
+            .child(key)
+            .removeValue()
     }
 
 }

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.attendance.letmeattend.maps.MapFragment
 import com.attendance.letmeattend.R
 import com.attendance.letmeattend.details.EnterDetailsActivity
+import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.services.MyAlarmManager
 import com.firebase.ui.auth.AuthUI
 import kotlinx.android.synthetic.main.screen_login.*
@@ -45,6 +46,7 @@ class FirebaseLogin: AppCompatActivity(),View.OnClickListener {
 
         val alarmManager : MyAlarmManager = MyAlarmManager()
         alarmManager.setAlarm()
+        MyNotificationChannel.createNotifChannel()
 
     }
 

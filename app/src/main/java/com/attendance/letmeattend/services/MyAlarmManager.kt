@@ -24,8 +24,9 @@ class MyAlarmManager()  {
     {
         val calendar: Calendar = Calendar.getInstance().apply {
             timeInMillis = System.currentTimeMillis()
+            set(Calendar.DAY_OF_WEEK,Calendar.MONDAY)
             set(Calendar.HOUR_OF_DAY, 14)
-            set(Calendar.MINUTE,30)
+            set(Calendar.MINUTE,40)
         }
 
         alarmMgr?.setInexactRepeating(

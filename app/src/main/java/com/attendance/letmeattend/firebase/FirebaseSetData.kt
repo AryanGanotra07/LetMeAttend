@@ -6,13 +6,16 @@ import com.attendance.letmeattend.models.Attendance
 import com.attendance.letmeattend.models.CollegeLocation
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.models.Subject
+import com.attendance.letmeattend.services.MyAlarmManager
 import com.attendance.letmeattend.utils.toast
 import com.google.firebase.database.*
 
 class FirebaseSetData(val userId:String) {
     //    private val userId = FirebaseAuth.getInstance().currentUser?.uid
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
-    private val ref = userId?.let { database.getReference("User").child(it) }
+    private val ref = userId?.let { database.getReference("User").child(it)
+    }
+    private val myAlarmManager : MyAlarmManager = MyAlarmManager()
 
 
     fun setAttendance(attendance: Attendance) {
@@ -80,7 +83,11 @@ class FirebaseSetData(val userId:String) {
         val childUpdates = HashMap<String, Any>()
         childUpdates["/lectures/$key"] = lecture.toMap()
         ref?.updateChildren(childUpdates)?.addOnCompleteListener {
-            if (it.isSuccessful) AppApplication.context?.toast("Lecture Added")
+            if (it.isSuccessful)
+            {
+
+                myAlarmManager.setAlarm(lecture)
+                AppApplication.context?.toast("Lecture Added")}
             else AppApplication.context?.toast("Error in adding lecture")
         }
         ref
@@ -204,7 +211,10 @@ class FirebaseSetData(val userId:String) {
             .child(lecture.id)
             .removeValue()
             .addOnCompleteListener {
-                if (it.isSuccessful) AppApplication.context?.toast("Lecture Deleted Successfully")
+                if (it.isSuccessful){
+                    AppApplication.context?.toast("Lecture Deleted Successfully")
+                    myAlarmManager.removeAlarm(lecture)
+                }
                 else AppApplication.context?.toast("Lecture Deletion Failed")
             }
 

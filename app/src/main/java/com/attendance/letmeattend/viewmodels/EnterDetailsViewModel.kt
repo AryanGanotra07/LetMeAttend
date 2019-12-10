@@ -10,6 +10,7 @@ import com.attendance.letmeattend.models.Attendance
 import com.attendance.letmeattend.models.CollegeLocation
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.models.Subject
+import com.attendance.letmeattend.services.MyAlarmManager
 
 
 class EnterDetailsViewModel : ViewModel() ,  SaveClickListener   {
@@ -25,6 +26,7 @@ class EnterDetailsViewModel : ViewModel() ,  SaveClickListener   {
       private val thursAdapter : LectureRecyclerAdapter = LectureRecyclerAdapter()
       private val friAdapter : LectureRecyclerAdapter = LectureRecyclerAdapter()
       private val satAdapter : LectureRecyclerAdapter = LectureRecyclerAdapter()
+      private val mAllarmMgr  : MyAlarmManager = MyAlarmManager()
 
 
 
@@ -97,6 +99,11 @@ class EnterDetailsViewModel : ViewModel() ,  SaveClickListener   {
     fun deleteLecture(lecture: Lecture)
     {
         repository.deleteLecture(lecture)
+    }
+
+    fun getAlarmManager() : MyAlarmManager
+    {
+        return mAllarmMgr
     }
 
 

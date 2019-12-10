@@ -26,7 +26,7 @@ class FirebaseLogin: AppCompatActivity(),View.OnClickListener {
                     startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(
                         arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())).setTheme(R.style.FirebaseAuthUi).build(),
                         RC_SIGN_IN_GOOGLE)
-                skin_signin_textview.id->startActivity(Intent(this@FirebaseLogin, EnterDetailsActivity::class.java))
+                skin_signin_textview.id->startActivity(Intent(this@FirebaseLogin, MapFragment::class.java))
 
 
 
@@ -45,8 +45,13 @@ class FirebaseLogin: AppCompatActivity(),View.OnClickListener {
        // createSignInIntent()
 
         val alarmManager : MyAlarmManager = MyAlarmManager()
-        alarmManager.setAlarm()
+       // alarmManager.setAlarm()
         MyNotificationChannel.createNotifChannel()
+       // val notificationBuilder = NotificationBuilder()
+     //   notificationBuilder.buildNotification(0)
+        //val intent = Intent(this, GoogleService::class.java)
+        //startService(intent)
+
 
     }
 

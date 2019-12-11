@@ -30,27 +30,30 @@ class NotificationBuilder() {
         val name = lecture.name
         Log.i("LECTURE_ID_BUILDER",lect_id)
 
+        val bundle = Bundle()
+        bundle.putParcelable("lecture",lecture)
+
         val yesIntent = Intent(context,NotificationReciever::class.java)
         yesIntent.action = ACTION_YES
         yesIntent.putExtra("EXTRA_NOTIFICATION_ID", id)
-        val yesBundle = Bundle()
-        yesBundle.putParcelable("lecture",lecture)
-        yesIntent.putExtra("lecture",yesBundle)
+        yesIntent.putExtra("lecture",bundle)
 
         val noIntent = Intent(context,NotificationReciever::class.java)
         noIntent.action = ACTION_NO
         noIntent.putExtra("EXTRA_NOTIFICATION_ID",id)
-        val noBundle = Bundle()
-        noBundle.putParcelable("lecture",lecture)
-        noIntent.putExtra("lecture",noBundle)
+        noIntent.putExtra("lecture",bundle)
 
         val noClassIntent = Intent(context,NotificationReciever::class.java)
         noClassIntent.action = ACTION_NO_CLASS
+        noClassIntent.putExtra("EXTRA_NOTIFICATION_ID",id)
+        noClassIntent.putExtra("lecture", bundle)
 
         val yesPendingIntent: PendingIntent =
             PendingIntent.getBroadcast(context, 0, yesIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val noPendingIntent : PendingIntent =
             PendingIntent.getBroadcast(context,1,noIntent,PendingIntent.FLAG_UPDATE_CURRENT)
+        val noClassPendingIntent : PendingIntent =
+            PendingIntent.getBroadcast(context,2,noClassIntent,PendingIntent.FLAG_UPDATE_CURRENT)
         var builder = NotificationCompat.Builder(context!!, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_create_black_24dp)
             .setContentTitle(name)
@@ -61,6 +64,7 @@ class NotificationBuilder() {
             .addExtras(Bundle())
             .addAction(R.drawable.ic_add_black_24dp,context.getString(R.string.yes),yesPendingIntent)
             .addAction(R.drawable.ic_add_black_24dp,context.getString(R.string.no),noPendingIntent)
+            .addAction(R.drawable.ic_add_black_24dp,context.getString(R.string.no_class),noClassPendingIntent)
             .setAutoCancel(true)
         with(NotificationManagerCompat.from(context)) {
             // notificationId is a unique int for each notification that you must define

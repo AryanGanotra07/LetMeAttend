@@ -32,14 +32,21 @@ class NotificationReciever() : BroadcastReceiver() {
             context?.toast("YES CLICKED")
             builder.removeNotification(intent.getIntExtra("EXTRA_NOTIFICATION_ID",0))
             attended = true
+            database.addAttendance(lect_id,sub_id,attended)
         }
         else if (intent?.action == builder.ACTION_NO)
         {
             context?.toast("NO CLICKED")
             builder.removeNotification(intent.getIntExtra("EXTRA_NOTIFICATION_ID",0))
             attended = false
+            database.addAttendance(lect_id,sub_id,attended)
         }
-       database.addAttendance(lect_id,sub_id,attended)
+        else if (intent?.action == builder.ACTION_NO_CLASS)
+        {
+            context?.toast("NO CLASS CLICKED")
+            builder.removeNotification(intent.getIntExtra("EXTRA_NOTIFICATION_ID",0))
+        }
+
 
 
     }

@@ -21,8 +21,9 @@
     <string name="choose_time">Choose Time</string>
     <string name="channel_name">MyChannel</string>
     <string name="channel_description">MyNotif</string>
-    <string name="yes">yes</string>
-    <string name="no">no</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="no_class">CANCELED</string>
 
 
     <!-- Copied from colorpickerlibrary -->

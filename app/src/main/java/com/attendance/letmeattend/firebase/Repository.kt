@@ -37,6 +37,14 @@ class Repository() {
         DB_REF_USER?.child("subjects")
     }
 
+//    private val DB_REF_LAT = userId?.let {
+//        DB_REF_LECTURES?.child("lat")
+//    }
+//
+//    private val DB_REF_LNG = userId?.let {
+//        DB_REF_LECTURES?.child("lng")
+//    }
+
 
     private val firebaseDatabaseLiveData = FirebaseDatabaseLiveData(DB_REF_USER)
     private val collegeLocationLiveData = FirebaseDatabaseLiveData(DB_REF_COLLEGE_LOC)
@@ -44,7 +52,6 @@ class Repository() {
     private val lecturesLiveData = FirebaseDatabaseLiveData(DB_REF_LECTURES)
     private val subjectsLiveData = FirebaseDatabaseLiveData(DB_REF_SUBJECTS)
     private val database : FirebaseSetData = FirebaseSetData(userId!!)
-
 
     private val user : MediatorLiveData<User> = MediatorLiveData()
     private val collegeLocation : MediatorLiveData<CollegeLocation> = MediatorLiveData()
@@ -151,5 +158,10 @@ class Repository() {
     fun deleteLecture(lecture: Lecture)
     {
         database.deleteLecture(lecture)
+    }
+
+    fun addAttendance(id : String,sub_id :String, attended : Boolean)
+    {
+        database.addAttendance(id, sub_id,attended)
     }
 }

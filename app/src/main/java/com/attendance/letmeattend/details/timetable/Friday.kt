@@ -20,6 +20,8 @@ import com.attendance.letmeattend.viewmodels.EnterDetailsViewModel
 import com.nightonke.boommenu.Animation.BoomEnum
 import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton
 import kotlinx.android.synthetic.main.monday.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class Friday():Fragment() {
 
@@ -29,7 +31,7 @@ class Friday():Fragment() {
     private lateinit var binding : FridayBinding
     private lateinit var lectures : MediatorLiveData<ArrayList<Lecture>>
     private var position : Int = 0
-
+    private val day = Calendar.FRIDAY
 
     fun newInstance(page: Int): Friday? {
         val day : Friday = Friday()
@@ -67,7 +69,7 @@ class Friday():Fragment() {
         if (activity!=null) {
             viewModel = ViewModelProviders.of(activity!!).get(EnterDetailsViewModel::class.java)
            binding.vm = viewModel
-            binding.id = 4
+            binding.id = day
             viewModel.getFriLectureRecyclerAdapter().setClickListener(onLectureClickListener)
 
            // Log.i("FragmentID",position.toString())
@@ -126,7 +128,7 @@ class Friday():Fragment() {
 
         })
 
-        bmb.setOnBoomListener(CustomOnBoomListener(4,add_sub_callback,viewModel))
+        bmb.setOnBoomListener(CustomOnBoomListener(day,add_sub_callback,viewModel))
 //
 //        fun setPosition(pos : Int)
 //        {

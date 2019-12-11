@@ -25,6 +25,7 @@ import com.attendance.letmeattend.models.Attendance
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.models.Subject
 import com.google.android.material.tabs.TabLayout
+import java.util.*
 
 
 class EnterDetailsActivity: AppCompatActivity(),
@@ -224,12 +225,12 @@ class EnterDetailsActivity: AppCompatActivity(),
         var adapter = viewModel.getMonLectureRecyclerAdapter()
         when(item.groupId)
         {
-            0-> adapter = viewModel.getMonLectureRecyclerAdapter()
-            1 -> adapter = viewModel.getTueLectureRecyclerAdapter()
-            2-> adapter = viewModel.getWedLectureRecyclerAdapter()
-            3->adapter = viewModel.getThurLectureRecyclerAdapter()
-            4->adapter = viewModel.getFriLectureRecyclerAdapter()
-            5->adapter = viewModel.getsatLectureRecyclerAdapter()
+            Calendar.MONDAY-> adapter = viewModel.getMonLectureRecyclerAdapter()
+            Calendar.TUESDAY -> adapter = viewModel.getTueLectureRecyclerAdapter()
+            Calendar.WEDNESDAY-> adapter = viewModel.getWedLectureRecyclerAdapter()
+            Calendar.THURSDAY->adapter = viewModel.getThurLectureRecyclerAdapter()
+            Calendar.FRIDAY->adapter = viewModel.getFriLectureRecyclerAdapter()
+            Calendar.SATURDAY->adapter = viewModel.getsatLectureRecyclerAdapter()
         }
 
         position = try {

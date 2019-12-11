@@ -5,6 +5,7 @@ import android.content.Intent
 import android.util.Log
 import androidx.core.app.JobIntentService
 import com.attendance.letmeattend.application.AppApplication
+import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.notifications.NotificationBuilder
 import com.attendance.letmeattend.utils.toast
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -33,7 +34,27 @@ class LocationService : JobIntentService() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         fusedLocationClient.lastLocation.addOnSuccessListener {
             // this@LocationService.toast("Lattitude:- " + it.latitude + " longitude:- " + it.longitude)
-            Log.i("LocationStatus",it.longitude.toString())
+//            Log.i("LocationStatusID",intent.getStringExtra("id"))
+            val lectureBundle = intent.getBundleExtra("lecture")
+            val lecture = lectureBundle.getParcelable<Lecture>("lecture")
+            if (lecture.lat!=0.0 || lecture.lng != 0.0)
+            {
+                if (it.latitude<lecture.lat+1 && it.latitude>lecture.lat-1
+                    && it.longitude<lecture.lng+1 && it.longitude>lecture.lng-1)
+                {
+                    //mark attendance. ask user to recheck attendance
+                }
+                else
+                {
+                    //ask user if he is attending. If yes
+                    // update location
+                    // and mark present. If no mark absent. If no class,then ignore
+                }
+            }
+            else
+            {
+                //ask user if he is attending lecture. if yes then save location , if no mark absent, if no class then ignore
+            }
             notifBuilder.buildNotification(intent, it)
         }
         fusedLocationClient.lastLocation.addOnCompleteListener {

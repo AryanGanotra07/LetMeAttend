@@ -25,6 +25,8 @@ import com.nightonke.boommenu.BoomButtons.HamButton
 import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton
 import com.nightonke.boommenu.OnBoomListener
 import kotlinx.android.synthetic.main.monday.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class Monday(): Fragment() {
@@ -35,6 +37,7 @@ class Monday(): Fragment() {
     private lateinit var binding : MondayBinding
     private lateinit var lectures : MediatorLiveData<ArrayList<Lecture>>
     private var position : Int = 0
+    private val day = Calendar.MONDAY
 
 
     fun newInstance(page: Int): Monday? {
@@ -75,7 +78,7 @@ class Monday(): Fragment() {
         if (activity!=null) {
             viewModel = ViewModelProviders.of(activity!!).get(EnterDetailsViewModel::class.java)
             binding.vm = viewModel
-            binding.id = 0
+            binding.id = day
 
             Log.i("FragmentID",position.toString())
             binding.lifecycleOwner = this
@@ -135,7 +138,7 @@ class Monday(): Fragment() {
 
         })
 
-        bmb.setOnBoomListener(CustomOnBoomListener(0,add_sub_callback,viewModel))
+        bmb.setOnBoomListener(CustomOnBoomListener(day,add_sub_callback,viewModel))
 
     }
 

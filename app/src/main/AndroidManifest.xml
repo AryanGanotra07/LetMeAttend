@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
             android:allowBackup="true"
@@ -26,12 +27,6 @@
         <activity android:name=".authentication.FirebaseLogin"
         android:theme="@style/FirebaseAuthUi">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-
 
         </activity>
 
@@ -47,6 +42,13 @@
                   android:theme="@style/FirebaseAuthUi">
 
 
+        </activity>
+        <activity android:name=".SplashScreen.SplashScreen" android:theme="@style/splashscreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
     </application>
 

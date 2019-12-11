@@ -1,5 +1,6 @@
 package com.attendance.letmeattend.firebase
 
+import android.location.Location
 import android.util.Log
 import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.models.Attendance
@@ -10,12 +11,13 @@ import com.attendance.letmeattend.services.MyAlarmManager
 import com.attendance.letmeattend.utils.toast
 import com.google.firebase.database.*
 
-class FirebaseSetData(val userId:String) {
+class FirebaseSetData(val userId: String) {
     //    private val userId = FirebaseAuth.getInstance().currentUser?.uid
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
-    private val ref = userId?.let { database.getReference("User").child(it)
+    private val ref = userId?.let {
+        database.getReference("User").child(it)
     }
-    private val myAlarmManager : MyAlarmManager = MyAlarmManager()
+    private val myAlarmManager: MyAlarmManager = MyAlarmManager()
 
 
     fun setAttendance(attendance: Attendance) {
@@ -46,18 +48,18 @@ class FirebaseSetData(val userId:String) {
 
                 override fun onDataChange(p0: DataSnapshot) {
                     if (p0.exists()) {
-                            val child = p0.children.first()
-                        Log.i("CHILD",child.toString())
-                            val lectureM: Lecture =child.getValue(Lecture::class.java)!!
-                            lecture.sub_id = lectureM.sub_id
-                            Log.i("SUB-KEY", lectureM.name + lectureM.sub_id)
-                            addToLectureList(key, lecture)
+                        val child = p0.children.first()
+                        Log.i("CHILD", child.toString())
+                        val lectureM: Lecture = child.getValue(Lecture::class.java)!!
+                        lecture.sub_id = lectureM.sub_id
+                        Log.i("SUB-KEY", lectureM.name + lectureM.sub_id)
+                        addToLectureList(key, lecture)
 
                     } else {
                         val sub_key = ref?.child("subjects")?.push()?.key
                         if (sub_key != null) {
-                           // AppApplication.context?.toast("SUB-KEY-SET")
-                            Log.i("SUB-KEY","SET")
+                            // AppApplication.context?.toast("SUB-KEY-SET")
+                            Log.i("SUB-KEY", "SET")
                             lecture.sub_id = sub_key
                         }
                         addToSubjectList(sub_key, lecture)
@@ -78,17 +80,15 @@ class FirebaseSetData(val userId:String) {
 
     }
 
-    private fun addToLectureList(key : String? , lecture: Lecture)
-    {
+    private fun addToLectureList(key: String?, lecture: Lecture) {
         val childUpdates = HashMap<String, Any>()
         childUpdates["/lectures/$key"] = lecture.toMap()
         ref?.updateChildren(childUpdates)?.addOnCompleteListener {
-            if (it.isSuccessful)
-            {
+            if (it.isSuccessful) {
 
                 myAlarmManager.setAlarm(lecture)
-                AppApplication.context?.toast("Lecture Added")}
-            else AppApplication.context?.toast("Error in adding lecture")
+                AppApplication.context?.toast("Lecture Added")
+            } else AppApplication.context?.toast("Error in adding lecture")
         }
         ref
             .child("subjects")
@@ -117,10 +117,8 @@ class FirebaseSetData(val userId:String) {
         ref?.updateChildren(childUpdates)?.addOnCompleteListener {
             if (it.isSuccessful) {
                 AppApplication.context?.toast("Added to subject")
-            }
-            else AppApplication.context?.toast("Error in adding subject")
+            } else AppApplication.context?.toast("Error in adding subject")
         }
-
 
 
 //    fun setUser(attendance: Attendance) {
@@ -164,8 +162,7 @@ class FirebaseSetData(val userId:String) {
 
     }
 
-    private fun updateLectureFinal(lecture: Lecture)
-    {
+    private fun updateLectureFinal(lecture: Lecture) {
         ref?.child("lectures")
             .child(lecture.id)
             .setValue(lecture)
@@ -175,19 +172,17 @@ class FirebaseSetData(val userId:String) {
             }
     }
 
-    private fun changeSubId(lecture: Lecture)
-    {
+    private fun changeSubId(lecture: Lecture) {
         ref?.child("lectures")
             .orderByChild("name")
             .equalTo(lecture.name)
-            .addListenerForSingleValueEvent(object : ValueEventListener{
+            .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
 
                 }
 
                 override fun onDataChange(p0: DataSnapshot) {
-                    if (p0.exists())
-                    {
+                    if (p0.exists()) {
                         val lectureM: Lecture = p0.getValue(Lecture::class.java)!!
                         lecture.sub_id = lectureM.sub_id
                         updateLectureFinal(lecture)
@@ -197,31 +192,28 @@ class FirebaseSetData(val userId:String) {
             })
     }
 
-    fun deleteLecture(lecture: Lecture)
-    {
+    fun deleteLecture(lecture: Lecture) {
         ref?.child("subjects")
             .child(lecture.sub_id)
             .child("lect_ids")
             .child(lecture.id)
             .removeValue()
             .addOnCompleteListener {
-                if(it.isSuccessful) checkSubject(lecture.sub_id)
+                if (it.isSuccessful) checkSubject(lecture.sub_id)
             }
         ref?.child("lectures")
             .child(lecture.id)
             .removeValue()
             .addOnCompleteListener {
-                if (it.isSuccessful){
+                if (it.isSuccessful) {
                     AppApplication.context?.toast("Lecture Deleted Successfully")
                     myAlarmManager.removeAlarm(lecture)
-                }
-                else AppApplication.context?.toast("Lecture Deletion Failed")
+                } else AppApplication.context?.toast("Lecture Deletion Failed")
             }
 
     }
 
-    fun checkSubject(key : String?)
-    {
+    fun checkSubject(key: String?) {
         ref?.child("subjects")
             .child(key!!)
             .child("lect_ids")
@@ -231,10 +223,8 @@ class FirebaseSetData(val userId:String) {
                 }
 
                 override fun onDataChange(p0: DataSnapshot) {
-                    if (!p0.exists())
-                    {
-                        if (!p0.hasChildren())
-                        {
+                    if (!p0.exists()) {
+                        if (!p0.hasChildren()) {
                             removeSubject(key!!)
                         }
                     }
@@ -243,11 +233,150 @@ class FirebaseSetData(val userId:String) {
             })
     }
 
-    fun removeSubject(key : String)
-    {
+    fun removeSubject(key: String) {
         ref?.child("subjects")
             .child(key)
             .removeValue()
+    }
+
+    fun addAttendance(id: String, sub_id: String, attended: Boolean) {
+        if (attended) {
+            addCurrentAttendance(id, sub_id)
+        }
+        addTotalAttendance(id, sub_id)
+    }
+
+    private fun addCurrentAttendance(id: String, sub_id: String) {
+
+        Log.i("ID", id)
+        ref?.child("lectures")
+            .child(id).child("c_attendance")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    if (p0.exists()) {
+                        Log.i("P0VALUE", p0.value.toString())
+                        var att = p0.value.toString().toInt()
+                        att = att + 1
+                        p0.ref.setValue(att).addOnCompleteListener {
+                            var str: String = ""
+                            if (it.isSuccessful) {
+                                str = "Current attendance incremented Successfully"
+                            } else {
+                                str = "Current attendance updation failed"
+                            }
+                            AppApplication?.context?.toast(str)
+                        }
+                    } else Log.i("DATAVALUE", "NULL")
+
+                }
+
+            })
+        ref?.child("subjects")
+            .child(sub_id)
+            .child("c_attendance")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    if (p0.exists()) {
+                        Log.i("P0VALUE", p0.value.toString())
+                        var att = p0.value.toString().toInt()
+                        att = att + 1
+                        p0.ref.setValue(att).addOnCompleteListener {
+                            var str: String = ""
+                            if (it.isSuccessful) {
+                                str = "Current attendance incremented Successfully"
+                            } else {
+                                str = "Current attendance updation failed"
+                            }
+                            AppApplication?.context?.toast(str)
+                        }
+                    } else Log.i("DATAVALUE", "NULL")
+
+                }
+
+
+            })
+
+    }
+
+    private fun addTotalAttendance(id: String, sub_id: String) {
+        ref?.child("lectures")
+            .child(id).child("t_attendance")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    var att = p0.value.toString().toInt()
+                    att++
+                    p0.ref.setValue(att).addOnCompleteListener {
+                        var str = ""
+                        if (it.isSuccessful) {
+                            str = "Total attendance incremented Successfully"
+                        } else {
+                            str = "Total attendance updation failed"
+                        }
+                        AppApplication?.context?.toast(str)
+                    }
+
+                }
+
+            })
+
+        ref?.child("subjects")
+            .child(sub_id)
+            .child("t_attendance")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    if (p0.exists()) {
+                        Log.i("P0VALUE", p0.value.toString())
+                        var att = p0.value.toString().toInt()
+                        att = att + 1
+                        p0.ref.setValue(att).addOnCompleteListener {
+                            var str: String = ""
+                            if (it.isSuccessful) {
+                                str = "Current attendance incremented Successfully"
+                            } else {
+                                str = "Current attendance updation failed"
+                            }
+                            AppApplication?.context?.toast(str)
+                        }
+                    } else Log.i("DATAVALUE", "NULL")
+
+                }
+            })
+    }
+
+    fun setLocation(id : String, location : Location)
+    {
+        ref?.child("lectures")
+            .child(id)
+            .child("lat")
+            .setValue(location.latitude)
+            .addOnCompleteListener {
+                if (it.isSuccessful) AppApplication?.context?.toast("Latitude Updated")
+                else AppApplication?.context?.toast("Latitude Updation Failed")
+            }
+        ref?.child("lectures")
+            .child(id)
+            .child("lng")
+            .setValue(location.longitude)
+            .addOnCompleteListener {
+                if (it.isSuccessful) AppApplication?.context?.toast("Longitude Updated")
+                else AppApplication?.context?.toast("Longitude Updation Failed")
+            }
     }
 
 }

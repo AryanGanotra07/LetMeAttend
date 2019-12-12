@@ -24,6 +24,7 @@
     <string name="yes">YES</string>
     <string name="no">NO</string>
     <string name="no_class">CANCELED</string>
+    <string name="are_you_attending">Are you attending</string>
 
 
     <!-- Copied from colorpickerlibrary -->

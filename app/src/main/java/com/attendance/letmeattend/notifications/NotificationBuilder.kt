@@ -37,16 +37,21 @@ class NotificationBuilder() {
         yesIntent.action = ACTION_YES
         yesIntent.putExtra("EXTRA_NOTIFICATION_ID", id)
         yesIntent.putExtra("lecture",bundle)
+       // yesIntent.putExtra("lat",location.latitude)
+        yesIntent.putExtra("location",location)
 
         val noIntent = Intent(context,NotificationReciever::class.java)
         noIntent.action = ACTION_NO
         noIntent.putExtra("EXTRA_NOTIFICATION_ID",id)
         noIntent.putExtra("lecture",bundle)
+        //noIntent.putExtra("lat",location.latitude)
+        //noIntent.putExtra("lng",location.longitude)
 
         val noClassIntent = Intent(context,NotificationReciever::class.java)
         noClassIntent.action = ACTION_NO_CLASS
         noClassIntent.putExtra("EXTRA_NOTIFICATION_ID",id)
         noClassIntent.putExtra("lecture", bundle)
+
 
         val yesPendingIntent: PendingIntent =
             PendingIntent.getBroadcast(context, 0, yesIntent, PendingIntent.FLAG_UPDATE_CURRENT)
@@ -57,11 +62,10 @@ class NotificationBuilder() {
         var builder = NotificationCompat.Builder(context!!, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_create_black_24dp)
             .setContentTitle(name)
-            .setContentText(location.latitude.toString()+" "+location.longitude.toString())
+            .setContentText("Have you attended "+lecture.name+" today from "+lecture.s_time+ " to "+lecture.e_time+"?")
             .setStyle(NotificationCompat.BigTextStyle()
-                .bigText(location.latitude.toString()+" "+location.longitude.toString()))
+                .bigText("Have you attended "+lecture.name+" today from "+lecture.s_time+ " to "+lecture.e_time+"?"))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .addExtras(Bundle())
             .addAction(R.drawable.ic_add_black_24dp,context.getString(R.string.yes),yesPendingIntent)
             .addAction(R.drawable.ic_add_black_24dp,context.getString(R.string.no),noPendingIntent)
             .addAction(R.drawable.ic_add_black_24dp,context.getString(R.string.no_class),noClassPendingIntent)

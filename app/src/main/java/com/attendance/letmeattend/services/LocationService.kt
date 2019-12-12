@@ -54,8 +54,10 @@ class LocationService : JobIntentService() {
             else
             {
                 //ask user if he is attending lecture. if yes then save location , if no mark absent, if no class then ignore
+
             }
             notifBuilder.buildNotification(intent, it)
+
         }
         fusedLocationClient.lastLocation.addOnCompleteListener {
             if (it.exception != null) {

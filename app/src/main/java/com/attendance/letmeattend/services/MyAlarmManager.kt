@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.util.Log
 import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.models.Lecture
-import java.math.BigInteger
 import java.util.*
 
 class MyAlarmManager()  {
@@ -23,17 +22,24 @@ class MyAlarmManager()  {
 
     }
 
-    fun setAlarm(lecture: Lecture)
+    fun setAlarm(lecture: Lecture, first : Boolean)
     {
         val day  = lecture.day
         val temp = lecture.s_time.split(":")
         val hour = temp[0].toInt()
         val min = temp[1].toInt()
-        val calendar: Calendar = Calendar.getInstance().apply {
+        val calendar: Calendar
+        calendar = Calendar.getInstance().apply {
             timeInMillis = System.currentTimeMillis()
+
             set(Calendar.DAY_OF_WEEK,day)
             set(Calendar.HOUR_OF_DAY, hour)
-           set(Calendar.MINUTE,min)
+            set(Calendar.MINUTE,min)
+        }
+        if (!first)
+        {
+            val i = calendar.get(Calendar.WEEK_OF_MONTH)
+            calendar.set(Calendar.WEEK_OF_MONTH,i+1)
         }
 
         Log.i("AlarmStatus","ADDED:"+lecture.id)
@@ -54,15 +60,15 @@ class MyAlarmManager()  {
         bundle.putParcelable("lecture",lecture)
         intent.putExtra("lecture",bundle)
         intent.putExtra("intid", lecture.id.hashCode())
+        intent.putExtra("hello",123)
             alarmIntent =intent.let { intent ->
 
                 val id = getInt(lecture.id)
                 PendingIntent.getBroadcast(AppApplication?.context,id , intent, PendingIntent.FLAG_UPDATE_CURRENT)
             }
-            alarmMgr?.setRepeating(
+            alarmMgr?.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP,
                 calendar.timeInMillis,
-                7*AlarmManager.INTERVAL_DAY,
                 alarmIntent
             )
         // }
@@ -98,5 +104,7 @@ class MyAlarmManager()  {
     {
         return string.hashCode()
     }
+
+
 
 }

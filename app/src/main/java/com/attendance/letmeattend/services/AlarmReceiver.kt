@@ -36,16 +36,22 @@ class AlarmReceiver() : BroadcastReceiver() {
             Log.i("Called","Yes")
             context?.toast("Hello Recieved Message for "+day+ ":"+hour)
             LocationService().enqueuework(context!!,intent!!)
+
         }
         else
         {
             context?.toast("Hello Recieved Message for nothing")
         }
 
+        alarmMgr.setAlarm(lect!!,false)
+
+
 
 
 
     }
+
+
 
 
 

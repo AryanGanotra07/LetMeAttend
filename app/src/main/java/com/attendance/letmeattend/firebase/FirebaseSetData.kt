@@ -7,6 +7,7 @@ import com.attendance.letmeattend.models.Attendance
 import com.attendance.letmeattend.models.CollegeLocation
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.models.Subject
+import com.attendance.letmeattend.notifications.NotificationBuilder
 import com.attendance.letmeattend.services.MyAlarmManager
 import com.attendance.letmeattend.utils.toast
 import com.google.firebase.database.*
@@ -14,6 +15,7 @@ import com.google.firebase.database.*
 class FirebaseSetData(val userId: String) {
     //    private val userId = FirebaseAuth.getInstance().currentUser?.uid
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+    private val notifBuilder = NotificationBuilder()
     private val ref = userId?.let {
         database.getReference("User").child(it)
     }
@@ -86,7 +88,7 @@ class FirebaseSetData(val userId: String) {
         ref?.updateChildren(childUpdates)?.addOnCompleteListener {
             if (it.isSuccessful) {
 
-                myAlarmManager.setAlarm(lecture)
+                myAlarmManager.setAlarm(lecture,true)
                 AppApplication.context?.toast("Lecture Added")
             } else AppApplication.context?.toast("Error in adding lecture")
         }
@@ -253,7 +255,8 @@ class FirebaseSetData(val userId: String) {
             .child(id).child("c_attendance")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
-
+                    Log.i("DatabaseStatus","ADD-Current-Failed "+ p0?.message.toString())
+                    notifBuilder.buildErrorNotif("ADD-Current-Failed "+ p0.message.toString(),-1)
                 }
 
                 override fun onDataChange(p0: DataSnapshot) {
@@ -280,7 +283,7 @@ class FirebaseSetData(val userId: String) {
             .child("c_attendance")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
-
+                    Log.i("DatabaseStatus","ADD-Current-Failed "+ p0?.message.toString())
                 }
 
                 override fun onDataChange(p0: DataSnapshot) {
@@ -311,7 +314,8 @@ class FirebaseSetData(val userId: String) {
             .child(id).child("t_attendance")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
-
+                    Log.i("DatabaseStatus","ADD-Total-Failed "+ p0.message.toString())
+                    notifBuilder.buildErrorNotif("ADD-Total-Failed "+ p0.message.toString(),-1)
                 }
 
                 override fun onDataChange(p0: DataSnapshot) {
@@ -336,7 +340,8 @@ class FirebaseSetData(val userId: String) {
             .child("t_attendance")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
-
+                    Log.i("DatabaseStatus","ADD-Total-Failed "+ p0.message.toString())
+                    notifBuilder.buildErrorNotif("ADD-Total-Failed "+ p0.message.toString(),-1)
                 }
 
                 override fun onDataChange(p0: DataSnapshot) {
@@ -367,7 +372,11 @@ class FirebaseSetData(val userId: String) {
             .setValue(location.latitude)
             .addOnCompleteListener {
                 if (it.isSuccessful) AppApplication?.context?.toast("Latitude Updated")
-                else AppApplication?.context?.toast("Latitude Updation Failed")
+                else {
+                    Log.i("DatabaseStatus","ADD-Location-Failed "+ it.exception?.message.toString())
+                    notifBuilder.buildErrorNotif("ADD-Location-Failed"+ it.exception?.message.toString(),-1)
+                    AppApplication?.context?.toast("Latitude Updation Failed")
+                }
             }
         ref?.child("lectures")
             .child(id)
@@ -375,7 +384,12 @@ class FirebaseSetData(val userId: String) {
             .setValue(location.longitude)
             .addOnCompleteListener {
                 if (it.isSuccessful) AppApplication?.context?.toast("Longitude Updated")
-                else AppApplication?.context?.toast("Longitude Updation Failed")
+                else
+                {
+                    Log.i("DatabaseStatus","ADD-Location-Failed "+ it.exception?.message.toString())
+                    notifBuilder.buildErrorNotif("ADD-Location-Failed"+ it.exception?.message.toString(),-1)
+                    AppApplication?.context?.toast("Longitude Updation Failed")
+                }
             }
     }
 

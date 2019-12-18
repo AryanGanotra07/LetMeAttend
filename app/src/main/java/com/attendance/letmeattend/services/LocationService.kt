@@ -15,11 +15,12 @@ import com.google.android.gms.location.LocationServices
 class LocationService : JobIntentService() {
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private val notifBuilder: NotificationBuilder = NotificationBuilder()
-    private val JOB_ID = 12
+
+   // private val JOB_ID = 12
 
 
     fun enqueuework(context: Context, work: Intent) {
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
         context.run { object : Runnable{
             override fun run() {
@@ -27,16 +28,23 @@ class LocationService : JobIntentService() {
             }
 
         } }
+        val JOB_ID = work.getIntExtra("id",0)
         enqueueWork(context, LocationService::class.java, JOB_ID, work)
     }
 
     override fun onHandleWork(intent: Intent) {
+
+        val notifBuilder: NotificationBuilder = NotificationBuilder()
+        val notif = notifBuilder.buildErrorNotif("Running Location Service",2)
+        startForeground(123,notif)
+        val lectureBundle = intent.getBundleExtra("lecture")
+        val lecture = lectureBundle.getParcelable<Lecture>("lecture")
+        val id = intent.getIntExtra("id",0)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         fusedLocationClient.lastLocation.addOnSuccessListener {
             // this@LocationService.toast("Lattitude:- " + it.latitude + " longitude:- " + it.longitude)
 //            Log.i("LocationStatusID",intent.getStringExtra("id"))
-            val lectureBundle = intent.getBundleExtra("lecture")
-            val lecture = lectureBundle.getParcelable<Lecture>("lecture")
+
             if (lecture.lat!=0.0 || lecture.lng != 0.0)
             {
                 if (it.latitude<lecture.lat+1 && it.latitude>lecture.lat-1
@@ -63,6 +71,7 @@ class LocationService : JobIntentService() {
             if (it.exception != null) {
                 //     this.toast("EXCEPTION:" + it.exception!!.message)
                 Log.i("LocationStatus", it.exception!!.message.toString())
+                notifBuilder.buildErrorNotif("Can't find location"+it.exception?.message.toString(),id)
             }
         }
     }

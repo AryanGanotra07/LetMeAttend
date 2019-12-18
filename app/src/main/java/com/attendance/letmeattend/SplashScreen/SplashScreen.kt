@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import com.attendance.letmeattend.authentication.FirebaseLogin
 import com.attendance.letmeattend.details.EnterDetailsActivity
 import com.attendance.letmeattend.maps.MapFragment
+import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.google.firebase.auth.FirebaseAuth
 
 class SplashScreen : AppCompatActivity() {
@@ -18,7 +19,7 @@ class SplashScreen : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        MyNotificationChannel.createNotifChannel()
         if (FirebaseAuth.getInstance().currentUser != null) {
             if(getLocationPermission()) {
                 startActivity(Intent(this, EnterDetailsActivity::class.java))

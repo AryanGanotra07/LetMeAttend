@@ -1,5 +1,6 @@
 package com.attendance.letmeattend.notifications
 
+import android.app.Notification
 import android.app.Notification.EXTRA_NOTIFICATION_ID
 import android.app.PendingIntent
 import android.content.Intent
@@ -65,11 +66,12 @@ class NotificationBuilder() {
             .setContentText("Have you attended "+lecture.name+" today from "+lecture.s_time+ " to "+lecture.e_time+"?")
             .setStyle(NotificationCompat.BigTextStyle()
                 .bigText("Have you attended "+lecture.name+" today from "+lecture.s_time+ " to "+lecture.e_time+"?"))
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
             .addAction(R.drawable.ic_add_black_24dp,context.getString(R.string.yes),yesPendingIntent)
             .addAction(R.drawable.ic_add_black_24dp,context.getString(R.string.no),noPendingIntent)
             .addAction(R.drawable.ic_add_black_24dp,context.getString(R.string.no_class),noClassPendingIntent)
-            .setAutoCancel(true)
+            .setColor(lecture.color)
         with(NotificationManagerCompat.from(context)) {
             // notificationId is a unique int for each notification that you must define
             notify(id, builder.build())
@@ -81,5 +83,23 @@ class NotificationBuilder() {
             // notificationId is a unique int for each notification that you must define
             this!!.cancel(id)
         }
+    }
+
+    fun buildErrorNotif(err : String,id : Int) : Notification
+    {
+        var builder = NotificationCompat.Builder(context!!, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_create_black_24dp)
+            .setContentTitle("Error")
+            .setContentText(err)
+            .setStyle(NotificationCompat.BigTextStyle()
+                .bigText(err))
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+        val notif = builder.build()
+        with(NotificationManagerCompat.from(context)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(id, notif)
+        }
+        return notif
     }
 }

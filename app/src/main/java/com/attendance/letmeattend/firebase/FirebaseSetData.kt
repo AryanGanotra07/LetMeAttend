@@ -7,6 +7,7 @@ import com.attendance.letmeattend.models.Attendance
 import com.attendance.letmeattend.models.CollegeLocation
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.models.Subject
+import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.notifications.NotificationBuilder
 import com.attendance.letmeattend.services.MyAlarmManager
 import com.attendance.letmeattend.utils.toast
@@ -20,6 +21,10 @@ class FirebaseSetData(val userId: String) {
         database.getReference("User").child(it)
     }
     private val myAlarmManager: MyAlarmManager = MyAlarmManager()
+
+  init {
+      MyNotificationChannel.createNotifChannel()
+  }
 
 
     fun setAttendance(attendance: Attendance) {

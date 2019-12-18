@@ -8,6 +8,7 @@ import androidx.core.app.JobIntentService
 import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.firebase.FirebaseSetData
 import com.attendance.letmeattend.models.Lecture
+import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.notifications.NotificationBuilder
 import com.attendance.letmeattend.utils.toast
 import com.google.firebase.FirebaseApp
@@ -26,6 +27,7 @@ class DatabaseService() : JobIntentService() {
     }
 
     override fun onHandleWork(intent: Intent) {
+        MyNotificationChannel.createNotifChannel()
         val lectureBundle = intent.getBundleExtra("lecture")
         val lecture = lectureBundle.getParcelable<Lecture>("lecture")
         val lect_id = lecture.id

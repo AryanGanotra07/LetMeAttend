@@ -19,10 +19,12 @@ class NotificationBuilder() {
     val ACTION_YES = "action_yes"
     val ACTION_NO = "action_no"
     val ACTION_NO_CLASS = "action_no_class"
+    private lateinit var inte : Intent
 
-    fun buildNotification(intent : Intent, location : Location)
+    fun buildNotification(intent : Intent, location : Location) : Notification
 
     {
+        inte = intent
         val id = intent.getIntExtra("intid",0)
         val lectureBundle = intent.getBundleExtra("lecture")
         val lecture = lectureBundle.getParcelable<Lecture>("lecture")
@@ -40,11 +42,13 @@ class NotificationBuilder() {
         yesIntent.putExtra("lecture",bundle)
        // yesIntent.putExtra("lat",location.latitude)
         yesIntent.putExtra("location",location)
+        yesIntent.putExtra(Intent.EXTRA_INTENT,intent)
 
         val noIntent = Intent(context,NotificationReciever::class.java)
         noIntent.action = ACTION_NO
         noIntent.putExtra("EXTRA_NOTIFICATION_ID",id)
         noIntent.putExtra("lecture",bundle)
+        noIntent.putExtra(Intent.EXTRA_INTENT,intent)
         //noIntent.putExtra("lat",location.latitude)
         //noIntent.putExtra("lng",location.longitude)
 
@@ -52,6 +56,7 @@ class NotificationBuilder() {
         noClassIntent.action = ACTION_NO_CLASS
         noClassIntent.putExtra("EXTRA_NOTIFICATION_ID",id)
         noClassIntent.putExtra("lecture", bundle)
+        noClassIntent.putExtra(Intent.EXTRA_INTENT,intent)
 
 
         val yesPendingIntent: PendingIntent =
@@ -76,6 +81,8 @@ class NotificationBuilder() {
             // notificationId is a unique int for each notification that you must define
             notify(id, builder.build())
         }
+
+        return builder.build()
     }
     fun removeNotification(id: Int)
     {
@@ -83,6 +90,8 @@ class NotificationBuilder() {
             // notificationId is a unique int for each notification that you must define
             this!!.cancel(id)
         }
+
+      //  context?.stopService(inte)
     }
 
     fun buildErrorNotif(err : String,id : Int) : Notification

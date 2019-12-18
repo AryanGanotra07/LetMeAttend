@@ -17,6 +17,7 @@
             android:theme="@style/AppTheme">
         <receiver android:name=".services.AlarmReceiver" />
         <receiver android:name=".notifications.NotificationReciever"/>
+        <receiver android:name=".geofencing.GeofenceBroadcastReceiver"/>
         <service android:name=".services.LocationService"
                 android:permission="android.permission.BIND_JOB_SERVICE"
                 android:exported="false"
@@ -24,6 +25,9 @@
         <service android:name=".services.DatabaseService"
             android:permission="android.permission.BIND_JOB_SERVICE"
             android:exported="false"/>
+        <service android:name=".services.MyForegroundService"
+                android:permission="android.permission.BIND_JOB_SERVICE"
+                android:exported="false"/>
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
                 android:value="@string/google_maps_key"/>
@@ -31,7 +35,11 @@
         <activity android:name=".authentication.FirebaseLogin"
         android:theme="@style/FirebaseAuthUi">
 
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
 
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
 
         <activity android:name=".MainActivity"/>
@@ -48,11 +56,7 @@
 
         </activity>
         <activity android:name=".SplashScreen.SplashScreen" android:theme="@style/splashscreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
     </application>
 

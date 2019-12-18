@@ -60,7 +60,7 @@ class MyAlarmManager()  {
         bundle.putParcelable("lecture",lecture)
         intent.putExtra("lecture",bundle)
         intent.putExtra("intid", lecture.id.hashCode())
-        intent.putExtra("hello",123)
+
             alarmIntent =intent.let { intent ->
 
                 val id = getInt(lecture.id)

@@ -19,9 +19,11 @@ class NotificationReciever() : BroadcastReceiver() {
 //    //val context = AppApplication?.context
 
     override fun onReceive(context: Context?, intent: Intent?) {
+        MyNotificationChannel.createNotifChannel()
         val builder : NotificationBuilder = NotificationBuilder()
       //  val database : FirebaseSetData = FirebaseSetData(FirebaseAuth.getInstance().currentUser!!.uid)
         val dbService = DatabaseService()
+        val inte = intent!!.getParcelableExtra<Intent>(Intent.EXTRA_INTENT)
        // val lectureBundle = intent!!.getBundleExtra("lecture")
        // val lecture = lectureBundle.getParcelable<Lecture>("lecture")
        // val lect_id = lecture.id
@@ -32,18 +34,20 @@ class NotificationReciever() : BroadcastReceiver() {
         if (intent?.action == builder.ACTION_YES)
         {
             context?.toast("YES CLICKED")
-            builder.removeNotification(intent.getIntExtra("EXTRA_NOTIFICATION_ID",0))
+
           //  attended = true
             dbService.enqueuework(context!!,intent!!)
+            builder.removeNotification(intent.getIntExtra("EXTRA_NOTIFICATION_ID",0))
 
         }
         else if (intent?.action == builder.ACTION_NO)
         {
             context?.toast("NO CLICKED")
-            builder.removeNotification(intent.getIntExtra("EXTRA_NOTIFICATION_ID",0))
+
             //attended = false
            // database.addAttendance(lect_id,sub_id,attended)
             dbService.enqueuework(context!!,intent!!)
+            builder.removeNotification(intent.getIntExtra("EXTRA_NOTIFICATION_ID",0))
 
         }
         else if (intent?.action == builder.ACTION_NO_CLASS)
@@ -51,6 +55,9 @@ class NotificationReciever() : BroadcastReceiver() {
             context?.toast("NO CLASS CLICKED")
             builder.removeNotification(intent.getIntExtra("EXTRA_NOTIFICATION_ID",0))
         }
+
+        context?.stopService(inte)
+
 
 
 

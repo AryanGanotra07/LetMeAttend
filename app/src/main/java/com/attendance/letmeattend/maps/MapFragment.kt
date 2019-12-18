@@ -1,6 +1,7 @@
 package com.attendance.letmeattend.maps
 
 import android.app.Activity
+import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -14,6 +15,9 @@ import androidx.lifecycle.ViewModelProviders
 import com.attendance.letmeattend.details.EnterDetailsActivity
 import com.attendance.letmeattend.models.CollegeLocation
 import com.attendance.letmeattend.R
+import com.attendance.letmeattend.application.AppApplication
+import com.attendance.letmeattend.geofencing.GeofenceBroadcastReceiver
+import com.attendance.letmeattend.geofencing.GeofenceClient
 import com.attendance.letmeattend.utils.toast
 import com.attendance.letmeattend.viewmodels.EnterDetailsViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -31,11 +35,27 @@ import java.util.*
 
 // these are listeners, they recieve a callback whenever specific event happens
 class MapFragment : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerDragListener, View.OnClickListener {
+
+    private val geofencePendingIntent: PendingIntent by lazy {
+        val intent = Intent(this, GeofenceBroadcastReceiver::class.java)
+        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
+        // addGeofences() and removeGeofences().
+        PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+    }
     override fun onClick(v: View?)
     {
         when(v){
             button_next-> {
                 viewModel.setCollegeLocation(CollegeLocation(circle.radius,circle.center.latitude,circle.center.longitude))
+                val geofenceClient = GeofenceClient()
+                geofenceClient.getGeofencingClient().addGeofences(geofenceClient.addGeofence(circle.center,circle.radius.toFloat()),geofencePendingIntent)?.run {
+                    addOnSuccessListener {
+                        AppApplication?.context?.toast("Geofence Added")
+                    }
+                    addOnFailureListener {
+                        AppApplication?.context?.toast("Geofence failed")
+                    }
+                }
                 startActivity(Intent(this@MapFragment, EnterDetailsActivity::class.java))
             }
             search_btn->   launchPlacesIntent()

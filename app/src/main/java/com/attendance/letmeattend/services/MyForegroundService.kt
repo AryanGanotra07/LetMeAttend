@@ -1,47 +1,30 @@
 package com.attendance.letmeattend.services
 
-import android.content.Context
+import android.app.Service
+import android.content.BroadcastReceiver
 import android.content.Intent
+import android.os.IBinder
 import android.util.Log
-import androidx.core.app.JobIntentService
-import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.notifications.NotificationBuilder
-import com.attendance.letmeattend.utils.toast
-import com.google.android.gms.location.FusedLocationProviderClient
+import com.attendance.letmeattend.notifications.NotificationReciever
 import com.google.android.gms.location.LocationServices
 
+class MyForegroundService() : Service(){
 
-class LocationService : JobIntentService() {
-
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-
-   // private val JOB_ID = 12
-
-
-    fun enqueuework(context: Context, work: Intent) {
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
-        context.run { object : Runnable{
-            override fun run() {
-                context.toast("Called")
-            }
-
-        } }
-        val JOB_ID = work.getIntExtra("id",0)
-        enqueueWork(context, LocationService::class.java, JOB_ID, work)
+    override fun onBind(intent: Intent?): IBinder? {
+        return null
     }
 
-    override fun onHandleWork(intent: Intent) {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         MyNotificationChannel.createNotifChannel()
         val notifBuilder: NotificationBuilder = NotificationBuilder()
-        val notif = notifBuilder.buildErrorNotif("Running Location Service",2)
-        startForeground(123,notif)
-        val lectureBundle = intent.getBundleExtra("lecture")
+        var notif = notifBuilder.buildErrorNotif("Running Location Service",2)
+        val lectureBundle = intent!!.getBundleExtra("lecture")
         val lecture = lectureBundle.getParcelable<Lecture>("lecture")
         val id = intent.getIntExtra("id",0)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         fusedLocationClient.lastLocation.addOnSuccessListener {
             // this@LocationService.toast("Lattitude:- " + it.latitude + " longitude:- " + it.longitude)
 //            Log.i("LocationStatusID",intent.getStringExtra("id"))
@@ -65,7 +48,8 @@ class LocationService : JobIntentService() {
                 //ask user if he is attending lecture. if yes then save location , if no mark absent, if no class then ignore
 
             }
-            notifBuilder.buildNotification(intent, it)
+           notif = notifBuilder.buildNotification(intent!!, it)
+            startForeground(lecture.id.hashCode(),notif)
 
         }
         fusedLocationClient.lastLocation.addOnCompleteListener {
@@ -75,6 +59,17 @@ class LocationService : JobIntentService() {
                 notifBuilder.buildErrorNotif("Can't find location"+it.exception?.message.toString(),id)
             }
         }
+
+        startForeground(lecture.id.hashCode(),notif)
+        return START_NOT_STICKY
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
 

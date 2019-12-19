@@ -33,7 +33,7 @@ class AttendanceCriteriaFragment(): Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        notifBuilder.buildErrorNotif("ERROr hai bhai ",0)
+       // notifBuilder.buildErrorNotif("ERROr hai bhai ",0)
 
         var attendancePercent:Int
         val slider = view.findViewById<FluidSlider>(R.id.fluidSlider)

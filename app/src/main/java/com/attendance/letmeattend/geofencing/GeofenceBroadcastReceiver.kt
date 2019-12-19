@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.notifications.NotificationBuilder
 import com.attendance.letmeattend.utils.toast
 import com.google.android.gms.location.Geofence
@@ -11,11 +12,13 @@ import com.google.android.gms.location.GeofencingEvent
 
 class GeofenceBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
+        MyNotificationChannel.createNotifChannel()
         val geofencingEvent = GeofencingEvent.fromIntent(intent)
         if (geofencingEvent.hasError()) {
             val errorMessage = geofencingEvent.errorCode
-            context?.toast("")
-
+            context?.toast("error" + errorMessage)
+            val notifBuilder = NotificationBuilder()
+            notifBuilder.buildErrorNotif("GEOFENCE -ERROR",-4)
             return
         }
 
@@ -23,20 +26,27 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
         val geofenceTransition = geofencingEvent.geofenceTransition
 
         // Test that the reported transition was of interest.
-        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
-        geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
-
-            // Get the geofences that were triggered. A single event can trigger
-            // multiple geofences.
-            val triggeringGeofences = geofencingEvent.triggeringGeofences
+        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ) {
 
             // Get the transition details as a String.
             val notifBuilder = NotificationBuilder()
-            notifBuilder.buildErrorNotif("IN YOUR COLLEGE",-4)
+            notifBuilder.buildErrorNotif("ENTRYING COLLEGE",-4)
+            val preference=context?.getSharedPreferences("GEOFENCE", Context.MODE_PRIVATE)
+            val editor=preference?.edit()
+            editor!!.putBoolean("ENTRY",true)
+            editor.commit()
 
-
-
-        } else {
+        }
+        else if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT)
+        {
+            val notifBuilder = NotificationBuilder()
+            notifBuilder.buildErrorNotif("EXITING COLLEGE",-4)
+            val preference=context?.getSharedPreferences("GEOFENCE", Context.MODE_PRIVATE)
+            val editor=preference?.edit()
+            editor!!.putBoolean("ENTRY",false)
+            editor.commit()
+        }
+        else {
             val notifBuilder = NotificationBuilder()
             notifBuilder.buildErrorNotif("NOT IN YOUR COLLEGE",-4)
         }

@@ -226,6 +226,8 @@ class MapFragment : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerD
 
         //Inititating places
         Places.initialize(applicationContext, resources.getString(R.string.google_places_key))
+        button_next.visibility = View.VISIBLE
+
         viewModel = ViewModelProviders.of(this).get(EnterDetailsViewModel::class.java)
         var placeClient: PlacesClient = Places.createClient(this)
 
@@ -236,6 +238,9 @@ class MapFragment : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerD
         val mapFragment = supportFragmentManager  //setting map to the fragment
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+
+
 
 
 
@@ -307,6 +312,7 @@ class MapFragment : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerD
             return
         }
         try {
+            addCircle(LatLng(28.564416,77.256673))
             if (mlocationPermissionGranted) {
                 mMap.isMyLocationEnabled = true
                 mMap.uiSettings.isMyLocationButtonEnabled = true

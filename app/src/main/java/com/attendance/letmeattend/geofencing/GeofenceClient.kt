@@ -22,8 +22,9 @@ class GeofenceClient() {
         geofencelist.add(Geofence
             .Builder()
             .setRequestId("college")
-            .setCircularRegion(location.latitude,location.longitude,radius)
+            .setCircularRegion(28.550284,77.251015,radius)
             .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
+            .setExpirationDuration(Geofence.NEVER_EXPIRE)
             .build()
         )
 

@@ -9,7 +9,7 @@ import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.models.Subject
 import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.notifications.NotificationBuilder
-import com.attendance.letmeattend.services.MyAlarmManager
+import com.attendance.letmeattend.services.alarms.MyAlarmManager
 import com.attendance.letmeattend.utils.toast
 import com.google.firebase.database.*
 
@@ -20,7 +20,7 @@ class FirebaseSetData(val userId: String) {
     private val ref = userId?.let {
         database.getReference("User").child(it)
     }
-    private val myAlarmManager: MyAlarmManager = MyAlarmManager()
+
 
   init {
       MyNotificationChannel.createNotifChannel()
@@ -93,7 +93,7 @@ class FirebaseSetData(val userId: String) {
         ref?.updateChildren(childUpdates)?.addOnCompleteListener {
             if (it.isSuccessful) {
 
-                myAlarmManager.setAlarm(lecture,true)
+
                 AppApplication.context?.toast("Lecture Added")
             } else AppApplication.context?.toast("Error in adding lecture")
         }
@@ -214,7 +214,7 @@ class FirebaseSetData(val userId: String) {
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     AppApplication.context?.toast("Lecture Deleted Successfully")
-                    myAlarmManager.removeAlarm(lecture)
+
                 } else AppApplication.context?.toast("Lecture Deletion Failed")
             }
 

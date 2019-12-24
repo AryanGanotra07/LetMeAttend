@@ -1,4 +1,4 @@
-package com.attendance.letmeattend.services
+package com.attendance.letmeattend.services.alarms
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -9,8 +9,9 @@ import android.util.Log
 import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.models.Lecture
 import java.util.*
+import kotlin.collections.ArrayList
 
-class MyAlarmManager()  {
+object MyAlarmManager {
 
     private var alarmMgr : AlarmManager? = null
     private lateinit var alarmIntent: PendingIntent
@@ -22,7 +23,18 @@ class MyAlarmManager()  {
 
     }
 
-    fun setAlarm(lecture: Lecture, first : Boolean)
+
+
+    fun setAllAlarms(lectures : ArrayList<Lecture>)
+    {
+        for(lecture in lectures)
+        {
+            removeAlarm(lecture)
+            setAlarm(lecture,true)
+        }
+    }
+
+     fun setAlarm(lecture: Lecture, first : Boolean)
     {
         val day  = lecture.day
         val temp = lecture.s_time.split(":")
@@ -74,7 +86,7 @@ class MyAlarmManager()  {
         // }
     }
 
-    fun removeAlarm(lecture: Lecture)
+     fun removeAlarm(lecture: Lecture)
     {
         val day  = lecture.day + 1
         val temp = lecture.s_time.split(":")
@@ -100,7 +112,7 @@ class MyAlarmManager()  {
 
     }
 
-    fun getInt(string : String) : Int
+    private fun getInt(string : String) : Int
     {
         return string.hashCode()
     }

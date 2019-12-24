@@ -1,4 +1,4 @@
-package com.attendance.letmeattend.services
+package com.attendance.letmeattend.services.alarms
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -7,11 +7,9 @@ import android.os.Bundle
 import android.util.Log
 import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.models.Lecture
-import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.notifications.NotificationBuilder
+import com.attendance.letmeattend.services.MyForegroundService
 import com.attendance.letmeattend.utils.toast
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import java.util.*
 
 class AlarmReceiver() : BroadcastReceiver() {
@@ -25,7 +23,8 @@ class AlarmReceiver() : BroadcastReceiver() {
 //       context?.startService(intent)
 
         val context = AppApplication?.context
-        val alarmMgr = MyAlarmManager()
+        val alarmMgr =
+            MyAlarmManager
         val builder = NotificationBuilder()
         val preference=context?.getSharedPreferences("GEOFENCE", Context.MODE_PRIVATE)
         val state= preference?.getBoolean("name",true)

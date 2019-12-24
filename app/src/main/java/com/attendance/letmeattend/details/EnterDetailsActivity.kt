@@ -1,7 +1,12 @@
 package com.attendance.letmeattend.details
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.os.PowerManager
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -13,18 +18,19 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
-import com.attendance.letmeattend.details.listeners.AddSubjectListener
-import com.attendance.letmeattend.details.listeners.SaveClickListener
 import com.attendance.letmeattend.R
 import com.attendance.letmeattend.adapters.TabLayoutAdapter
-import com.attendance.letmeattend.viewmodels.EnterDetailsViewModel
 import com.attendance.letmeattend.databinding.EnterDetailsActivityBinding
+import com.attendance.letmeattend.details.listeners.AddSubjectListener
 import com.attendance.letmeattend.details.listeners.OnLectureClickListener
+import com.attendance.letmeattend.details.listeners.SaveClickListener
 import com.attendance.letmeattend.details.timetable.*
 import com.attendance.letmeattend.models.Attendance
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.models.Subject
+import com.attendance.letmeattend.viewmodels.EnterDetailsViewModel
 import com.google.android.material.tabs.TabLayout
+
 import java.util.*
 
 
@@ -60,6 +66,19 @@ class EnterDetailsActivity: AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val intent = Intent()
+            val packageName = packageName
+            val pm =
+                getSystemService(Context.POWER_SERVICE) as PowerManager
+            if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+                intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+                intent.data = Uri.parse("package:$packageName")
+                startActivity(intent)
+            }
+        }
 
         val binding : EnterDetailsActivityBinding = DataBindingUtil.setContentView(this, R.layout.enter_details_activity)
 

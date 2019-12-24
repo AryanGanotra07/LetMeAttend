@@ -1,11 +1,13 @@
 package com.attendance.letmeattend.firebase
 
+import android.app.AlarmManager
 import android.util.Log
 import androidx.annotation.MainThread
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.models.*
+import com.attendance.letmeattend.services.alarms.MyAlarmManager
 import com.attendance.letmeattend.utils.toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -84,6 +86,7 @@ class Repository() {
                     val lect : Lecture = lecture.getValue(Lecture::class.java)!!
                     lecturesList.add(lect)
                 }
+                MyAlarmManager.setAllAlarms(lecturesList)
                 Thread(Runnable { lectures.postValue(lecturesList) }).start()
             }
             else lectures.value = null

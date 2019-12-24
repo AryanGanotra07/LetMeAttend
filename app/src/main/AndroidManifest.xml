@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
 
 
     <application
@@ -32,7 +33,7 @@
                 android:permission="android.permission.BIND_JOB_SERVICE"
                 ></service>
 
-        <receiver android:name=".services.AlarmReceiver" />
+        <receiver android:name=".services.alarms.AlarmReceiver" />
         <receiver android:name=".notifications.NotificationReciever"/>
         <receiver android:name=".geofencing.GeofenceBroadcastReceiver"/>
         <service android:name=".services.LocationService"

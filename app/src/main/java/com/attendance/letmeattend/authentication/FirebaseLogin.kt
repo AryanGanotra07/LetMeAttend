@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -14,9 +13,10 @@ import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.details.EnterDetailsActivity
 import com.attendance.letmeattend.maps.MapFragment
 import com.attendance.letmeattend.notifications.MyNotificationChannel
-import com.attendance.letmeattend.services.MyAlarmManager
+import com.attendance.letmeattend.services.alarms.MyAlarmManager
 import com.attendance.letmeattend.services.boot.BootCompleteReciever
 import com.firebase.ui.auth.AuthUI
+import com.judemanutd.autostarter.AutoStartPermissionHelper
 import kotlinx.android.synthetic.main.screen_login.*
 
 
@@ -51,21 +51,23 @@ class FirebaseLogin: AppCompatActivity(),View.OnClickListener {
        // setTheme(R.style.FirebaseAuthUi)
        // createSignInIntent()
 
-        val manufacturer = "xiaomi"
-        if (manufacturer.equals(
-                Build.MANUFACTURER,
-                ignoreCase = true
-            )
-        ) { //this will open auto start screen where user can enable permission for your app
-            val intent1 = Intent()
-            intent1.component = ComponentName(
-                "com.miui.securitycenter",
-                "com.miui.permcenter.autostart.AutoStartManagementActivity"
-            )
-            startActivity(intent1)
-        }
-        val cont = AppApplication?.context
-        val receiver = ComponentName(cont, BootCompleteReciever::class.java)
+//        val manufacturer = "xiaomi"
+//        if (manufacturer.equals(
+//                Build.MANUFACTURER,
+//                ignoreCase = true
+//            )
+//        ) { //this will open auto start screen where user can enable permission for your app
+//            val intent1 = Intent()
+//            intent1.component = ComponentName(
+//                "com.miui.securitycenter",
+//                "com.miui.permcenter.autostart.AutoStartManagementActivity"
+//            )
+//            intent1.setData(Uri.parse("package:" + context!!.getPackageName()));
+//            startActivity(intent1)
+//        }
+        AutoStartPermissionHelper.getInstance().getAutoStartPermission(this)
+                val cont = AppApplication?.context
+                val receiver = ComponentName(cont, BootCompleteReciever::class.java)
 
 
         cont!!.packageManager.setComponentEnabledSetting(
@@ -73,7 +75,7 @@ class FirebaseLogin: AppCompatActivity(),View.OnClickListener {
             PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
             PackageManager.DONT_KILL_APP
         )
-        val alarmManager : MyAlarmManager = MyAlarmManager()
+
        // alarmManager.setAlarm()
         MyNotificationChannel.createNotifChannel()
        // val notificationBuilder = NotificationBuilder()

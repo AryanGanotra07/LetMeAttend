@@ -61,6 +61,7 @@ class MyForegroundService() : Service(){
         }
 
         startForeground(lecture.id.hashCode(),notif)
+        startForeground(lecture.id.hashCode()+1,notif)
         return START_NOT_STICKY
     }
 

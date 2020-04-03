@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -16,10 +17,12 @@ import com.google.firebase.auth.FirebaseAuth
 class SplashScreen : AppCompatActivity() {
 
     private val LOCATION_PERMISSION = 12
+    private final val TAG = "SplashScreen"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MyNotificationChannel.createNotifChannel()
+        Log.d(TAG, FirebaseAuth.getInstance().currentUser.toString())
         if (FirebaseAuth.getInstance().currentUser != null) {
             if(getLocationPermission()) {
                 startActivity(Intent(this, EnterDetailsActivity::class.java))

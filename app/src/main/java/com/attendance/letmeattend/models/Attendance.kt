@@ -1,4 +1,5 @@
 package com.attendance.letmeattend.models
 
-data class Attendance(var attendance: Int) {
+data class Attendance(var attendance: Int = 0) {
 }
+

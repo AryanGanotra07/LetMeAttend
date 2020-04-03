@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -15,6 +16,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
@@ -29,6 +31,7 @@ import com.attendance.letmeattend.models.Attendance
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.models.Subject
 import com.attendance.letmeattend.viewmodels.EnterDetailsViewModel
+import com.google.android.gms.maps.MapFragment
 import com.google.android.material.tabs.TabLayout
 
 import java.util.*
@@ -47,6 +50,11 @@ class EnterDetailsActivity: AppCompatActivity(),
     private lateinit var dialogHelper : SubjectDialogHelper
     private var id : Int = 0
 
+
+    private lateinit var attendanceLiveData : MediatorLiveData<Attendance>
+
+    private val TAG  = "EnterDetailsActivity"
+
     val tabLayoutAdapter: TabLayoutAdapter =
         TabLayoutAdapter(fragmentManager, 6)
 
@@ -55,12 +63,14 @@ class EnterDetailsActivity: AppCompatActivity(),
       //  add_btn.visibility = View.VISIBLE
 
         viewModel.setAttendance(Attendance(attendance = attendance))
+        attendanceLiveData.removeObserver(attendanceObserver)
 
         val fragment : Fragment? = fragmentManager.findFragmentByTag("attendance");
         fragment?.let { fragmentManager.beginTransaction().remove(it).commit() }
-        viewPager.adapter=tabLayoutAdapter
-        viewPager.currentItem = 0
-        tabLayout.setupWithViewPager(viewPager)
+
+        setUpViewPagerWithAdapter()
+
+
 
     }
 
@@ -96,6 +106,10 @@ class EnterDetailsActivity: AppCompatActivity(),
 
             }
         })
+
+        attendanceLiveData = viewModel.getAttendance()
+
+        attendanceLiveData.observe(this, attendanceObserver)
 
 
 
@@ -139,12 +153,11 @@ class EnterDetailsActivity: AppCompatActivity(),
 //
 //
 //        FirebaseDatabase.getInstance().reference.child("User").child("11001").setValue(user)
+
+
 //
 
-        val fragmentTransaction:FragmentTransaction=fragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.frame_layout,attendanceCriteriaFragment,"attendance")
-        fragmentTransaction.addToBackStack("attendance")
-        fragmentTransaction.commit()
+
 
 //        viewPager.addOnPageChangeListener(onPageChangeListener)
 //        viewPager.post(Runnable {
@@ -160,6 +173,49 @@ class EnterDetailsActivity: AppCompatActivity(),
 
 //
     }
+
+    val attendanceObserver = Observer<Attendance> {
+
+        //Log.d(TAG, (it as Attendance).attendance.toString());
+        if (it != null) {
+            val attendanceobj = (it as Attendance)
+            if (attendanceobj != null) {
+                val attendance = attendanceobj.attendance
+                if (attendance == null || attendance == 0) {
+                   askForAttendance()
+
+                } else {
+                    setUpViewPagerWithAdapter()
+                }
+            }
+        }
+        else {
+            askForAttendance()
+        }
+    }
+
+    private fun askForAttendance () {
+        val fragmentTransaction: FragmentTransaction =
+            fragmentManager.beginTransaction()
+        fragmentTransaction.add(
+            R.id.frame_layout,
+            attendanceCriteriaFragment,
+            "attendance"
+        )
+        fragmentTransaction.addToBackStack("attendance")
+        fragmentTransaction.commit()
+    }
+
+
+    private fun setUpViewPagerWithAdapter() {
+        viewPager.adapter=tabLayoutAdapter
+        viewPager.currentItem = 0
+        tabLayout.setupWithViewPager(viewPager)
+        attendanceLiveData.removeObserver(attendanceObserver)
+
+    }
+
+
 
     val onPageChangeListener : ViewPager.OnPageChangeListener = object  : ViewPager.OnPageChangeListener {
         override fun onPageScrollStateChanged(state: Int) {

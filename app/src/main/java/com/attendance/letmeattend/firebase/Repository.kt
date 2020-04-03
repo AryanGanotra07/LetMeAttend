@@ -14,6 +14,8 @@ import com.google.firebase.database.FirebaseDatabase
 
 class Repository() {
 
+    private val TAG = "Repository"
+
     private val userId : String?  = FirebaseAuth.getInstance()?.currentUser?.uid?.let {
         it
     }
@@ -74,7 +76,10 @@ class Repository() {
         })
 
         attendance.addSource(collegeAttendanceLiveData, Observer {
-            if (it != null) Thread(Runnable { attendance.postValue(it.getValue(Attendance :: class.java)) }).start()
+            if (it != null) Thread(Runnable {
+                attendance.postValue(it.getValue(Attendance :: class.java))
+                //Log.d(TAG, it.getValue(Attendance :: class.java)?.attendance.toString())
+            }).start()
         })
 
         lectures.addSource(lecturesLiveData, Observer {

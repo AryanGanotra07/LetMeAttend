@@ -98,6 +98,17 @@
 
       </LinearLayout>
 
+      <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+              android:text="Sign In With Phone Number"
+              android:layout_weight="1"
+              android:gravity="center"
+              android:onClick="onClick"
+              android:id="@+id/phone_signin_textview"
+              android:layout_gravity="center"
+              android:textColor="@color/colorAccent"
+
+              />
+
 
       <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                 android:text="Skip Sign In"
@@ -107,6 +118,7 @@
                 android:id="@+id/skin_signin_textview"
                 android:layout_gravity="center"
                 android:textColor="@color/colorAccent"
+                android:visibility="gone"
 
 
       />

@@ -4,7 +4,7 @@
     <item android:drawable="@color/windowBackground"/>
 
     <item>
-        <bitmap android:src="@drawable/loclog"
+        <bitmap android:src="@drawable/splashlog"
             android:gravity="center"/>
     </item>
 

@@ -1,5 +1,6 @@
 package com.attendance.letmeattend.details
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -37,13 +38,27 @@ class Monday(): Fragment() {
     private lateinit var binding : MondayBinding
     private lateinit var lectures : MediatorLiveData<ArrayList<Lecture>>
     private var position : Int = 0
-    private val day = Calendar.MONDAY
+    private var day = Calendar.MONDAY
+    private final val TAG = "Monday"
 
 
     fun newInstance(page: Int): Monday? {
         val day : Monday = Monday()
         day.position = page
         return day
+    }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+//        day = arguments!!.getInt("index")
+//        Log.d(TAG, position.toString())
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
     }
 
 
@@ -61,8 +76,14 @@ class Monday(): Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
         binding = DataBindingUtil.inflate(inflater , R.layout.monday, container, false)
         return binding.root
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
     }
 
 

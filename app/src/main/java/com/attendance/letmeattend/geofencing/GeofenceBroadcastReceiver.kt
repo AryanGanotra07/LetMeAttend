@@ -3,16 +3,19 @@ package com.attendance.letmeattend.geofencing
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.util.Log
 import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.notifications.NotificationBuilder
+import com.attendance.letmeattend.sharedpreferences.LocalRepository
 import com.attendance.letmeattend.utils.toast
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingEvent
 
 class GeofenceBroadcastReceiver : BroadcastReceiver() {
+    private val TAG = "GeofenceBroadcastReceiver"
     override fun onReceive(context: Context?, intent: Intent?) {
-        MyNotificationChannel.createNotifChannel()
+        MyNotificationChannel.createAllNotificationChannels()
         val geofencingEvent = GeofencingEvent.fromIntent(intent)
         if (geofencingEvent.hasError()) {
             val errorMessage = geofencingEvent.errorCode
@@ -30,25 +33,25 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
 
             // Get the transition details as a String.
             val notifBuilder = NotificationBuilder()
-            notifBuilder.buildErrorNotif("ENTRYING COLLEGE",-4)
-            val preference=context?.getSharedPreferences("GEOFENCE", Context.MODE_PRIVATE)
-            val editor=preference?.edit()
-            editor!!.putBoolean("ENTRY",true)
-            editor.commit()
+            notifBuilder.buildEnterLocationNotification("ENTRYING COLLEGE","entrying",notifBuilder.ENTRY_EXIT_NOTIF_ID)
+            LocalRepository.setGeofenceState(true)
+            Log.d(TAG, "Building entry notification ...")
 
         }
         else if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT)
         {
             val notifBuilder = NotificationBuilder()
-            notifBuilder.buildErrorNotif("EXITING COLLEGE",-4)
-            val preference=context?.getSharedPreferences("GEOFENCE", Context.MODE_PRIVATE)
-            val editor=preference?.edit()
-            editor!!.putBoolean("ENTRY",false)
-            editor.commit()
+            notifBuilder.buildEnterLocationNotification("EXITING COLLEGE","exiting",notifBuilder.ENTRY_EXIT_NOTIF_ID)
+            LocalRepository.setGeofenceState(false)
+            Log.d(TAG, "Building exit notification...")
+
         }
         else {
             val notifBuilder = NotificationBuilder()
-            notifBuilder.buildErrorNotif("NOT IN YOUR COLLEGE",-4)
+            notifBuilder.buildEnterLocationNotification("CAN'T FIND COLLEGE","exiting",notifBuilder.ENTRY_EXIT_NOTIF_ID)
+            LocalRepository.setGeofenceState(false)
+            Log.d(TAG, "Building no notification...")
+
         }
     }
 }

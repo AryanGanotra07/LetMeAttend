@@ -19,7 +19,7 @@ class NotificationReciever() : BroadcastReceiver() {
 //    //val context = AppApplication?.context
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        MyNotificationChannel.createNotifChannel()
+        MyNotificationChannel.createAllNotificationChannels()
         val builder : NotificationBuilder = NotificationBuilder()
       //  val database : FirebaseSetData = FirebaseSetData(FirebaseAuth.getInstance().currentUser!!.uid)
         val dbService = DatabaseService()

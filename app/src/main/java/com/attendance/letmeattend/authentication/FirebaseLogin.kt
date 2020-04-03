@@ -124,7 +124,7 @@ class FirebaseLogin: AppCompatActivity(),View.OnClickListener {
         )
 
        // alarmManager.setAlarm()
-        MyNotificationChannel.createNotifChannel()
+        MyNotificationChannel.createAllNotificationChannels()
        // val notificationBuilder = NotificationBuilder()
      //   notificationBuilder.buildNotification(0)
         //val intent = Intent(this, GoogleService::class.java)

@@ -34,7 +34,7 @@ class LocationService : JobIntentService() {
     }
 
     override fun onHandleWork(intent: Intent) {
-        MyNotificationChannel.createNotifChannel()
+        MyNotificationChannel.createAllNotificationChannels()
         val notifBuilder: NotificationBuilder = NotificationBuilder()
         val notif = notifBuilder.buildErrorNotif("Running Location Service",2)
         startForeground(123,notif)

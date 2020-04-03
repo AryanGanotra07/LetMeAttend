@@ -31,7 +31,7 @@ class BootCompleteService() : Service() {
         val context = AppApplication?.context
         context?.toast("Starting servicee")
         FirebaseApp.initializeApp(context!!)
-        MyNotificationChannel.createNotifChannel()
+        MyNotificationChannel.createAllNotificationChannels()
         val notifBuilder = NotificationBuilder()
         var notif= notifBuilder.buildErrorNotif("Started service",-3)
         if (FirebaseAuth.getInstance().currentUser!=null)
@@ -99,7 +99,7 @@ class BootCompleteService() : Service() {
             }
             else
             {
-                MyNotificationChannel.createNotifChannel()
+                MyNotificationChannel.createAllNotificationChannels()
                 val notifBuilder = NotificationBuilder()
                 notif= notifBuilder.buildErrorNotif("ID not found",-3)
                 stopForeground(true)
@@ -111,7 +111,7 @@ class BootCompleteService() : Service() {
         }
         else
         {
-            MyNotificationChannel.createNotifChannel()
+            MyNotificationChannel.createAllNotificationChannels()
             val notifBuilder = NotificationBuilder()
             notif= notifBuilder.buildErrorNotif("User not found",-3)
             stopForeground(true)

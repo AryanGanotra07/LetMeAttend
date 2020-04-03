@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.utils.Constants
 import com.attendance.letmeattend.utils.Constants.DEVICE_TOKEN
+import com.attendance.letmeattend.utils.Constants.ENTRY_KEY
 import com.attendance.letmeattend.utils.Constants.PREFERENCE_NAME
 
 
@@ -23,5 +24,15 @@ object LocalRepository {
     public fun getSavedUser() : String {
         val userId = sharedPref.getString(DEVICE_TOKEN, null)
         return userId
+    }
+
+    fun setGeofenceState(state : Boolean) {
+        val editor= sharedPref?.edit()
+        editor!!.putBoolean(ENTRY_KEY,state)
+        editor.commit()
+    }
+
+    fun getGeofenceState() : Boolean {
+        return sharedPref.getBoolean(ENTRY_KEY,true)
     }
 }

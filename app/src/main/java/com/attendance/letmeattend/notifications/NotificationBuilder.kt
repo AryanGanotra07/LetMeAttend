@@ -2,6 +2,7 @@ package com.attendance.letmeattend.notifications
 
 import android.app.Notification
 import android.app.Notification.EXTRA_NOTIFICATION_ID
+import android.app.NotificationChannel
 import android.app.PendingIntent
 import android.content.Intent
 import android.location.Location
@@ -19,6 +20,7 @@ class NotificationBuilder() {
     val ACTION_YES = "action_yes"
     val ACTION_NO = "action_no"
     val ACTION_NO_CLASS = "action_no_class"
+    final val ENTRY_EXIT_NOTIF_ID = 1123
     private lateinit var inte : Intent
 
     fun buildNotification(intent : Intent, location : Location) : Notification
@@ -102,6 +104,23 @@ class NotificationBuilder() {
             .setContentText(err)
             .setStyle(NotificationCompat.BigTextStyle()
                 .bigText(err))
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+        val notif = builder.build()
+        with(NotificationManagerCompat.from(context)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(id, notif)
+        }
+        return notif
+    }
+
+    fun buildEnterLocationNotification (message : String, state : String, id : Int) : Notification {
+        var builder = NotificationCompat.Builder(context!!,MyNotificationChannel.ENTRANCE_CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_create_black_24dp)
+            .setContentTitle("Let Me Attend")
+            .setContentText("You have "+state+" college")
+            .setStyle(NotificationCompat.BigTextStyle()
+                .bigText(message))
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setPriority(NotificationCompat.PRIORITY_MAX)
         val notif = builder.build()

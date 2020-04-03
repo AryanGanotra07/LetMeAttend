@@ -23,7 +23,7 @@ class FirebaseSetData(val userId: String) {
 
 
   init {
-      MyNotificationChannel.createNotifChannel()
+      MyNotificationChannel.createAllNotificationChannels()
   }
 
 

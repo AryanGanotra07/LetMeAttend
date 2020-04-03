@@ -12,7 +12,7 @@ import com.attendance.letmeattend.utils.toast
 class BootCompleteReciever() : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
 
-        MyNotificationChannel.createNotifChannel()
+        MyNotificationChannel.createAllNotificationChannels()
         val notifBuilder = NotificationBuilder()
         notifBuilder.buildErrorNotif("Boot completed",-2)
         Log.i("Boot","COmpleted")

@@ -27,7 +27,7 @@ class DatabaseService() : JobIntentService() {
     }
 
     override fun onHandleWork(intent: Intent) {
-        MyNotificationChannel.createNotifChannel()
+        MyNotificationChannel.createAllNotificationChannels()
         val lectureBundle = intent.getBundleExtra("lecture")
         val lecture = lectureBundle.getParcelable<Lecture>("lecture")
         val lect_id = lecture.id

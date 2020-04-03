@@ -11,7 +11,8 @@ import com.google.firebase.database.core.Constants
 
 class GeofenceClient() {
 
-    private lateinit var geofencingClient: GeofencingClient
+    private var geofencingClient: GeofencingClient
+    private final val REQUEST_ID = "college"
 
     init {
         geofencingClient = LocationServices.getGeofencingClient(AppApplication?.context!!)
@@ -21,15 +22,15 @@ class GeofenceClient() {
         val geofencelist = ArrayList<Geofence>()
         geofencelist.add(Geofence
             .Builder()
-            .setRequestId("college")
-            .setCircularRegion(28.550284,77.251015,radius)
+            .setRequestId(REQUEST_ID)
+            .setCircularRegion(location.latitude, location.longitude, radius)
             .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
             .setExpirationDuration(Geofence.NEVER_EXPIRE)
             .build()
         )
 
         return GeofencingRequest.Builder().apply {
-            setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+            setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER or GeofencingRequest.INITIAL_TRIGGER_EXIT)
             addGeofences(geofencelist)
         }.build()
     }

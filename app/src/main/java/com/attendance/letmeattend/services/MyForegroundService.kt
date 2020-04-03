@@ -19,7 +19,7 @@ class MyForegroundService() : Service(){
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        MyNotificationChannel.createNotifChannel()
+        MyNotificationChannel.createAllNotificationChannels()
         val notifBuilder: NotificationBuilder = NotificationBuilder()
         var notif = notifBuilder.buildErrorNotif("Running Location Service",2)
         val lectureBundle = intent!!.getBundleExtra("lecture")

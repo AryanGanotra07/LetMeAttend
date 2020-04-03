@@ -33,7 +33,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
 
             // Get the transition details as a String.
             val notifBuilder = NotificationBuilder()
-            notifBuilder.buildEnterLocationNotification("ENTRYING COLLEGE","entrying",notifBuilder.ENTRY_EXIT_NOTIF_ID)
+            notifBuilder.buildEnterLocationNotification("You have entered your college.","entrying",notifBuilder.ENTRY_EXIT_NOTIF_ID)
             LocalRepository.setGeofenceState(true)
             Log.d(TAG, "Building entry notification ...")
 
@@ -41,7 +41,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
         else if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT)
         {
             val notifBuilder = NotificationBuilder()
-            notifBuilder.buildEnterLocationNotification("EXITING COLLEGE","exiting",notifBuilder.ENTRY_EXIT_NOTIF_ID)
+            notifBuilder.buildEnterLocationNotification("You have exited college.","exiting",notifBuilder.ENTRY_EXIT_NOTIF_ID)
             LocalRepository.setGeofenceState(false)
             Log.d(TAG, "Building exit notification...")
 

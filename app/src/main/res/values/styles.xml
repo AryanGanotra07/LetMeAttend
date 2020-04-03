@@ -16,6 +16,9 @@
 
     <style name="splashscreen" parent="AppTheme">
         <item name="android:windowBackground">@drawable/splash</item>
+        <item name="android:statusBarColor">@color/windowBackground</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="FirebaseAuthUi" parent="FirebaseUI">

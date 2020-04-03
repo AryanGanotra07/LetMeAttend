@@ -130,4 +130,21 @@ class NotificationBuilder() {
         }
         return notif
     }
+
+    fun buildAttendanceStatusNotification(message: String, id : Int) : Notification {
+        var builder = NotificationCompat.Builder(context!!,MyNotificationChannel.ENTRANCE_CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_create_black_24dp)
+            .setContentTitle("Let Me Attend")
+            .setContentText(message)
+            .setStyle(NotificationCompat.BigTextStyle()
+                .bigText(message))
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+        val notif = builder.build()
+        with(NotificationManagerCompat.from(context)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(id, notif)
+        }
+        return notif
+    }
 }

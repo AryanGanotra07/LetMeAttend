@@ -273,6 +273,7 @@ class FirebaseSetData(val userId: String) {
                             var str: String = ""
                             if (it.isSuccessful) {
                                 str = "Current attendance incremented Successfully"
+                                notifBuilder.buildAttendanceStatusNotification("")
                             } else {
                                 str = "Current attendance updation failed"
                             }

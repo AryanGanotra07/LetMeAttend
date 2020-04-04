@@ -15,6 +15,7 @@ import java.util.*
 class AlarmReceiver() : BroadcastReceiver() {
 
 
+    private val TAG = "AlarmReceiver"
 
     override fun onReceive(context: Context?, intent: Intent?) {
       //context?.toast("Hello Recieved Message")
@@ -38,8 +39,12 @@ class AlarmReceiver() : BroadcastReceiver() {
         val calendar = Calendar.getInstance()
         Log.i("DETAILS-DAY-CURRENT",calendar.get(Calendar.DAY_OF_WEEK).toString())
         Log.i("DETAILS-HOUR-CURRENT",calendar.get(Calendar.HOUR_OF_DAY).toString())
+        Log.d(TAG, state.toString())
         if (state!!) {
-            if (hour == calendar.get(Calendar.HOUR_OF_DAY) && day == calendar.get(Calendar.DAY_OF_WEEK)) {
+            if (hour == calendar.get(Calendar.HOUR_OF_DAY)
+                && day == calendar.get(Calendar.DAY_OF_WEEK)
+                && min == calendar.get(Calendar.MINUTE)
+            ) {
                 Log.i("Called", "Yes")
                 context?.toast("Hello Recieved Message for " + day + ":" + hour)
                 //LocationService().enqueuework(context!!,intent!!)

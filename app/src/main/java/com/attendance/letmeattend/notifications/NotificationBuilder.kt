@@ -21,6 +21,7 @@ class NotificationBuilder() {
     val ACTION_NO = "action_no"
     val ACTION_NO_CLASS = "action_no_class"
     final val ENTRY_EXIT_NOTIF_ID = 1123
+    val ATTENDANCE_STATUS_NOTIF_ID = 1124
     private lateinit var inte : Intent
 
     fun buildNotification(intent : Intent, location : Location) : Notification
@@ -132,7 +133,7 @@ class NotificationBuilder() {
     }
 
     fun buildAttendanceStatusNotification(message: String, id : Int) : Notification {
-        var builder = NotificationCompat.Builder(context!!,MyNotificationChannel.ENTRANCE_CHANNEL_ID)
+        var builder = NotificationCompat.Builder(context!!,MyNotificationChannel.ATTENDANCE_STATUS_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_create_black_24dp)
             .setContentTitle("Let Me Attend")
             .setContentText(message)

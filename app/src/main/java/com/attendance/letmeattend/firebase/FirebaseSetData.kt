@@ -3,15 +3,14 @@ package com.attendance.letmeattend.firebase
 import android.location.Location
 import android.util.Log
 import com.attendance.letmeattend.application.AppApplication
-import com.attendance.letmeattend.models.Attendance
-import com.attendance.letmeattend.models.CollegeLocation
-import com.attendance.letmeattend.models.Lecture
-import com.attendance.letmeattend.models.Subject
+import com.attendance.letmeattend.models.*
 import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.notifications.NotificationBuilder
 import com.attendance.letmeattend.services.alarms.MyAlarmManager
 import com.attendance.letmeattend.utils.toast
 import com.google.firebase.database.*
+import java.util.*
+import kotlin.collections.HashMap
 
 class FirebaseSetData(val userId: String) {
     //    private val userId = FirebaseAuth.getInstance().currentUser?.uid
@@ -25,6 +24,22 @@ class FirebaseSetData(val userId: String) {
   init {
       MyNotificationChannel.createAllNotificationChannels()
   }
+
+    fun addAttendanceStatus(attendanceStatus: AttendanceStatus) {
+        val key = ref?.child("attendanceStatus")?.push()?.key
+        if (key != null) {
+            attendanceStatus.id = key
+        }
+        val childUpdates = HashMap<String, Any>()
+        childUpdates["/attendanceStatus/$key"] = attendanceStatus.toMap()
+        ref?.updateChildren(childUpdates)?.addOnCompleteListener {
+            if (it.isSuccessful) {
+
+
+                AppApplication.context?.toast("Attendance Status Added")
+            } else AppApplication.context?.toast("Error in adding attendance status")
+        }
+    }
 
 
     fun setAttendance(attendance: Attendance) {
@@ -246,15 +261,26 @@ class FirebaseSetData(val userId: String) {
             .removeValue()
     }
 
-    fun addAttendance(id: String, sub_id: String, attended: Boolean) {
+    fun addAttendance(lecture: Lecture, attended: Boolean) {
         if (attended) {
-            addCurrentAttendance(id, sub_id)
+            addCurrentAttendance(lecture)
         }
-        addTotalAttendance(id, sub_id)
+        addTotalAttendance(lecture, attended)
     }
 
-    private fun addCurrentAttendance(id: String, sub_id: String) {
+    private fun createAttendanceStatus(lecture: Lecture, attended: Boolean ) : AttendanceStatus {
+        val attendanceStatus = AttendanceStatus("",lecture.id, lecture.sub_id, attended, lecture.s_time, lecture.e_time, lecture.day)
+        return attendanceStatus
+    }
 
+    fun getAttendanceStatus(lecture : Lecture) {
+        
+    }
+
+    private fun addCurrentAttendance(lecture : Lecture) {
+
+        val id = lecture.id
+        val sub_id = lecture.sub_id
         Log.i("ID", id)
         ref?.child("lectures")
             .child(id).child("c_attendance")
@@ -273,7 +299,10 @@ class FirebaseSetData(val userId: String) {
                             var str: String = ""
                             if (it.isSuccessful) {
                                 str = "Current attendance incremented Successfully"
-                                notifBuilder.buildAttendanceStatusNotification("")
+                                notifBuilder.buildAttendanceStatusNotification(
+                                    "Congrats ;) You have been marked present!",
+                                    notifBuilder.ATTENDANCE_STATUS_NOTIF_ID )
+                                addAttendanceStatus(createAttendanceStatus(lecture, true))
                             } else {
                                 str = "Current attendance updation failed"
                             }
@@ -315,7 +344,9 @@ class FirebaseSetData(val userId: String) {
 
     }
 
-    private fun addTotalAttendance(id: String, sub_id: String) {
+    private fun addTotalAttendance(lecture: Lecture, attended: Boolean) {
+        val id = lecture.id
+        val sub_id = lecture.sub_id
         ref?.child("lectures")
             .child(id).child("t_attendance")
             .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -331,6 +362,14 @@ class FirebaseSetData(val userId: String) {
                         var str = ""
                         if (it.isSuccessful) {
                             str = "Total attendance incremented Successfully"
+
+                            if (!attended) {
+                                notifBuilder.buildAttendanceStatusNotification(
+                                    "Absent! You should attend classes regularly dude!",
+                                    notifBuilder.ATTENDANCE_STATUS_NOTIF_ID
+                                )
+                                addAttendanceStatus(createAttendanceStatus(lecture, false))
+                            }
                         } else {
                             str = "Total attendance updation failed"
                         }

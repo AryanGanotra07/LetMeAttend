@@ -41,6 +41,10 @@ class Repository() {
         DB_REF_USER?.child("subjects")
     }
 
+    private val DB_REF_ATTENDANCE_STATUS = userId?.let {
+        DB_REF_USER?.child("attendanceStatus")
+    }
+
 //    private val DB_REF_LAT = userId?.let {
 //        DB_REF_LECTURES?.child("lat")
 //    }
@@ -55,6 +59,7 @@ class Repository() {
     private val collegeAttendanceLiveData = FirebaseDatabaseLiveData(DB_REF_ATTENDANCE)
     private val lecturesLiveData = FirebaseDatabaseLiveData(DB_REF_LECTURES)
     private val subjectsLiveData = FirebaseDatabaseLiveData(DB_REF_SUBJECTS)
+    private val attendanceStatusLiveData = FirebaseDatabaseLiveData(DB_REF_ATTENDANCE_STATUS)
     private val database : FirebaseSetData = FirebaseSetData(userId!!)
 
     private val user : MediatorLiveData<User> = MediatorLiveData()
@@ -62,6 +67,8 @@ class Repository() {
     private val attendance : MediatorLiveData<Attendance> = MediatorLiveData()
     private val lectures : MediatorLiveData<ArrayList<Lecture>> = MediatorLiveData()
     private val subjects : MediatorLiveData<ArrayList<Subject>> = MediatorLiveData()
+    private val attendanceStatus : MediatorLiveData<ArrayList<AttendanceStatus>> = MediatorLiveData()
+
     init {
         user.addSource(firebaseDatabaseLiveData, Observer {
             if (it != null) Thread(Runnable { user.postValue(it.getValue(User::class.java))
@@ -80,6 +87,20 @@ class Repository() {
                 attendance.postValue(it.getValue(Attendance :: class.java))
                 //Log.d(TAG, it.getValue(Attendance :: class.java)?.attendance.toString())
             }).start()
+        })
+
+        attendanceStatus.addSource(attendanceStatusLiveData, Observer {
+            if (it != null && it.hasChildren()) {
+                val attendanceStatusList : ArrayList<AttendanceStatus> = ArrayList()
+                for (attendanceStatus in it.children) {
+                    val attendanceStat : AttendanceStatus = attendanceStatus.getValue(AttendanceStatus::class.java)!!
+                    attendanceStatusList.add(attendanceStat)
+                }
+                Thread(Runnable { attendanceStatus.postValue(attendanceStatusList) }).start()
+            }
+            else {
+                attendanceStatus.value = null
+            }
         })
 
         lectures.addSource(lecturesLiveData, Observer {
@@ -168,8 +189,8 @@ class Repository() {
         database.deleteLecture(lecture)
     }
 
-    fun addAttendance(id : String,sub_id :String, attended : Boolean)
-    {
-        database.addAttendance(id, sub_id,attended)
-    }
+//    fun addAttendance(id : String,sub_id :String, attended : Boolean)
+//    {
+//        database.addAttendance(id, sub_id,attended)
+//    }
 }

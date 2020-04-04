@@ -112,12 +112,14 @@ class SplashScreen : AppCompatActivity() {
     }
 
     private fun openMap() {
+
         collegeLocationLiveData.removeObserver(collegeLocationObserver)
         startActivity(Intent(this, MapFragment::class.java))
         finish()
     }
 
     private fun initiateUser() {
+        getLocationPermission()
         collegeLocationLiveData.removeObserver(collegeLocationObserver)
         startActivity(Intent(this, EnterDetailsActivity::class.java))
         finish()

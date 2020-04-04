@@ -66,6 +66,8 @@ object MyAlarmManager {
         intent.putExtra("day",day)
         intent.putExtra("hour",hour)
         intent.putExtra("min",min)
+
+
 //        intent.putExtra("id",lecture.id)
 //        intent.putExtra("sub_id",lecture.sub_id)
         val bundle = Bundle()

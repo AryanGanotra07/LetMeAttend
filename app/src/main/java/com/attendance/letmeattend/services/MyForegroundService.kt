@@ -5,10 +5,12 @@ import android.content.BroadcastReceiver
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
+import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.notifications.NotificationBuilder
 import com.attendance.letmeattend.notifications.NotificationReciever
+import com.attendance.letmeattend.utils.toast
 import com.google.android.gms.location.LocationServices
 
 class MyForegroundService() : Service(){
@@ -49,7 +51,7 @@ class MyForegroundService() : Service(){
 
             }
            notif = notifBuilder.buildNotification(intent!!, it)
-            startForeground(lecture.id.hashCode(),notif)
+            //startForeground(lecture.id.hashCode(),notif)
 
         }
         fusedLocationClient.lastLocation.addOnCompleteListener {
@@ -60,8 +62,8 @@ class MyForegroundService() : Service(){
             }
         }
 
+        stopForeground(false)
         startForeground(lecture.id.hashCode(),notif)
-        startForeground(lecture.id.hashCode()+1,notif)
         return START_NOT_STICKY
     }
 
@@ -70,6 +72,7 @@ class MyForegroundService() : Service(){
     }
 
     override fun onDestroy() {
+        AppApplication?.context?.toast("Previous notification destroyed")
         super.onDestroy()
     }
 

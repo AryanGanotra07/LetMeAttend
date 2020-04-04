@@ -37,7 +37,7 @@ class NotificationReciever() : BroadcastReceiver() {
 
           //  attended = true
             dbService.enqueuework(context!!,intent!!)
-            builder.removeNotification(intent.getIntExtra("EXTRA_NOTIFICATION_ID",0))
+            builder.removeNotification(intent.getIntExtra(EXTRA_NOTIFICATION_ID,0))
 
         }
         else if (intent?.action == builder.ACTION_NO)
@@ -47,13 +47,13 @@ class NotificationReciever() : BroadcastReceiver() {
             //attended = false
            // database.addAttendance(lect_id,sub_id,attended)
             dbService.enqueuework(context!!,intent!!)
-            builder.removeNotification(intent.getIntExtra("EXTRA_NOTIFICATION_ID",0))
+            builder.removeNotification(intent.getIntExtra(EXTRA_NOTIFICATION_ID,0))
 
         }
         else if (intent?.action == builder.ACTION_NO_CLASS)
         {
             context?.toast("NO CLASS CLICKED")
-            builder.removeNotification(intent.getIntExtra("EXTRA_NOTIFICATION_ID",0))
+            builder.removeNotification(intent.getIntExtra(EXTRA_NOTIFICATION_ID,0))
         }
 
         context?.stopService(inte)

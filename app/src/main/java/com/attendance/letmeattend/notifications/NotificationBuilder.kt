@@ -23,6 +23,7 @@ class NotificationBuilder() {
     final val ENTRY_EXIT_NOTIF_ID = 1123
     val ATTENDANCE_STATUS_NOTIF_ID = 1124
     private lateinit var inte : Intent
+    val EXTRA_NOTIFICATION_ID = "extraNotifId"
 
     fun buildNotification(intent : Intent, location : Location) : Notification
 
@@ -41,7 +42,7 @@ class NotificationBuilder() {
 
         val yesIntent = Intent(context,NotificationReciever::class.java)
         yesIntent.action = ACTION_YES
-        yesIntent.putExtra("EXTRA_NOTIFICATION_ID", id)
+        yesIntent.putExtra(EXTRA_NOTIFICATION_ID, id)
         yesIntent.putExtra("lecture",bundle)
        // yesIntent.putExtra("lat",location.latitude)
         yesIntent.putExtra("location",location)
@@ -49,7 +50,7 @@ class NotificationBuilder() {
 
         val noIntent = Intent(context,NotificationReciever::class.java)
         noIntent.action = ACTION_NO
-        noIntent.putExtra("EXTRA_NOTIFICATION_ID",id)
+        noIntent.putExtra(EXTRA_NOTIFICATION_ID,id)
         noIntent.putExtra("lecture",bundle)
         noIntent.putExtra(Intent.EXTRA_INTENT,intent)
         //noIntent.putExtra("lat",location.latitude)
@@ -57,7 +58,7 @@ class NotificationBuilder() {
 
         val noClassIntent = Intent(context,NotificationReciever::class.java)
         noClassIntent.action = ACTION_NO_CLASS
-        noClassIntent.putExtra("EXTRA_NOTIFICATION_ID",id)
+        noClassIntent.putExtra(EXTRA_NOTIFICATION_ID,id)
         noClassIntent.putExtra("lecture", bundle)
         noClassIntent.putExtra(Intent.EXTRA_INTENT,intent)
 

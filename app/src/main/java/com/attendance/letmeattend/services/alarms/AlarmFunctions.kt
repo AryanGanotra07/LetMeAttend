@@ -1,16 +1,20 @@
 package com.attendance.letmeattend.services.alarms
 
+import android.app.ActivityManager
+import android.content.Context.ACTIVITY_SERVICE
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.core.content.ContextCompat.getSystemService
 import com.attendance.letmeattend.application.AppApplication
-import com.attendance.letmeattend.firebase.Repository
+import com.attendance.letmeattend.application.AppApplication.Companion.context
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.notifications.NotificationBuilder
 import com.attendance.letmeattend.services.MyForegroundService
 import com.attendance.letmeattend.sharedpreferences.LocalRepository
 import com.attendance.letmeattend.utils.toast
 import java.util.*
+
 
 object AlarmFunctions {
 
@@ -68,4 +72,5 @@ object AlarmFunctions {
         alarmMgr.setAlarm(lect!!,false)
 
     }
+
 }

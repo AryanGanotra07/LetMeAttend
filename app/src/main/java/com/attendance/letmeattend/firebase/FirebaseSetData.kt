@@ -1,15 +1,18 @@
 package com.attendance.letmeattend.firebase
 
+import android.content.Intent
 import android.location.Location
 import android.util.Log
 import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.models.*
 import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.notifications.NotificationBuilder
+import com.attendance.letmeattend.services.alarms.AlarmFunctions
 import com.attendance.letmeattend.services.alarms.MyAlarmManager
 import com.attendance.letmeattend.utils.toast
 import com.google.firebase.database.*
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 class FirebaseSetData(val userId: String) {
@@ -275,15 +278,37 @@ class FirebaseSetData(val userId: String) {
         return attendanceStatus
     }
 
-    fun getAttendanceStatus(lecture : Lecture) {
-        ref?.child("attendanceStatus").orderByChild("lect_id").equalTo(lecture.id).
-            orderByChild("s_time").equalTo(lecture.s_time)
+    fun getAttendanceStatus(lecture : Lecture, intent : Intent) {
+        ref?.child("attendanceStatus").orderByChild("lect_id").equalTo(lecture.id)
+//            orderByChild("s_time").equalTo(lecture.s_time)
 //            .orderByChild("e_time").equalTo(lecture.e_time)
 //            .orderByChild("last_marked").orderByValue()
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(p0: DataSnapshot) {
-                    if (p0.exists())
-                    Log.d(TAG, p0.value.toString())
+                    if (p0.exists() && p0.hasChildren()) {
+                        val attendanceStatusList : ArrayList<AttendanceStatus> = ArrayList()
+                        for (attendanceStat in p0.children) {
+                            val attendanceStatus = attendanceStat.getValue(AttendanceStatus::class.java)
+                            if (attendanceStatus!!.s_time == lecture.s_time
+                                && attendanceStatus!!.day == lecture.day
+                                && attendanceStatus!!.last_marked.date == Calendar.getInstance().time.date) {
+
+                                attendanceStatusList.add(attendanceStatus!!)
+                            }
+                            Log.d(TAG, "Attendence status list size is "+attendanceStatusList.size)
+                            if (attendanceStatusList.isEmpty()) {
+                                AlarmFunctions.execute(intent,true)
+                            }
+                            else {
+                                AlarmFunctions.execute(intent, false)
+                            }
+                        }
+                        Log.d(TAG,attendanceStatusList.size.toString())
+                    }
+                    else {
+                        AlarmFunctions.execute(intent,true)
+                    }
+
                 }
 
                 override fun onCancelled(p0: DatabaseError) {

@@ -1,6 +1,7 @@
 package com.attendance.letmeattend.firebase
 
 import android.app.AlarmManager
+import android.content.Intent
 import android.util.Log
 import androidx.annotation.MainThread
 import androidx.lifecycle.MediatorLiveData
@@ -192,8 +193,8 @@ object Repository {
         database.deleteLecture(lecture)
     }
 
-   fun getAttendanceStatus(lecture: Lecture) : Date{
-       database.getAttendanceStatus(lecture)
+   fun getAttendanceStatus(lecture: Lecture, intent : Intent) : Date{
+       database.getAttendanceStatus(lecture, intent)
        return Calendar.getInstance().time
    }
 

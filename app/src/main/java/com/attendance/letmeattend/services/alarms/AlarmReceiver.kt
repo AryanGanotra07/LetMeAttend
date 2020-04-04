@@ -3,15 +3,10 @@ package com.attendance.letmeattend.services.alarms
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
-import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.firebase.Repository
 import com.attendance.letmeattend.models.Lecture
-import com.attendance.letmeattend.notifications.NotificationBuilder
-import com.attendance.letmeattend.services.MyForegroundService
 import com.attendance.letmeattend.sharedpreferences.LocalRepository
-import com.attendance.letmeattend.utils.toast
 import java.util.*
 
 class AlarmReceiver() : BroadcastReceiver() {

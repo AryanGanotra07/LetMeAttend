@@ -1,7 +1,6 @@
-package com.attendance.letmeattend.services
+package com.attendance.letmeattend.services.foregroundservices
 
 import android.app.Service
-import android.content.BroadcastReceiver
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
@@ -9,11 +8,11 @@ import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.notifications.NotificationBuilder
-import com.attendance.letmeattend.notifications.NotificationReciever
 import com.attendance.letmeattend.utils.toast
 import com.google.android.gms.location.LocationServices
 
 class MyForegroundService() : Service(){
+    private val TAG = "MyForegroundService"
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -62,17 +61,32 @@ class MyForegroundService() : Service(){
             }
         }
 
-        stopForeground(false)
+        Log.d(TAG,ForegroundServiceStatus.isRunning().toString())
+
+
         startForeground(lecture.id.hashCode(),notif)
+        if (ForegroundServiceStatus.isRunning()) {
+            if (lecture.id != ForegroundServiceStatus.getLecture().id) {
+                notifBuilder.buildNoResponseNotification(ForegroundServiceStatus.getLecture())
+                Log.d(TAG, "Building notification" + ForegroundServiceStatus.getLecture().name)
+                ForegroundServiceStatus.setRunning(false)
+            }
+        }
+        ForegroundServiceStatus.setRunning(true)
+        Log.d(TAG,"Building foreground"+lecture.name)
+        ForegroundServiceStatus.setLecture(lecture)
         return START_NOT_STICKY
     }
 
     override fun onCreate() {
         super.onCreate()
+        Log.d(TAG, "MyForegroundService created")
     }
+
 
     override fun onDestroy() {
         AppApplication?.context?.toast("Previous notification destroyed")
+        Log.d(TAG, "MyForegroundService ended")
         super.onDestroy()
     }
 

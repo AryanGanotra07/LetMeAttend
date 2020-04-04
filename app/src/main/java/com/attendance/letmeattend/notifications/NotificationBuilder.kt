@@ -14,6 +14,7 @@ import com.attendance.letmeattend.R
 import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.notifications.MyNotificationChannel.CHANNEL_ID
+import java.util.*
 
 class NotificationBuilder() {
     val context = AppApplication.context
@@ -24,6 +25,7 @@ class NotificationBuilder() {
     val ATTENDANCE_STATUS_NOTIF_ID = 1124
     private lateinit var inte : Intent
     val EXTRA_NOTIFICATION_ID = "extraNotifId"
+
 
     fun buildNotification(intent : Intent, location : Location) : Notification
 
@@ -146,6 +148,24 @@ class NotificationBuilder() {
         with(NotificationManagerCompat.from(context)) {
             // notificationId is a unique int for each notification that you must define
             notify(id, notif)
+        }
+        return notif
+    }
+
+    fun buildNoResponseNotification(lecture: Lecture) : Notification {
+        val id = Random().nextInt(1000)
+        var builder = NotificationCompat.Builder(context!!,MyNotificationChannel.NO_RESPONSE_CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_create_black_24dp)
+            .setContentTitle(lecture.name)
+            .setContentText("Marked you absent for your lecture from "+lecture.s_time+" to "+lecture.e_time + "as we got no response from you.")
+            .setStyle(NotificationCompat.BigTextStyle()
+                .bigText("Marked you absent for your lecture from "+lecture.s_time+" to "+lecture.e_time + "as we got no response from you."))
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+        val notif = builder.build()
+        with(NotificationManagerCompat.from(context)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(lecture.id.hashCode()-1, notif)
         }
         return notif
     }

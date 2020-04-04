@@ -43,7 +43,7 @@
         <service android:name=".services.DatabaseService"
             android:permission="android.permission.BIND_JOB_SERVICE"
             android:exported="false"/>
-        <service android:name=".services.MyForegroundService"
+        <service android:name=".services.foregroundservices.MyForegroundService"
                 android:permission="android.permission.BIND_JOB_SERVICE"
                 android:exported="false"/>
         <meta-data

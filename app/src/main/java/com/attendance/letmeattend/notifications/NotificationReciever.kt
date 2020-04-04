@@ -10,6 +10,8 @@ import com.attendance.letmeattend.firebase.FirebaseSetData
 import com.attendance.letmeattend.firebase.Repository
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.services.DatabaseService
+import com.attendance.letmeattend.services.foregroundservices.ForegroundServiceStatus
+import com.attendance.letmeattend.services.foregroundservices.MyForegroundService
 import com.attendance.letmeattend.utils.toast
 import com.google.firebase.auth.FirebaseAuth
 
@@ -38,6 +40,7 @@ class NotificationReciever() : BroadcastReceiver() {
           //  attended = true
             dbService.enqueuework(context!!,intent!!)
             builder.removeNotification(intent.getIntExtra(EXTRA_NOTIFICATION_ID,0))
+            ForegroundServiceStatus.setRunning(false)
 
         }
         else if (intent?.action == builder.ACTION_NO)
@@ -48,12 +51,14 @@ class NotificationReciever() : BroadcastReceiver() {
            // database.addAttendance(lect_id,sub_id,attended)
             dbService.enqueuework(context!!,intent!!)
             builder.removeNotification(intent.getIntExtra(EXTRA_NOTIFICATION_ID,0))
+            ForegroundServiceStatus.setRunning(false)
 
         }
         else if (intent?.action == builder.ACTION_NO_CLASS)
         {
             context?.toast("NO CLASS CLICKED")
             builder.removeNotification(intent.getIntExtra(EXTRA_NOTIFICATION_ID,0))
+            ForegroundServiceStatus.setRunning(false)
         }
 
         context?.stopService(inte)

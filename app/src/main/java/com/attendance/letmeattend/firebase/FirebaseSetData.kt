@@ -274,7 +274,7 @@ class FirebaseSetData(val userId: String) {
     }
 
     fun getAttendanceStatus(lecture : Lecture) {
-        
+
     }
 
     private fun addCurrentAttendance(lecture : Lecture) {

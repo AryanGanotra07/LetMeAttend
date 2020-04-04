@@ -12,7 +12,7 @@ import com.attendance.letmeattend.utils.toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
-class Repository() {
+object Repository {
 
     private val TAG = "Repository"
 
@@ -188,6 +188,10 @@ class Repository() {
     {
         database.deleteLecture(lecture)
     }
+
+   fun getAttendanceStatus(lecture: Lecture, day : Day) {
+
+   }
 
 //    fun addAttendance(id : String,sub_id :String, attended : Boolean)
 //    {

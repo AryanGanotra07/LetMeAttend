@@ -179,8 +179,8 @@ class FirebaseLogin: AppCompatActivity(),View.OnClickListener {
     }
 
     private fun loginUser() {
-        val repo = Repository()
-        collegeLocationLiveData = repo.getCollegeLocation()
+
+        collegeLocationLiveData = Repository.getCollegeLocation()
         collegeLocationLiveData.observe(this, collegeLocationObserver)
     }
 

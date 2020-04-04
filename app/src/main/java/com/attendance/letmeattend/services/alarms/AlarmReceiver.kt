@@ -9,6 +9,7 @@ import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.notifications.NotificationBuilder
 import com.attendance.letmeattend.services.MyForegroundService
+import com.attendance.letmeattend.sharedpreferences.LocalRepository
 import com.attendance.letmeattend.utils.toast
 import java.util.*
 
@@ -27,8 +28,8 @@ class AlarmReceiver() : BroadcastReceiver() {
         val alarmMgr =
             MyAlarmManager
         val builder = NotificationBuilder()
-        val preference=context?.getSharedPreferences("GEOFENCE", Context.MODE_PRIVATE)
-        val state= preference?.getBoolean("name",true)
+
+        val state= LocalRepository.getGeofenceState()
         val day = intent?.getIntExtra("day",1)
         val lectureBundle = intent?.getBundleExtra("lecture")
         val lect = lectureBundle?.getParcelable<Lecture>("lecture")

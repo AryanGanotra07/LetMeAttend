@@ -16,9 +16,9 @@ class EnterDetailsViewModel : ViewModel() ,  SaveClickListener   {
 
 
 //    private val user : MediatorLiveData<User> = Repository.getUserLiveData()
-      private val repository : Repository = Repository()
-      private val attendance : MediatorLiveData<Attendance> = repository.getAttendance()
-      private val collegeLocation : MediatorLiveData<CollegeLocation> = repository.getCollegeLocation()
+//      private val repository : Repository = Repository
+      private val attendance : MediatorLiveData<Attendance> = Repository.getAttendance()
+      private val collegeLocation : MediatorLiveData<CollegeLocation> = Repository.getCollegeLocation()
       private val monAdapter : LectureRecyclerAdapter = LectureRecyclerAdapter()
       private val tueAdapter : LectureRecyclerAdapter = LectureRecyclerAdapter()
       private val wedAdapter : LectureRecyclerAdapter = LectureRecyclerAdapter()
@@ -41,20 +41,20 @@ class EnterDetailsViewModel : ViewModel() ,  SaveClickListener   {
 
     fun setAttendance(attendance: Attendance)
     {
-        repository.setAttendance(attendance)
+        Repository.setAttendance(attendance)
     }
     fun setCollegeLocation(collegeLocation: CollegeLocation)
     {
-        repository.setCollegeLocation(collegeLocation)
+        Repository.setCollegeLocation(collegeLocation)
     }
     fun addLecture(lecture : Lecture)
     {
-        repository.addLecture(lecture)
+        Repository.addLecture(lecture)
     }
 
     fun getLectures() : MediatorLiveData<ArrayList<Lecture>>
     {
-        return repository.getLectures()
+        return Repository.getLectures()
     }
 
     fun getMonLectureRecyclerAdapter() : LectureRecyclerAdapter
@@ -82,22 +82,22 @@ class EnterDetailsViewModel : ViewModel() ,  SaveClickListener   {
 
     fun updateLecture(lecture: Lecture)
     {
-        repository.updateLecture(lecture)
+        Repository.updateLecture(lecture)
     }
 
     fun getSubjectByName(name : String) : List<Subject>?
     {
-        return repository.getSubjectsByName(name)
+        return Repository.getSubjectsByName(name)
     }
 
     fun getSubjects() : MediatorLiveData<ArrayList<Subject>>
     {
-        return repository.getSubjects()
+        return Repository.getSubjects()
     }
 
     fun deleteLecture(lecture: Lecture)
     {
-        repository.deleteLecture(lecture)
+        Repository.deleteLecture(lecture)
     }
 
 

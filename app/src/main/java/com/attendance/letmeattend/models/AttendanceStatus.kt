@@ -10,7 +10,8 @@ data class AttendanceStatus (var id : String = "",
                              var attended : Boolean = false,
                              var s_time : String = "",
                              var e_time : String = "",
-                             var day : Int = 0
+                             var day : Int = 0,
+                             var last_marked : Date = Calendar.getInstance().time
                              ) {
 
     fun toMap(): Map<String, Any?> {
@@ -21,7 +22,8 @@ data class AttendanceStatus (var id : String = "",
             "attended" to attended,
             "s_time" to s_time,
             "e_time" to e_time,
-            "day" to day
+            "day" to day,
+            "last_marked" to last_marked
         )
     }
 }

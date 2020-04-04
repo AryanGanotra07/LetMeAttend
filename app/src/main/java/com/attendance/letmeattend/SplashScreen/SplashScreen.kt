@@ -32,8 +32,7 @@ class SplashScreen : AppCompatActivity() {
         MyNotificationChannel.createAllNotificationChannels()
         Log.d(TAG, FirebaseAuth.getInstance().currentUser.toString())
         if (FirebaseAuth.getInstance().currentUser != null) {
-            val repo = Repository()
-            collegeLocationLiveData = repo.getCollegeLocation()
+            collegeLocationLiveData = Repository.getCollegeLocation()
             collegeLocationLiveData.observe(this, collegeLocationObserver)
 //            if(getLocationPermission()) {
 //                startActivity(Intent(this, EnterDetailsActivity::class.java))

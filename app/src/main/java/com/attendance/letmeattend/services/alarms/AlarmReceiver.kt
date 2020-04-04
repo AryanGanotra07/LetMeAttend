@@ -6,6 +6,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.attendance.letmeattend.application.AppApplication
+import com.attendance.letmeattend.firebase.Repository
+import com.attendance.letmeattend.models.Day
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.notifications.NotificationBuilder
 import com.attendance.letmeattend.services.MyForegroundService
@@ -46,6 +48,7 @@ class AlarmReceiver() : BroadcastReceiver() {
                 && day == calendar.get(Calendar.DAY_OF_WEEK)
                 && min == calendar.get(Calendar.MINUTE)
             ) {
+                Repository.getAttendanceStatus(lect!!)
                 Log.i("Called", "Yes")
                 context?.toast("Hello Recieved Message for " + day + ":" + hour)
                 //LocationService().enqueuework(context!!,intent!!)

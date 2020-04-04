@@ -20,6 +20,8 @@ class FirebaseSetData(val userId: String) {
         database.getReference("User").child(it)
     }
 
+    private val TAG = "FirebaseSetData"
+
 
   init {
       MyNotificationChannel.createAllNotificationChannels()
@@ -274,7 +276,20 @@ class FirebaseSetData(val userId: String) {
     }
 
     fun getAttendanceStatus(lecture : Lecture) {
+        ref?.child("attendanceStatus").orderByChild("lect_id").equalTo(lecture.id).
+            orderByChild("s_time").equalTo(lecture.s_time)
+//            .orderByChild("e_time").equalTo(lecture.e_time)
+//            .orderByChild("last_marked").orderByValue()
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(p0: DataSnapshot) {
+                    if (p0.exists())
+                    Log.d(TAG, p0.value.toString())
+                }
 
+                override fun onCancelled(p0: DatabaseError) {
+
+                }
+            })
     }
 
     private fun addCurrentAttendance(lecture : Lecture) {

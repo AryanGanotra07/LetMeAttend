@@ -11,6 +11,9 @@ import com.attendance.letmeattend.services.alarms.MyAlarmManager
 import com.attendance.letmeattend.utils.toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import java.sql.Time
+import java.util.*
+import kotlin.collections.ArrayList
 
 object Repository {
 
@@ -189,8 +192,9 @@ object Repository {
         database.deleteLecture(lecture)
     }
 
-   fun getAttendanceStatus(lecture: Lecture, day : Day) {
-
+   fun getAttendanceStatus(lecture: Lecture) : Date{
+       database.getAttendanceStatus(lecture)
+       return Calendar.getInstance().time
    }
 
 //    fun addAttendance(id : String,sub_id :String, attended : Boolean)

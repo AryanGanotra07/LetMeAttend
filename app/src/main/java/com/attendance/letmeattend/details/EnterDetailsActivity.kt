@@ -79,7 +79,7 @@ class EnterDetailsActivity: AppCompatActivity(),
 
    val broadcastReceiver : BroadcastReceiver =  object : BroadcastReceiver() {
        override fun onReceive(context: Context?, intent: Intent?) {
-           
+
            val notificationAlert = NotificationAlert(context!!)
            val lecture = LectureDeserializer.getLecture(intent!!)
            notificationAlert.executeDialog(lecture)
@@ -247,8 +247,14 @@ class EnterDetailsActivity: AppCompatActivity(),
 
         override fun onPageSelected(position: Int) {
             id = position
+
         }
 
+    }
+
+    override fun onDestroy() {
+        unregisterReceiver(broadcastReceiver)
+        super.onDestroy()
     }
 
     override fun onAttachFragment(fragment: Fragment) {

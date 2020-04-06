@@ -4,12 +4,13 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import androidx.legacy.content.WakefulBroadcastReceiver
 import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.notifications.NotificationBuilder
 import com.attendance.letmeattend.utils.toast
 
 
-class BootCompleteReciever() : BroadcastReceiver() {
+class BootCompleteReciever() : WakefulBroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
 
         MyNotificationChannel.createAllNotificationChannels()

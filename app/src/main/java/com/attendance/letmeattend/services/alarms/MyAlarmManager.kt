@@ -80,9 +80,9 @@ object MyAlarmManager {
                 val id = getInt(lecture.id)
                 PendingIntent.getBroadcast(AppApplication?.context,id , intent, PendingIntent.FLAG_UPDATE_CURRENT)
             }
-            alarmMgr?.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                calendar.timeInMillis,
+            alarmMgr?.setAlarmClock(
+                AlarmManager.AlarmClockInfo(calendar.timeInMillis,
+                    alarmIntent),
                 alarmIntent
             )
         // }

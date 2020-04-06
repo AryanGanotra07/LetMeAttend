@@ -1,7 +1,6 @@
 package com.attendance.letmeattend.details
 
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -27,10 +26,14 @@ import com.attendance.letmeattend.details.listeners.AddSubjectListener
 import com.attendance.letmeattend.details.listeners.OnLectureClickListener
 import com.attendance.letmeattend.details.listeners.SaveClickListener
 import com.attendance.letmeattend.details.timetable.*
+import com.attendance.letmeattend.helpers.LectureDeserializer
 import com.attendance.letmeattend.models.Attendance
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.models.Subject
+import com.attendance.letmeattend.utils.toast
 import com.attendance.letmeattend.viewmodels.EnterDetailsViewModel
+import com.attendance.letmeattend.views.NotificationAlert
+import com.crowdfire.cfalertdialog.CFAlertDialog
 import com.google.android.gms.maps.MapFragment
 import com.google.android.material.tabs.TabLayout
 
@@ -74,9 +77,20 @@ class EnterDetailsActivity: AppCompatActivity(),
 
     }
 
+   val broadcastReceiver : BroadcastReceiver =  object : BroadcastReceiver() {
+       override fun onReceive(context: Context?, intent: Intent?) {
+           
+           val notificationAlert = NotificationAlert(context!!)
+           val lecture = LectureDeserializer.getLecture(intent!!)
+           notificationAlert.executeDialog(lecture)
+
+       }
+   }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        registerReceiver(broadcastReceiver, IntentFilter("NEW_NOTIFICATION"))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val intent = Intent()
@@ -320,6 +334,7 @@ class EnterDetailsActivity: AppCompatActivity(),
         }
         return super.onContextItemSelected(item)
     }
+
 
 
 }

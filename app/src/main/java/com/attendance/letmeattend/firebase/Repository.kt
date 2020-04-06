@@ -198,6 +198,10 @@ object Repository {
        return Calendar.getInstance().time
    }
 
+    fun addAttendance(lecture : Lecture, attended : Boolean) {
+        database.addAttendance(lecture, attended)
+    }
+
 //    fun addAttendance(id : String,sub_id :String, attended : Boolean)
 //    {
 //        database.addAttendance(id, sub_id,attended)

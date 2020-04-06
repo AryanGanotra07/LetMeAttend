@@ -1,14 +1,17 @@
 package com.attendance.letmeattend.services.alarms
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.attendance.letmeattend.application.AppApplication
+import com.attendance.letmeattend.details.EnterDetailsActivity
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.notifications.NotificationBuilder
 import com.attendance.letmeattend.services.foregroundservices.MyForegroundService
 import com.attendance.letmeattend.sharedpreferences.LocalRepository
 import com.attendance.letmeattend.utils.toast
+import com.crowdfire.cfalertdialog.CFAlertDialog
 import java.util.*
 
 
@@ -52,6 +55,12 @@ object AlarmFunctions {
                 inte.putExtra("lecture", bundle)
                 inte.putExtra("intid", lect!!.id.hashCode())
                 context?.startService(inte)
+
+                 val broadcastIntent = Intent("NEW_NOTIFICATION")
+                 broadcastIntent.putExtra("lecture",bundle)
+                 context?.sendBroadcast(broadcastIntent);
+
+
 
 
             } else {

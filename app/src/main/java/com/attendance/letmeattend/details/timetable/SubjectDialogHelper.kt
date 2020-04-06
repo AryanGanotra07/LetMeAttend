@@ -14,6 +14,7 @@ import com.attendance.letmeattend.viewmodels.EnterDetailsViewModel
 import com.attendance.letmeattend.colorseekbar.ColorSeekBar
 import com.attendance.letmeattend.models.Subject
 import com.attendance.letmeattend.utils.toast
+import com.crowdfire.cfalertdialog.CFAlertDialog
 import com.google.android.material.snackbar.Snackbar
 
 class SubjectDialogHelper(val context : Activity,val alertView: View, val viewModel: EnterDetailsViewModel) {
@@ -273,5 +274,19 @@ class SubjectDialogHelper(val context : Activity,val alertView: View, val viewMo
 
 
 
+    }
+
+    fun executeDialog()  {
+        val builder :  CFAlertDialog.Builder  = CFAlertDialog.Builder(context)
+            .setDialogStyle(CFAlertDialog.CFAlertStyle.NOTIFICATION)
+            .setTitle("You've hit the limit")
+            .setMessage("Looks like you've hit your usage limit. Upgrade to our paid plan to continue without any limits.")
+//                     .addButton("UPGRADE", -1, -1, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.END,object : DialogInterface.OnClickListener {
+//                         override fun onClick(dialog: DialogInterface?, which: Int) {
+//                             context?.toast("Clicked");
+//                         }
+//                     })
+
+        builder.show();
     }
 }

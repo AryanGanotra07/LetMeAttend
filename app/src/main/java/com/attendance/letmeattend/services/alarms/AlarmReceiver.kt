@@ -2,12 +2,16 @@ package com.attendance.letmeattend.services.alarms
 
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.util.Log
 import com.attendance.letmeattend.firebase.Repository
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.sharedpreferences.LocalRepository
+import com.attendance.letmeattend.utils.toast
+import com.crowdfire.cfalertdialog.CFAlertDialog
 import java.util.*
+
 
 class AlarmReceiver() : BroadcastReceiver() {
 
@@ -35,7 +39,10 @@ class AlarmReceiver() : BroadcastReceiver() {
             ) {
 
                     Repository.getAttendanceStatus(lect!!, intent)
-            }
+
+
+                }
+
 
 
 

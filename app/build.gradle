@@ -71,6 +71,7 @@ dependencies {
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
 
     implementation 'com.github.judemanutd:autostarter:1.0.6'
+    implementation 'com.crowdfire.cfalertdialog:cfalertdialog:1.1.0'
 
 }
 

@@ -61,8 +61,6 @@ object AlarmFunctions {
                  context?.sendBroadcast(broadcastIntent);
 
 
-
-
             } else {
                 context?.toast("Hello Recieved Message for nothing")
             }

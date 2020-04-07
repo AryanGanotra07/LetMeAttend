@@ -234,6 +234,7 @@ class FirebaseSetData(val userId: String) {
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     AppApplication.context?.toast("Lecture Deleted Successfully")
+                    deleteAttendanceStatusByLecture(lecture)
 
                 } else AppApplication.context?.toast("Lecture Deletion Failed")
             }
@@ -276,6 +277,42 @@ class FirebaseSetData(val userId: String) {
     private fun createAttendanceStatus(lecture: Lecture, attended: Boolean ) : AttendanceStatus {
         val attendanceStatus = AttendanceStatus("",lecture.id, lecture.sub_id, attended, lecture.s_time, lecture.e_time, lecture.day)
         return attendanceStatus
+    }
+
+    private fun deleteAttendanceStatusById(attendanceStatus: AttendanceStatus) {
+        ref?.child("attendanceStatus").child(attendanceStatus.id).removeValue().addOnCompleteListener {
+            if (it.isSuccessful) {
+                AppApplication?.context?.toast("Attendance status deleted successfully");
+            }
+            else {
+                AppApplication?.context?.toast("Error removing attendance status");
+            }
+        }
+    }
+    
+    private fun deleteAttendanceStatusByLecture(lecture : Lecture) {
+        ref?.child("attendanceStatus").orderByChild("lect_id").equalTo(lecture.id)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    if (p0.exists() && p0.hasChildren()) {
+                        val attendanceStatusList : ArrayList<AttendanceStatus> = ArrayList()
+                        for (attendanceStat in p0.children) {
+                            val attendanceStatus = attendanceStat.getValue(AttendanceStatus::class.java)
+                            deleteAttendanceStatusById(attendanceStatus!!)
+                        }
+                        Log.d(TAG,attendanceStatusList.size.toString())
+                    }
+                    else {
+                        AppApplication?.context?.toast("No attendances found for the deleted lecture");
+                    }
+
+
+                }
+            })
     }
 
     fun getAttendanceStatus(lecture : Lecture, intent : Intent) {

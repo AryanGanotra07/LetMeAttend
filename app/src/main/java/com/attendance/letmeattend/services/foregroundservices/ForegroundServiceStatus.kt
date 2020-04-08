@@ -6,6 +6,7 @@ object ForegroundServiceStatus {
 
     private var running : Boolean = false
     private var lecture : Lecture = Lecture()
+    private var lastMarkedLecture : Lecture = Lecture()
 
     fun isRunning() : Boolean {
         return running
@@ -21,5 +22,13 @@ object ForegroundServiceStatus {
 
     fun getLecture() : Lecture {
      return this.lecture
+    }
+
+    fun getLastMarkedLecture() : Lecture {
+        return this.lastMarkedLecture
+    }
+
+    fun setLastMarkedLecture(lastMarkedLecture : Lecture) {
+        this.lastMarkedLecture = lastMarkedLecture
     }
 }

@@ -57,7 +57,9 @@ object AlarmFunctions {
                 context?.startService(inte)
 
                  val broadcastIntent = Intent("NEW_NOTIFICATION")
-                 broadcastIntent.putExtra("lecture",bundle)
+                 broadcastIntent.putExtra("intent",inte)
+                 broadcastIntent.putExtra("lecture", bundle)
+                 broadcastIntent.setPackage("com.attendance.letmeattend")
                  context?.sendBroadcast(broadcastIntent);
 
 

@@ -1,5 +1,6 @@
 package com.attendance.letmeattend.details
 
+import android.app.Notification
 import android.content.*
 import android.net.Uri
 import android.os.Build
@@ -21,15 +22,18 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.attendance.letmeattend.R
 import com.attendance.letmeattend.adapters.TabLayoutAdapter
+import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.databinding.EnterDetailsActivityBinding
 import com.attendance.letmeattend.details.listeners.AddSubjectListener
 import com.attendance.letmeattend.details.listeners.OnLectureClickListener
 import com.attendance.letmeattend.details.listeners.SaveClickListener
 import com.attendance.letmeattend.details.timetable.*
 import com.attendance.letmeattend.helpers.LectureDeserializer
+import com.attendance.letmeattend.helpers.NotificationAlertStatus
 import com.attendance.letmeattend.models.Attendance
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.models.Subject
+import com.attendance.letmeattend.notifications.NotificationBuilder
 import com.attendance.letmeattend.utils.toast
 import com.attendance.letmeattend.viewmodels.EnterDetailsViewModel
 import com.attendance.letmeattend.views.NotificationAlert
@@ -82,7 +86,14 @@ class EnterDetailsActivity: AppCompatActivity(),
 
            val notificationAlert = NotificationAlert(context!!)
            val lecture = LectureDeserializer.getLecture(intent!!)
-           notificationAlert.executeDialog(lecture)
+           val inte = intent.getParcelableExtra<Intent>("intent")
+           //context?.stopService(inte)
+
+           NotificationAlertStatus.setAbsentMarked()
+           val aL = notificationAlert.executeDialog(lecture,inte)
+           NotificationAlertStatus.setLecture(lecture!!)
+           NotificationAlertStatus.setRunning(true)
+           NotificationAlertStatus.setAlertView(aL)
 
        }
    }

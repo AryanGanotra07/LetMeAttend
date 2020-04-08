@@ -40,6 +40,7 @@ class NotificationReciever() : BroadcastReceiver() {
           //  attended = true
             dbService.enqueuework(context!!,intent!!)
             builder.removeNotification(intent.getIntExtra(EXTRA_NOTIFICATION_ID,0))
+
             ForegroundServiceStatus.setRunning(false)
 
         }

@@ -25,6 +25,7 @@ class NotificationBuilder() {
     val ATTENDANCE_STATUS_NOTIF_ID = 1124
     private lateinit var inte : Intent
     val EXTRA_NOTIFICATION_ID = "extraNotifId"
+    private val TAG = "NotificationBuilder"
 
 
     fun buildNotification(intent : Intent, location : Location) : Notification
@@ -37,7 +38,7 @@ class NotificationBuilder() {
         val lect_id = lecture.id
         val sub_id = lecture.sub_id
         val name = lecture.name
-        Log.i("LECTURE_ID_BUILDER",lect_id)
+
 
         val bundle = Bundle()
         bundle.putParcelable("lecture",lecture)
@@ -87,11 +88,12 @@ class NotificationBuilder() {
             // notificationId is a unique int for each notification that you must define
             notify(id, builder.build())
         }
-
+        Log.i(TAG,"Building notification with id" + id)
         return builder.build()
     }
     fun removeNotification(id: Int)
     {
+        Log.d(TAG, "Removing notification with id.. " + id)
         with(context?.let { NotificationManagerCompat.from(it) }) {
             // notificationId is a unique int for each notification that you must define
             this!!.cancel(id)

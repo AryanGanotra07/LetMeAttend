@@ -3,7 +3,9 @@ package com.attendance.letmeattend.firebase
 import android.content.Intent
 import android.location.Location
 import android.util.Log
+import android.widget.Toast
 import com.attendance.letmeattend.application.AppApplication
+import com.attendance.letmeattend.helpers.NotificationAlertStatus
 import com.attendance.letmeattend.models.*
 import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.notifications.NotificationBuilder
@@ -268,10 +270,7 @@ class FirebaseSetData(val userId: String) {
     }
 
     fun addAttendance(lecture: Lecture, attended: Boolean) {
-        if (attended) {
-            addCurrentAttendance(lecture)
-        }
-        addTotalAttendance(lecture, attended)
+        getAttendanceStatusForRecheck(lecture, attended)
     }
 
     private fun createAttendanceStatus(lecture: Lecture, attended: Boolean ) : AttendanceStatus {
@@ -354,6 +353,52 @@ class FirebaseSetData(val userId: String) {
             })
     }
 
+    fun getAttendanceStatusForRecheck(lecture : Lecture, attended: Boolean) {
+        ref?.child("attendanceStatus").orderByChild("lect_id").equalTo(lecture.id)
+//            orderByChild("s_time").equalTo(lecture.s_time)
+//            .orderByChild("e_time").equalTo(lecture.e_time)
+//            .orderByChild("last_marked").orderByValue()
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(p0: DataSnapshot) {
+                    if (p0.exists() && p0.hasChildren()) {
+                        val attendanceStatusList : ArrayList<AttendanceStatus> = ArrayList()
+                        for (attendanceStat in p0.children) {
+                            val attendanceStatus = attendanceStat.getValue(AttendanceStatus::class.java)
+                            if (attendanceStatus!!.s_time == lecture.s_time
+                                && attendanceStatus!!.day == lecture.day
+                                && attendanceStatus!!.last_marked.date == Calendar.getInstance().time.date) {
+
+                                attendanceStatusList.add(attendanceStatus!!)
+                            }
+                            Log.d(TAG, "Attendence status list size is "+attendanceStatusList.size)
+                            if (attendanceStatusList.isEmpty()) {
+                                if (attended) {
+                                    addCurrentAttendance(lecture)
+                                }
+                                addTotalAttendance(lecture, attended)
+                            }
+                            else {
+                               AppApplication?.context?.toast("Attendance has been marked already!")
+
+                            }
+                        }
+                        Log.d(TAG,attendanceStatusList.size.toString())
+                    }
+                    else {
+                        if (attended) {
+                            addCurrentAttendance(lecture)
+                        }
+                        addTotalAttendance(lecture, attended)
+                    }
+
+                }
+
+                override fun onCancelled(p0: DatabaseError) {
+
+                }
+            })
+    }
+
     private fun addCurrentAttendance(lecture : Lecture) {
 
         val id = lecture.id
@@ -380,6 +425,7 @@ class FirebaseSetData(val userId: String) {
                                     "Congrats ;) You have been marked present!",
                                     notifBuilder.ATTENDANCE_STATUS_NOTIF_ID )
                                 addAttendanceStatus(createAttendanceStatus(lecture, true))
+
                             } else {
                                 str = "Current attendance updation failed"
                             }
@@ -446,7 +492,13 @@ class FirebaseSetData(val userId: String) {
                                     notifBuilder.ATTENDANCE_STATUS_NOTIF_ID
                                 )
                                 addAttendanceStatus(createAttendanceStatus(lecture, false))
+
                             }
+                            Log.d(TAG, NotificationAlertStatus.isRunning().toString())
+                            Log.d(TAG, NotificationAlertStatus.getLecture().name)
+                            NotificationAlertStatus.setAttendanceMarkedAlready(lecture!!)
+                            Log.d(TAG, NotificationAlertStatus.isRunning().toString())
+                            Log.d(TAG, NotificationAlertStatus.getLecture().name)
                         } else {
                             str = "Total attendance updation failed"
                         }

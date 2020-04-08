@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import com.attendance.letmeattend.application.AppApplication
+import com.attendance.letmeattend.application.AppApplication.Companion.context
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.notifications.NotificationBuilder
@@ -50,6 +51,7 @@ class MyForegroundService() : Service(){
 
             }
            notif = notifBuilder.buildNotification(intent!!, it)
+
             //startForeground(lecture.id.hashCode(),notif)
 
         }
@@ -75,6 +77,11 @@ class MyForegroundService() : Service(){
         ForegroundServiceStatus.setRunning(true)
         Log.d(TAG,"Building foreground"+lecture.name)
         ForegroundServiceStatus.setLecture(lecture)
+//        val broadcastIntent = Intent("NEW_NOTIFICATION")
+//        broadcastIntent.putExtra("intent",intent)
+//        broadcastIntent.putExtra("lecture", lectureBundle)
+//        broadcastIntent.setPackage("com.attendance.letmeattend")
+//        context?.sendBroadcast(broadcastIntent);
         return START_NOT_STICKY
     }
 
@@ -84,7 +91,10 @@ class MyForegroundService() : Service(){
     }
 
 
+
+
     override fun onDestroy() {
+        stopForeground(Service.STOP_FOREGROUND_REMOVE)
         AppApplication?.context?.toast("Previous notification destroyed")
         Log.d(TAG, "MyForegroundService ended")
         super.onDestroy()

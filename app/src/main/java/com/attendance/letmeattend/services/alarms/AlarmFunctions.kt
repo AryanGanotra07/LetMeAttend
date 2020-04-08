@@ -2,6 +2,7 @@ package com.attendance.letmeattend.services.alarms
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import com.attendance.letmeattend.application.AppApplication
@@ -54,7 +55,13 @@ object AlarmFunctions {
                 bundle.putParcelable("lecture", lect)
                 inte.putExtra("lecture", bundle)
                 inte.putExtra("intid", lect!!.id.hashCode())
-                context?.startService(inte)
+
+                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                     context?.startForegroundService(inte)
+                 }
+                 else {
+                     context?.startService(inte)
+                 }
 
                  val broadcastIntent = Intent("NEW_NOTIFICATION")
                  broadcastIntent.putExtra("intent",inte)

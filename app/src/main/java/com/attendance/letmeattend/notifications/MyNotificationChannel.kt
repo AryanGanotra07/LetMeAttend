@@ -3,9 +3,11 @@ package com.attendance.letmeattend.notifications
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.graphics.Color
 import android.os.Build
 import com.attendance.letmeattend.R
 import com.attendance.letmeattend.application.AppApplication
+
 
 object MyNotificationChannel {
 
@@ -22,6 +24,21 @@ object MyNotificationChannel {
             val importance = NotificationManager.IMPORTANCE_HIGH
             val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
                 description = descriptionText
+                enableVibration(true)
+               setLightColor(Color.GREEN)
+                setVibrationPattern(
+                    longArrayOf(
+                        100,
+                        200,
+                        300,
+                        400,
+                        500,
+                        400,
+                        300,
+                        200,
+                        400
+                    )
+                )
             }
             // Register the channel with the system
             val notificationManager: NotificationManager =
@@ -37,6 +54,21 @@ object MyNotificationChannel {
             val importance = NotificationManager.IMPORTANCE_HIGH
             val channel = NotificationChannel(ENTRANCE_CHANNEL_ID, ENTRANCE_CHANNEL_ID, importance).apply {
                 description = descriptionText
+                enableVibration(true)
+                setLightColor(Color.GREEN)
+                setVibrationPattern(
+                    longArrayOf(
+                        100,
+                        200,
+                        300,
+                        400,
+                        500,
+                        400,
+                        300,
+                        200,
+                        400
+                    )
+                )
             }
             // Register the channel with the system
             val notificationManager: NotificationManager =
@@ -52,6 +84,21 @@ object MyNotificationChannel {
             val importance = NotificationManager.IMPORTANCE_HIGH
             val channel = NotificationChannel(ATTENDANCE_STATUS_CHANNEL_ID, ATTENDANCE_STATUS_CHANNEL_ID, importance).apply {
                 description = descriptionText
+                enableVibration(true)
+                setLightColor(Color.GREEN)
+                setVibrationPattern(
+                    longArrayOf(
+                        100,
+                        200,
+                        300,
+                        400,
+                        500,
+                        400,
+                        300,
+                        200,
+                        400
+                    )
+                )
             }
             // Register the channel with the system
             val notificationManager: NotificationManager =
@@ -66,6 +113,21 @@ object MyNotificationChannel {
             val importance = NotificationManager.IMPORTANCE_HIGH
             val channel = NotificationChannel(NO_RESPONSE_CHANNEL_ID, NO_RESPONSE_CHANNEL_ID, importance).apply {
                 description = descriptionText
+                enableVibration(true)
+                setLightColor(Color.GREEN)
+                setVibrationPattern(
+                    longArrayOf(
+                        100,
+                        200,
+                        300,
+                        400,
+                        500,
+                        400,
+                        300,
+                        200,
+                        400
+                    )
+                )
             }
             // Register the channel with the system
             val notificationManager: NotificationManager =

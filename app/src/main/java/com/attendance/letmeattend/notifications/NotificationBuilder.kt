@@ -83,7 +83,21 @@ class NotificationBuilder() {
             .addAction(R.drawable.ic_add_black_24dp,context.getString(R.string.yes),yesPendingIntent)
             .addAction(R.drawable.ic_add_black_24dp,context.getString(R.string.no),noPendingIntent)
             .addAction(R.drawable.ic_add_black_24dp,context.getString(R.string.no_class),noClassPendingIntent)
+            .setCategory(NotificationCompat.CATEGORY_REMINDER)
             .setColor(lecture.color)
+            .setVibrate(
+                longArrayOf(
+                    100,
+                    200,
+                    300,
+                    400,
+                    500,
+                    400,
+                    300,
+                    200,
+                    400
+                )
+            )
         with(NotificationManagerCompat.from(context)) {
             // notificationId is a unique int for each notification that you must define
             notify(id, builder.build())
@@ -112,6 +126,19 @@ class NotificationBuilder() {
                 .bigText(err))
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setVibrate(
+                longArrayOf(
+                    100,
+                    200,
+                    300,
+                    400,
+                    500,
+                    400,
+                    300,
+                    200,
+                    400
+                )
+            )
         val notif = builder.build()
         with(NotificationManagerCompat.from(context)) {
             // notificationId is a unique int for each notification that you must define
@@ -129,6 +156,19 @@ class NotificationBuilder() {
                 .bigText(message))
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setVibrate(
+            longArrayOf(
+                100,
+                200,
+                300,
+                400,
+                500,
+                400,
+                300,
+                200,
+                400
+            )
+        )
         val notif = builder.build()
         with(NotificationManagerCompat.from(context)) {
             // notificationId is a unique int for each notification that you must define
@@ -145,7 +185,21 @@ class NotificationBuilder() {
             .setStyle(NotificationCompat.BigTextStyle()
                 .bigText(message))
             .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setCategory(NotificationCompat.CATEGORY_REMINDER)
             .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setVibrate(
+                longArrayOf(
+                    100,
+                    200,
+                    300,
+                    400,
+                    500,
+                    400,
+                    300,
+                    200,
+                    400
+                )
+            )
         val notif = builder.build()
         with(NotificationManagerCompat.from(context)) {
             // notificationId is a unique int for each notification that you must define
@@ -164,6 +218,19 @@ class NotificationBuilder() {
                 .bigText("Marked you absent for your lecture from "+lecture.s_time+" to "+lecture.e_time + "as we got no response from you."))
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setVibrate(
+                longArrayOf(
+                    100,
+                    200,
+                    300,
+                    400,
+                    500,
+                    400,
+                    300,
+                    200,
+                    400
+                )
+            )
         val notif = builder.build()
         with(NotificationManagerCompat.from(context)) {
             // notificationId is a unique int for each notification that you must define

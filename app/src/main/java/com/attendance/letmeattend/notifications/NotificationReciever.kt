@@ -4,16 +4,9 @@ import android.app.Notification.EXTRA_NOTIFICATION_ID
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
-import com.attendance.letmeattend.application.AppApplication
-import com.attendance.letmeattend.firebase.FirebaseSetData
-import com.attendance.letmeattend.firebase.Repository
-import com.attendance.letmeattend.models.Lecture
-import com.attendance.letmeattend.services.DatabaseService
-import com.attendance.letmeattend.services.foregroundservices.ForegroundServiceStatus
-import com.attendance.letmeattend.services.foregroundservices.MyForegroundService
+import com.attendance.letmeattend.services.backgroundservices.DatabaseService
+import com.attendance.letmeattend.helpers.ForegroundServiceStatus
 import com.attendance.letmeattend.utils.toast
-import com.google.firebase.auth.FirebaseAuth
 
 class NotificationReciever() : BroadcastReceiver() {
 //    val ACTION_YES = "action_yes"
@@ -24,7 +17,8 @@ class NotificationReciever() : BroadcastReceiver() {
         MyNotificationChannel.createAllNotificationChannels()
         val builder : NotificationBuilder = NotificationBuilder()
       //  val database : FirebaseSetData = FirebaseSetData(FirebaseAuth.getInstance().currentUser!!.uid)
-        val dbService = DatabaseService()
+        val dbService =
+            DatabaseService()
         val inte = intent!!.getParcelableExtra<Intent>(Intent.EXTRA_INTENT)
        // val lectureBundle = intent!!.getBundleExtra("lecture")
        // val lecture = lectureBundle.getParcelable<Lecture>("lecture")

@@ -1,18 +1,12 @@
 package com.attendance.letmeattend.firebase
 
-import android.app.AlarmManager
 import android.content.Intent
-import android.util.Log
-import androidx.annotation.MainThread
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
-import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.models.*
-import com.attendance.letmeattend.services.alarms.MyAlarmManager
-import com.attendance.letmeattend.utils.toast
+import com.attendance.letmeattend.alarms.MyAlarmManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import java.sql.Time
 import java.util.*
 import kotlin.collections.ArrayList
 

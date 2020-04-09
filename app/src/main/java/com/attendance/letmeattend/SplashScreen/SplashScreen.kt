@@ -3,20 +3,18 @@ package com.attendance.letmeattend.SplashScreen
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MediatorLiveData
 import com.attendance.letmeattend.authentication.FirebaseLogin
-import com.attendance.letmeattend.details.EnterDetailsActivity
+import com.attendance.letmeattend.activities.EnterDetailsActivity
 import com.attendance.letmeattend.firebase.Repository
-import com.attendance.letmeattend.maps.MapFragment
+import com.attendance.letmeattend.activities.MapFragment
 import com.attendance.letmeattend.models.CollegeLocation
 import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.google.firebase.auth.FirebaseAuth
-import java.util.*
 
 
 private lateinit var collegeLocationLiveData : MediatorLiveData<CollegeLocation>

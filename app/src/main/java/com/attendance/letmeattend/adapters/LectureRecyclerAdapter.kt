@@ -8,7 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.attendance.letmeattend.R
 import com.attendance.letmeattend.databinding.LectureTtBinding
-import com.attendance.letmeattend.details.listeners.OnLectureClickListener
+import com.attendance.letmeattend.listeners.OnLectureClickListener
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.utils.toast
 import com.attendance.letmeattend.viewmodels.LectureViewModel

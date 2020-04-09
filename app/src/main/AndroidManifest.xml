@@ -1,77 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.attendance.letmeattend">
+        package="com.attendance.letmeattend">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <application
+            android:name=".application.AppApplication"
             android:allowBackup="true"
             android:icon="@drawable/icon"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:name=".application.AppApplication"
             android:theme="@style/AppTheme">
 
-        <receiver android:name=".services.boot.BootCompleteReciever"
+        <activity android:name=".activities.ChangeAttendanceActivity"
+                android:launchMode="singleTask"
+                android:taskAffinity=""
+                android:excludeFromRecents="true"
+                android:theme="@style/Theme.Transparent"
+                ></activity>
+
+        <receiver
+                android:name=".services.boot.BootCompleteReciever"
                 android:enabled="true"
                 android:exported="true">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.REBOOT"/>
+
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.REBOOT" />
             </intent-filter>
         </receiver>
-        <service android:name=".services.boot.BootCompleteService"
-                android:exported="false"
-                android:permission="android.permission.BIND_JOB_SERVICE"
-                ></service>
 
-        <receiver android:name=".services.alarms.AlarmReceiver" />
-        <receiver android:name=".notifications.NotificationReciever"/>
-        <receiver android:name=".geofencing.GeofenceBroadcastReceiver"/>
-        <service android:name=".services.LocationService"
-                android:permission="android.permission.BIND_JOB_SERVICE"
+        <service
+                android:name=".services.boot.BootCompleteService"
                 android:exported="false"
-                />
-        <service android:name=".services.DatabaseService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="false"/>
-        <service android:name=".services.foregroundservices.MyForegroundService"
-                android:permission="android.permission.BIND_JOB_SERVICE"
-                android:exported="false"/>
+                android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <receiver android:name=".alarms.AlarmReceiver" />
+        <receiver android:name=".notifications.NotificationReciever" />
+        <receiver android:name=".geofencing.GeofenceBroadcastReceiver" />
+
+        <service
+                android:name=".services.backgroundservices.LocationService"
+                android:exported="false"
+                android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+                android:name=".services.backgroundservices.DatabaseService"
+                android:exported="false"
+                android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+                android:name=".services.foregroundservices.MyForegroundService"
+                android:exported="false"
+                android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
-                android:value="@string/google_maps_key"/>
+                android:value="@string/google_maps_key" />
 
-        <activity android:name=".authentication.FirebaseLogin"
-        android:theme="@style/FirebaseAuthUi">
-        </activity>
-
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".maps.MapFragment"
-        android:theme="@style/FirebaseAuthUi">
-
-
-
-
-        </activity>
-        <activity android:name=".details.EnterDetailsActivity"
-                  android:theme="@style/FirebaseAuthUi">
-
-
-        </activity>
-        <activity android:name=".SplashScreen.SplashScreen" android:theme="@style/splashscreen">
+        <activity
+                android:name=".authentication.FirebaseLogin"
+                android:theme="@style/FirebaseAuthUi"></activity>
+        <activity android:name=".MainActivity" />
+        <activity
+                android:name=".activities.MapFragment"
+                android:theme="@style/FirebaseAuthUi"></activity>
+        <activity
+                android:name=".activities.EnterDetailsActivity"
+                android:theme="@style/FirebaseAuthUi"></activity>
+        <activity
+                android:name=".SplashScreen.SplashScreen"
+                android:theme="@style/splashscreen">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>

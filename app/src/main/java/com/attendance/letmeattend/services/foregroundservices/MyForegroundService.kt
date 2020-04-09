@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import com.attendance.letmeattend.application.AppApplication
-import com.attendance.letmeattend.application.AppApplication.Companion.context
+import com.attendance.letmeattend.helpers.ForegroundServiceStatus
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.notifications.NotificationBuilder
@@ -63,7 +63,7 @@ class MyForegroundService() : Service(){
             }
         }
 
-        Log.d(TAG,ForegroundServiceStatus.isRunning().toString())
+        Log.d(TAG, ForegroundServiceStatus.isRunning().toString())
 
 
         startForeground(lecture.id.hashCode(),notif)

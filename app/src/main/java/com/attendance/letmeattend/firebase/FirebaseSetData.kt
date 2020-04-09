@@ -3,14 +3,13 @@ package com.attendance.letmeattend.firebase
 import android.content.Intent
 import android.location.Location
 import android.util.Log
-import android.widget.Toast
 import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.helpers.NotificationAlertStatus
 import com.attendance.letmeattend.models.*
 import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.notifications.NotificationBuilder
-import com.attendance.letmeattend.services.alarms.AlarmFunctions
-import com.attendance.letmeattend.services.alarms.MyAlarmManager
+import com.attendance.letmeattend.alarms.AlarmFunctions
+import com.attendance.letmeattend.helpers.AttendanceMarkingStatus
 import com.attendance.letmeattend.utils.toast
 import com.google.firebase.database.*
 import java.util.*
@@ -44,7 +43,9 @@ class FirebaseSetData(val userId: String) {
 
 
                 AppApplication.context?.toast("Attendance Status Added")
+
             } else AppApplication.context?.toast("Error in adding attendance status")
+            AttendanceMarkingStatus.setAttendanceMarking(false)
         }
     }
 
@@ -269,8 +270,18 @@ class FirebaseSetData(val userId: String) {
             .removeValue()
     }
 
-    fun addAttendance(lecture: Lecture, attended: Boolean) {
+    fun addAttendance(lecture: Lecture, attended: Boolean, override : Boolean = false) {
+        if (override) {
+            if (attended) {
+                addCurrentAttendance(lecture)
+            }
+            addTotalAttendance(lecture, attended)
+        }
+        else
         getAttendanceStatusForRecheck(lecture, attended)
+        AttendanceMarkingStatus.setLecture(lecture)
+        AttendanceMarkingStatus.setAttendanceMarking(true)
+
     }
 
     private fun createAttendanceStatus(lecture: Lecture, attended: Boolean ) : AttendanceStatus {
@@ -332,7 +343,9 @@ class FirebaseSetData(val userId: String) {
                                 attendanceStatusList.add(attendanceStatus!!)
                             }
                             Log.d(TAG, "Attendence status list size is "+attendanceStatusList.size)
-                            if (attendanceStatusList.isEmpty()) {
+                            if (attendanceStatusList.isEmpty()
+                                && (AttendanceMarkingStatus.getLecture().id != lecture.id
+                                        || !AttendanceMarkingStatus.getAttendanceMarking())) {
                                 AlarmFunctions.execute(intent,true)
                             }
                             else {
@@ -342,7 +355,9 @@ class FirebaseSetData(val userId: String) {
                         Log.d(TAG,attendanceStatusList.size.toString())
                     }
                     else {
-                        AlarmFunctions.execute(intent,true)
+                        if(AttendanceMarkingStatus.getLecture().id != lecture.id
+                            || !AttendanceMarkingStatus.getAttendanceMarking())
+                                AlarmFunctions.execute(intent,true)
                     }
 
                 }
@@ -422,7 +437,8 @@ class FirebaseSetData(val userId: String) {
                             if (it.isSuccessful) {
                                 str = "Current attendance incremented Successfully"
                                 notifBuilder.buildAttendanceStatusNotification(
-                                    "Congrats ;) You have been marked present!",
+                                    lecture,
+                                    true,
                                     notifBuilder.ATTENDANCE_STATUS_NOTIF_ID )
                                 addAttendanceStatus(createAttendanceStatus(lecture, true))
 
@@ -488,7 +504,8 @@ class FirebaseSetData(val userId: String) {
 
                             if (!attended) {
                                 notifBuilder.buildAttendanceStatusNotification(
-                                    "Absent! You should attend classes regularly dude!",
+                                    lecture,
+                                    false,
                                     notifBuilder.ATTENDANCE_STATUS_NOTIF_ID
                                 )
                                 addAttendanceStatus(createAttendanceStatus(lecture, false))

@@ -3,13 +3,12 @@ package com.attendance.letmeattend.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MediatorLiveData
 import com.attendance.letmeattend.adapters.LectureRecyclerAdapter
-import com.attendance.letmeattend.details.listeners.SaveClickListener
+import com.attendance.letmeattend.listeners.SaveClickListener
 import com.attendance.letmeattend.firebase.Repository
 import com.attendance.letmeattend.models.Attendance
 import com.attendance.letmeattend.models.CollegeLocation
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.models.Subject
-import com.attendance.letmeattend.services.alarms.MyAlarmManager
 
 
 class EnterDetailsViewModel : ViewModel() ,  SaveClickListener   {

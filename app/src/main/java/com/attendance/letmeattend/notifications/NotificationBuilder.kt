@@ -11,6 +11,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.attendance.letmeattend.R
+import com.attendance.letmeattend.activities.ChangeAttendanceActivity
 import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.notifications.MyNotificationChannel.CHANNEL_ID
@@ -177,7 +178,10 @@ class NotificationBuilder() {
         return notif
     }
 
-    fun buildAttendanceStatusNotification(message: String, id : Int) : Notification {
+    fun buildAttendanceStatusNotification(lecture : Lecture, attended : Boolean, id : Int) : Notification {
+
+        var message = "Present! You have been marked present for lecture - " + lecture.name
+        if (!attended) message = "Absent!! You should regularly attend classes dude - " + lecture.name
         var builder = NotificationCompat.Builder(context!!,MyNotificationChannel.ATTENDANCE_STATUS_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_create_black_24dp)
             .setContentTitle("Let Me Attend")
@@ -187,6 +191,7 @@ class NotificationBuilder() {
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setCategory(NotificationCompat.CATEGORY_REMINDER)
             .setPriority(NotificationCompat.PRIORITY_MAX)
+
             .setVibrate(
                 longArrayOf(
                     100,
@@ -209,6 +214,15 @@ class NotificationBuilder() {
     }
 
     fun buildNoResponseNotification(lecture: Lecture) : Notification {
+        val bundle = Bundle()
+        bundle.putParcelable("lecture",lecture)
+        val notifyIntent = Intent(context, ChangeAttendanceActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("lecture", bundle)
+        }
+        val notifyPendingIntent = PendingIntent.getActivity(
+            context, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT
+        )
         val id = Random().nextInt(1000)
         var builder = NotificationCompat.Builder(context!!,MyNotificationChannel.NO_RESPONSE_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_create_black_24dp)
@@ -218,6 +232,7 @@ class NotificationBuilder() {
                 .bigText("Marked you absent for your lecture from "+lecture.s_time+" to "+lecture.e_time + "as we got no response from you."))
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setContentIntent(notifyPendingIntent)
             .setVibrate(
                 longArrayOf(
                     100,

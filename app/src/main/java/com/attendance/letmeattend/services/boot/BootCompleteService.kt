@@ -1,18 +1,14 @@
 package com.attendance.letmeattend.services.boot
 
-import android.app.Notification
-import android.app.NotificationChannel
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import com.attendance.letmeattend.application.AppApplication
-import com.attendance.letmeattend.firebase.Repository
-import com.attendance.letmeattend.models.CollegeLocation
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.notifications.NotificationBuilder
-import com.attendance.letmeattend.services.alarms.MyAlarmManager
+import com.attendance.letmeattend.alarms.MyAlarmManager
 import com.attendance.letmeattend.utils.toast
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth

@@ -13,12 +13,11 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import com.attendance.letmeattend.R
 import com.attendance.letmeattend.application.AppApplication
-import com.attendance.letmeattend.details.EnterDetailsActivity
+import com.attendance.letmeattend.activities.EnterDetailsActivity
 import com.attendance.letmeattend.firebase.Repository
-import com.attendance.letmeattend.maps.MapFragment
+import com.attendance.letmeattend.activities.MapFragment
 import com.attendance.letmeattend.models.CollegeLocation
 import com.attendance.letmeattend.notifications.MyNotificationChannel
-import com.attendance.letmeattend.services.alarms.MyAlarmManager
 import com.attendance.letmeattend.services.boot.BootCompleteReciever
 import com.attendance.letmeattend.sharedpreferences.LocalRepository
 import com.attendance.letmeattend.utils.toast
@@ -26,7 +25,6 @@ import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.judemanutd.autostarter.AutoStartPermissionHelper
 import kotlinx.android.synthetic.main.screen_login.*
-import java.security.AccessController.getContext
 
 
 class FirebaseLogin: AppCompatActivity(),View.OnClickListener {
@@ -56,7 +54,7 @@ class FirebaseLogin: AppCompatActivity(),View.OnClickListener {
 //                        ||collegeLocation.lng == null
 //                        || collegeLocation.center == null ) {
 //
-//                        startActivity(Intent(this, com.attendance.letmeattend.maps.MapFragment::class.java))
+//                        startActivity(Intent(this, com.attendance.letmeattend.activities.MapFragment::class.java))
 //                    }
 
                     val androidId = getUDI()

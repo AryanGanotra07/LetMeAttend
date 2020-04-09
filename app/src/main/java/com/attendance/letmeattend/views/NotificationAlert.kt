@@ -3,13 +3,11 @@ package com.attendance.letmeattend.views
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.util.Log
-import com.attendance.letmeattend.firebase.FirebaseSetData
 import com.attendance.letmeattend.firebase.Repository
 import com.attendance.letmeattend.helpers.NotificationAlertStatus
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.notifications.NotificationBuilder
-import com.attendance.letmeattend.services.foregroundservices.ForegroundServiceStatus
+import com.attendance.letmeattend.helpers.ForegroundServiceStatus
 import com.attendance.letmeattend.utils.toast
 import com.crowdfire.cfalertdialog.CFAlertDialog
 

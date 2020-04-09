@@ -195,6 +195,9 @@ object Repository {
     fun addAttendance(lecture : Lecture, attended : Boolean) {
         database.addAttendance(lecture, attended)
     }
+    fun updateAttendance(lecture : Lecture, attended : Boolean) {
+        database.updateAttendance(lecture, attended)
+    }
 
 //    fun addAttendance(id : String,sub_id :String, attended : Boolean)
 //    {

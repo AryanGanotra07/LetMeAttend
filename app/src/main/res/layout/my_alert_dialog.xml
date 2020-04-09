@@ -23,6 +23,50 @@
             android:layout_margin="10dp"
          android:text="Marked you absent as we got no response from you."/>
 
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Change here."/>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+        android:text="Change"
+            android:layout_margin="10dp"
+            android:id="@+id/change"
+            android:layout_weight="1"
+            android:backgroundTint="@color/colorAccent"
+            android:textColor="@color/quantum_white_100"/>
+<!--        <Button-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="absent"-->
+<!--                android:layout_weight="1"-->
+<!--                android:layout_margin="10dp"-->
+<!--                android:id="@+id/absent"-->
+<!--                android:backgroundTint="@color/quantum_googred"-->
+<!--                android:textColor="@color/quantum_white_100"/>-->
+<!--        <Button-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Present"-->
+<!--                android:id="@+id/present"-->
+<!--                android:layout_weight="1"-->
+<!--                android:layout_margin="10dp"-->
+<!--                android:backgroundTint="@color/quantum_googgreen"-->
+<!--                android:textColor="@color/quantum_white_100"/>-->
+
+
+    </LinearLayout>
+
+
+
 </LinearLayout>
 
 </androidx.cardview.widget.CardView>

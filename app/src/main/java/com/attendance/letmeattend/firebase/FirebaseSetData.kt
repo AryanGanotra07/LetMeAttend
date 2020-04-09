@@ -270,14 +270,8 @@ class FirebaseSetData(val userId: String) {
             .removeValue()
     }
 
-    fun addAttendance(lecture: Lecture, attended: Boolean, override : Boolean = false) {
-        if (override) {
-            if (attended) {
-                addCurrentAttendance(lecture)
-            }
-            addTotalAttendance(lecture, attended)
-        }
-        else
+    fun addAttendance(lecture: Lecture, attended: Boolean) {
+
         getAttendanceStatusForRecheck(lecture, attended)
         AttendanceMarkingStatus.setLecture(lecture)
         AttendanceMarkingStatus.setAttendanceMarking(true)
@@ -583,5 +577,135 @@ class FirebaseSetData(val userId: String) {
                 }
             }
     }
+
+    fun updateAttendance(lecture: Lecture, attended: Boolean) {
+
+        ref?.child("attendanceStatus").orderByChild("lect_id").equalTo(lecture.id)
+//            orderByChild("s_time").equalTo(lecture.s_time)
+//            .orderByChild("e_time").equalTo(lecture.e_time)
+//            .orderByChild("last_marked").orderByValue()
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(p0: DataSnapshot) {
+                    if (p0.exists() && p0.hasChildren()) {
+                        val attendanceStatusList : ArrayList<AttendanceStatus> = ArrayList()
+                        for (attendanceStat in p0.children) {
+                            val attendanceStatus = attendanceStat.getValue(AttendanceStatus::class.java)
+                            if (attendanceStatus!!.s_time == lecture.s_time
+                                && attendanceStatus!!.day == lecture.day
+                                && attendanceStatus!!.last_marked.date == Calendar.getInstance().time.date) {
+
+                                attendanceStatusList.add(attendanceStatus!!)
+                            }
+                            Log.d(TAG, "Attendence status list size is "+attendanceStatusList.size)
+                            if (attendanceStatusList.isEmpty()) {
+                               AppApplication?.context?.toast("No attendance status found")
+                            }
+                            else if (attendanceStatusList.size == 1 && attended) {
+                               val attendanceStatus = attendanceStatusList.get(0)
+                                updateAttendanceByAttendanceStatus(attendanceStatus, attended)
+                                updateCurrentAttendance(lecture, attended)
+                            }
+                        }
+                        Log.d(TAG,attendanceStatusList.size.toString())
+                    }
+                    else {
+                        AppApplication?.context?.toast("No attendance status found")
+                    }
+
+                }
+
+                override fun onCancelled(p0: DatabaseError) {
+                    AppApplication?.context?.toast("Failed to find attendane status" + p0.message)
+                }
+            })
+    }
+
+    private fun updateAttendanceByAttendanceStatus(attendanceStatus: AttendanceStatus, attended: Boolean) {
+        attendanceStatus.attended = attended
+        ref?.
+            child("attendanceStatus")
+            .child(attendanceStatus.id)
+            .setValue(attendanceStatus)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    AppApplication?.context?.toast("Attendance status updated")
+
+                }
+                else {
+                    AppApplication?.context?.toast("Attendance status updation failed.." + it.exception?.message)
+                }
+            }
+    }
+
+    private fun updateCurrentAttendance(lecture: Lecture, attended: Boolean) {
+        val id = lecture.id
+        val sub_id = lecture.sub_id
+        Log.i("ID", id)
+        ref?.child("lectures")
+            .child(id).child("c_attendance")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+                    Log.i("DatabaseStatus","Update-Current-Failed "+ p0?.message.toString())
+                    notifBuilder.buildErrorNotif("Update-Current-Failed "+ p0.message.toString(),-1)
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    if (p0.exists()) {
+                        Log.i("P0VALUE", p0.value.toString())
+                        var att = p0.value.toString().toInt()
+                        if (attended)
+                            att = att + 1
+                        p0.ref.setValue(att).addOnCompleteListener {
+                            var str: String = ""
+                            if (it.isSuccessful) {
+                                str = "Current attendance decremented Successfully"
+                                notifBuilder.buildAttendanceStatusNotification(
+                                    lecture,
+                                    true,
+                                    notifBuilder.ATTENDANCE_STATUS_NOTIF_ID )
+                                //addAttendanceStatus(createAttendanceStatus(lecture, true))
+
+                            } else {
+                                str = "Current attendance updation failed"
+                            }
+                            AppApplication?.context?.toast(str)
+                        }
+                    } else Log.i("DATAVALUE", "NULL")
+
+                }
+
+            })
+        ref?.child("subjects")
+            .child(sub_id)
+            .child("c_attendance")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+                    Log.i("DatabaseStatus","ADD-Current-Failed "+ p0?.message.toString())
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    if (p0.exists()) {
+                        Log.i("P0VALUE", p0.value.toString())
+                        var att = p0.value.toString().toInt()
+                        if (attended)
+                            att = att + 1
+                        p0.ref.setValue(att).addOnCompleteListener {
+                            var str: String = ""
+                            if (it.isSuccessful) {
+                                str = "Current attendance decremented Successfully"
+                            } else {
+                                str = "Current attendance updation failed"
+                            }
+                            AppApplication?.context?.toast(str)
+                        }
+                    } else Log.i("DATAVALUE", "NULL")
+
+                }
+
+
+            })
+    }
+
+
 
 }

@@ -24,6 +24,7 @@ class DatabaseService() : JobIntentService() {
             DatabaseService::class.java,JOB_ID,work)
     }
 
+
     override fun onHandleWork(intent: Intent) {
         MyNotificationChannel.createAllNotificationChannels()
         val lectureBundle = intent.getBundleExtra("lecture")

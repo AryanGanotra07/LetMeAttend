@@ -48,7 +48,8 @@ class NotificationAlert(val context : Context) {
             })
             .setCancelable(false)
 
-        val al = builder.show();
+        val al = builder.create();
+        al.show()
         return al
     }
 

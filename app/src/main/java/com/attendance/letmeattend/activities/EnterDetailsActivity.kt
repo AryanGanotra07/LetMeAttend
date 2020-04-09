@@ -84,12 +84,14 @@ class EnterDetailsActivity: AppCompatActivity(),
            val lecture = LectureDeserializer.getLecture(intent!!)
            val inte = intent.getParcelableExtra<Intent>("intent")
            //context?.stopService(inte)
+if (NotificationAlertStatus.getLecture().id != lecture!!.id) {
 
-           NotificationAlertStatus.setAbsentMarked()
-           val aL = notificationAlert.executeDialog(lecture,inte)
+    val aL = notificationAlert.executeDialog(lecture, inte)
+    NotificationAlertStatus.setAbsentMarked(lecture!!, aL)
            NotificationAlertStatus.setLecture(lecture!!)
            NotificationAlertStatus.setRunning(true)
            NotificationAlertStatus.setAlertView(aL)
+}
 
        }
    }

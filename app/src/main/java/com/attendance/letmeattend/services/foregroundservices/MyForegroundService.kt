@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import com.attendance.letmeattend.application.AppApplication
+import com.attendance.letmeattend.firebase.Repository
 import com.attendance.letmeattend.helpers.ForegroundServiceStatus
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.notifications.MyNotificationChannel
@@ -71,6 +72,7 @@ class MyForegroundService() : Service(){
             if (lecture.id != ForegroundServiceStatus.getLecture().id) {
                 notifBuilder.buildNoResponseNotification(ForegroundServiceStatus.getLecture())
                 Log.d(TAG, "Building notification" + ForegroundServiceStatus.getLecture().name)
+                Repository.addAttendance(ForegroundServiceStatus.getLecture(), false)
                 ForegroundServiceStatus.setRunning(false)
             }
         }

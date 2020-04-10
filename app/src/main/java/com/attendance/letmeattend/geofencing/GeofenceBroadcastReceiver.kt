@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.PowerManager
 import android.util.Log
 import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.notifications.NotificationBuilder
@@ -17,6 +18,12 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         MyNotificationChannel.createAllNotificationChannels()
         val geofencingEvent = GeofencingEvent.fromIntent(intent)
+        val wakeLock: PowerManager.WakeLock =
+            (context!!.getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+                newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MyApp::MyWakelockTag").apply {
+                    acquire()
+                }
+            }
         if (geofencingEvent.hasError()) {
             val errorMessage = geofencingEvent.errorCode
             context?.toast("error" + errorMessage)

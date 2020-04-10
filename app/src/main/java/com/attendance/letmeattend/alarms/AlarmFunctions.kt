@@ -9,7 +9,6 @@ import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.notifications.NotificationBuilder
 import com.attendance.letmeattend.services.foregroundservices.MyForegroundService
 import com.attendance.letmeattend.sharedpreferences.LocalRepository
-import com.attendance.letmeattend.utils.toast
 import java.util.*
 
 
@@ -17,7 +16,7 @@ object AlarmFunctions {
 
     private val TAG = "AlarmFunction"
 
-    fun execute(intent: Intent, shouldRun : Boolean) {
+    fun execute(intent: Intent, shouldRun : Boolean = true) {
 
         val context = AppApplication?.context
         val alarmMgr =
@@ -27,6 +26,7 @@ object AlarmFunctions {
         val state= LocalRepository.getGeofenceState()
         val day = intent?.getIntExtra("day",1)
         val lectureBundle = intent?.getBundleExtra("lecture")
+        lectureBundle.setClassLoader(Lecture::class.java.getClassLoader())
         val lect = lectureBundle?.getParcelable<Lecture>("lecture")
         val hour = intent?.getIntExtra("hour",0)
         val min = intent?.getIntExtra("min",0)
@@ -40,7 +40,7 @@ object AlarmFunctions {
             if (shouldRun)
              {
                 Log.i("Called", "Yes")
-                context?.toast("Hello Recieved Message for " + day + ":" + hour)
+               // context?.toast("Hello Recieved Message for " + day + ":" + hour)
                 //LocationService().enqueuework(context!!,intent!!)
                 val inte = Intent(context, MyForegroundService::class.java)
                 inte.putExtra("day", day)
@@ -53,12 +53,16 @@ object AlarmFunctions {
                 inte.putExtra("lecture", bundle)
                 inte.putExtra("intid", lect!!.id.hashCode())
 
+
+
+                 //builder.removeNotification(lect!!.id.hashCode())
                  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                      context?.startForegroundService(inte)
                  }
                  else {
                      context?.startService(inte)
                  }
+
 
                  val broadcastIntent = Intent("NEW_NOTIFICATION")
                  broadcastIntent.putExtra("intent",inte)
@@ -68,7 +72,7 @@ object AlarmFunctions {
 
 
             } else {
-                context?.toast("Hello Recieved Message for nothing")
+                //context?.toast("Hello Recieved Message for nothing")
             }
 //        else
 //        {

@@ -2,6 +2,7 @@ package com.attendance.letmeattend.services.foregroundservices
 
 import android.app.Service
 import android.content.Intent
+import android.location.Location
 import android.os.IBinder
 import android.util.Log
 import com.attendance.letmeattend.application.AppApplication
@@ -32,26 +33,24 @@ class MyForegroundService() : Service(){
             // this@LocationService.toast("Lattitude:- " + it.latitude + " longitude:- " + it.longitude)
 //            Log.i("LocationStatusID",intent.getStringExtra("id"))
 
-            if (lecture.lat!=0.0 || lecture.lng != 0.0)
-            {
-                if (it.latitude<lecture.lat+1 && it.latitude>lecture.lat-1
-                    && it.longitude<lecture.lng+1 && it.longitude>lecture.lng-1)
-                {
-                    //mark attendance. ask user to recheck attendance
-                }
-                else
-                {
-                    //ask user if he is attending. If yes
-                    // update location
-                    // and mark present. If no mark absent. If no class,then ignore
-                }
-            }
-            else
-            {
-                //ask user if he is attending lecture. if yes then save location , if no mark absent, if no class then ignore
+            if (it != null) {
+                if (lecture.lat != 0.0 || lecture.lng != 0.0) {
+                    if (it.latitude < lecture.lat + 1 && it.latitude > lecture.lat - 1
+                        && it.longitude < lecture.lng + 1 && it.longitude > lecture.lng - 1
+                    ) {
+                        //mark attendance. ask user to recheck attendance
+                    } else {
+                        //ask user if he is attending. If yes
+                        // update location
+                        // and mark present. If no mark absent. If no class,then ignore
+                    }
+                } else {
+                    //ask user if he is attending lecture. if yes then save location , if no mark absent, if no class then ignore
 
+                }
+                notif = notifBuilder.buildNotification(intent!!, it)
             }
-           notif = notifBuilder.buildNotification(intent!!, it)
+
 
             //startForeground(lecture.id.hashCode(),notif)
 

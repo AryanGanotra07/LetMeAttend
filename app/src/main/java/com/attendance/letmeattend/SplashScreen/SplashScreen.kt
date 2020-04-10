@@ -14,7 +14,9 @@ import com.attendance.letmeattend.firebase.Repository
 import com.attendance.letmeattend.activities.MapFragment
 import com.attendance.letmeattend.models.CollegeLocation
 import com.attendance.letmeattend.notifications.MyNotificationChannel
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 
 private lateinit var collegeLocationLiveData : MediatorLiveData<CollegeLocation>
@@ -27,6 +29,8 @@ class SplashScreen : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(this)
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true)
         MyNotificationChannel.createAllNotificationChannels()
         Log.d(TAG, FirebaseAuth.getInstance().currentUser.toString())
         if (FirebaseAuth.getInstance().currentUser != null) {

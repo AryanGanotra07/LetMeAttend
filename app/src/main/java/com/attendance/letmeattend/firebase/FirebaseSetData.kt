@@ -10,6 +10,7 @@ import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.notifications.NotificationBuilder
 import com.attendance.letmeattend.alarms.AlarmFunctions
 import com.attendance.letmeattend.helpers.AttendanceMarkingStatus
+import com.attendance.letmeattend.services.backgroundservices.MyForegroundServiceExecutor
 import com.attendance.letmeattend.utils.toast
 import com.google.firebase.database.*
 import java.util.*
@@ -337,10 +338,16 @@ class FirebaseSetData(val userId: String) {
                                 attendanceStatusList.add(attendanceStatus!!)
                             }
                             Log.d(TAG, "Attendence status list size is "+attendanceStatusList.size)
+
+
+                            notifBuilder.removeNotification(lecture.id.hashCode())
+                            AppApplication?.context?.stopService(intent)
+
                             if (attendanceStatusList.isEmpty()
                                 && (AttendanceMarkingStatus.getLecture().id != lecture.id
                                         || !AttendanceMarkingStatus.getAttendanceMarking())) {
                                 AlarmFunctions.execute(intent,true)
+                                //executeAlarmFunction(intent)
                             }
                             else {
                                 AlarmFunctions.execute(intent, false)
@@ -349,8 +356,13 @@ class FirebaseSetData(val userId: String) {
                         Log.d(TAG,attendanceStatusList.size.toString())
                     }
                     else {
+
+                        notifBuilder.removeNotification(lecture.id.hashCode())
+                        AppApplication?.context?.stopService(intent)
+                        Log.d(TAG, "No attendance found for this lecture")
                         if(AttendanceMarkingStatus.getLecture().id != lecture.id
                             || !AttendanceMarkingStatus.getAttendanceMarking())
+                           // executeAlarmFunction(intent)
                                 AlarmFunctions.execute(intent,true)
                     }
 
@@ -360,6 +372,14 @@ class FirebaseSetData(val userId: String) {
 
                 }
             })
+    }
+
+    private fun executeAlarmFunction(intent: Intent) {
+        val newIntent = Intent(AppApplication?.context!!, MyForegroundServiceExecutor :: class.java)
+        newIntent.putExtra("intent", intent)
+        val functionExecutor = MyForegroundServiceExecutor()
+        functionExecutor.enqueuework(AppApplication?.context!!, newIntent)
+
     }
 
     fun getAttendanceStatusForRecheck(lecture : Lecture, attended: Boolean) {

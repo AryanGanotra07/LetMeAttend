@@ -253,4 +253,22 @@ class NotificationBuilder() {
         }
         return notif
     }
+
+    fun buildFirebaseNotification(lecture : Lecture) : Notification {
+        var message = "Checking attendance status for " + lecture.name + " from " + lecture.s_time + " to " + lecture.e_time
+        var builder = NotificationCompat.Builder(context!!,MyNotificationChannel.FIREBASE_FOREGROUND_CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_create_black_24dp)
+            .setContentTitle("")
+            .setContentText(message)
+            .setStyle(NotificationCompat.BigTextStyle()
+                .bigText(message))
+            .setCategory(NotificationCompat.CATEGORY_REMINDER)
+            .setPriority(NotificationCompat.PRIORITY_MIN)
+        val notif = builder.build()
+        with(NotificationManagerCompat.from(context)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(lecture.id.hashCode(), notif)
+        }
+        return notif
+    }
 }

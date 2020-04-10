@@ -4,9 +4,11 @@ import android.app.Notification.EXTRA_NOTIFICATION_ID
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.attendance.letmeattend.services.backgroundservices.DatabaseService
+import android.os.IBinder
 import com.attendance.letmeattend.helpers.ForegroundServiceStatus
+import com.attendance.letmeattend.services.backgroundservices.DatabaseService
 import com.attendance.letmeattend.utils.toast
+
 
 class NotificationReciever() : BroadcastReceiver() {
 //    val ACTION_YES = "action_yes"
@@ -33,9 +35,9 @@ class NotificationReciever() : BroadcastReceiver() {
 
           //  attended = true
             dbService.enqueuework(context!!,intent!!)
-            builder.removeNotification(intent.getIntExtra(EXTRA_NOTIFICATION_ID,0))
+            //builder.removeNotification(intent.getIntExtra(EXTRA_NOTIFICATION_ID,0))
 
-            ForegroundServiceStatus.setRunning(false)
+           // ForegroundServiceStatus.setRunning(false)
 
         }
         else if (intent?.action == builder.ACTION_NO)
@@ -45,18 +47,18 @@ class NotificationReciever() : BroadcastReceiver() {
             //attended = false
            // database.addAttendance(lect_id,sub_id,attended)
             dbService.enqueuework(context!!,intent!!)
-            builder.removeNotification(intent.getIntExtra(EXTRA_NOTIFICATION_ID,0))
-            ForegroundServiceStatus.setRunning(false)
+            //builder.removeNotification(intent.getIntExtra(EXTRA_NOTIFICATION_ID,0))
+            //ForegroundServiceStatus.setRunning(false)
 
         }
         else if (intent?.action == builder.ACTION_NO_CLASS)
         {
             context?.toast("NO CLASS CLICKED")
-            builder.removeNotification(intent.getIntExtra(EXTRA_NOTIFICATION_ID,0))
-            ForegroundServiceStatus.setRunning(false)
+           // builder.removeNotification(intent.getIntExtra(EXTRA_NOTIFICATION_ID,0))
+           // ForegroundServiceStatus.setRunning(false)
         }
 
-        context?.stopService(inte)
+       // context?.stopService(inte)
 
 
 
@@ -64,4 +66,7 @@ class NotificationReciever() : BroadcastReceiver() {
 
 
     }
+
+
+
 }

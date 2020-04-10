@@ -1,11 +1,14 @@
 package com.attendance.letmeattend.services.backgroundservices
 
+import android.app.Notification
 import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.util.Log
 import androidx.core.app.JobIntentService
+import com.attendance.letmeattend.application.AppApplication.Companion.context
 import com.attendance.letmeattend.firebase.FirebaseSetData
+import com.attendance.letmeattend.helpers.ForegroundServiceStatus
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.notifications.NotificationBuilder
@@ -32,6 +35,7 @@ class DatabaseService() : JobIntentService() {
         val lect_id = lecture.id
         val location = intent.getParcelableExtra<Location>("location")
         val sub_id = lecture.sub_id
+        val inte = intent!!.getParcelableExtra<Intent>(Intent.EXTRA_INTENT)
         val builder : NotificationBuilder = NotificationBuilder()
         val database = FirebaseSetData(FirebaseAuth.getInstance().currentUser?.uid!!)
         Log.i("DatabaseStatus","Handling database work")
@@ -54,6 +58,10 @@ class DatabaseService() : JobIntentService() {
         {
             Log.i("DatabaseStatus","No Class Clicked from intent service")
         }
+
+        builder.removeNotification(intent.getIntExtra(Notification.EXTRA_NOTIFICATION_ID,0))
+        context?.stopService(inte)
+        ForegroundServiceStatus.setRunning(false)
 
     }
 }

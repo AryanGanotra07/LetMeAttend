@@ -55,7 +55,16 @@
                 android:exported="false"
                 android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
+                android:name=".services.backgroundservices.MyForegroundServiceExecutor"
+                android:exported="false"
+                android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
                 android:name=".services.foregroundservices.MyForegroundService"
+                android:exported="false"
+                android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <service
+                android:name=".services.foregroundservices.FirebaseForegroundService"
                 android:exported="false"
                 android:permission="android.permission.BIND_JOB_SERVICE" />
 

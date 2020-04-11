@@ -16,6 +16,7 @@ object MyNotificationChannel {
     val ENTRANCE_CHANNEL_ID = "entranceNotificationID"
     val ATTENDANCE_STATUS_CHANNEL_ID = "attendanceStatusID"
     val FIREBASE_FOREGROUND_CHANNEL_ID = "firebaseChannelID"
+    val MARK_ATTENDANCE_CHANNEL_ID = "markAttendanceChannelID"
 
     private fun createNotifChannel()
     {
@@ -152,11 +153,27 @@ object MyNotificationChannel {
         }
     }
 
+    private fun createMarkAttendanceNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = AppApplication.context?.getString(R.string.channel_name)
+            val descriptionText = AppApplication?.context?.getString(R.string.channel_description)
+            val importance = NotificationManager.IMPORTANCE_NONE
+            val channel = NotificationChannel(MARK_ATTENDANCE_CHANNEL_ID, MARK_ATTENDANCE_CHANNEL_ID, importance).apply {
+                description = descriptionText
+            }
+            // Register the channel with the system
+            val notificationManager: NotificationManager =
+                AppApplication?.context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
     fun createAllNotificationChannels() {
         createNotifChannel()
         createEntryExitNotificationChannel()
         createAttendanceMarkedStatusNotificationChannel()
         createNoResponseNotificationChannel()
         createFirebaseNotificationChannel()
+        createMarkAttendanceNotificationChannel()
     }
 }

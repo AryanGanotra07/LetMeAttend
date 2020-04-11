@@ -52,51 +52,59 @@ object NotificationAlertStatus  {
         if (this.isRunning()) {
             if (this.getAlertView() != null) {
                 val prevAl = this.getAlertView()
-                prevAl.setMessage("You have been marked absent as we got no response from you. Tap me to change!!- " + this.lecture.name)
-//                   val items = arrayOf("Change")
-//                   prevAl.setItems(items, object : DialogInterface.OnClickListener {
-//                       override fun onClick(dialog: DialogInterface?, which: Int) {
-//                           dialog!!.dismiss()
-//                       }
-//
-//                   })
-
-                prevAl.setTitle("No Response!")
-                prevAl.setCancelable(true)
-//                prevAl.setEnabled(false)
-
-                this.setPrevLecture(lecture)
-                prevAl.setContentView(R.layout.my_alert_dialog)
-                val change = prevAl.findViewById<Button>(R.id.change)
-
-//                val present = prevAl.findViewById<Button>(R.id.present)
-//                val absent = prevAl.findViewById<Button>(R.id.absent)
-
-//                present!!.setOnClickListener {
-//                    Repository.updateAttendance(this.prevLecture, true)
-//                    prevAl.dismiss()
-//                }
-//                absent!!.setOnClickListener {
-//                    Repository.updateAttendance(this.prevLecture, false)
-//                    prevAl.dismiss()
-//                }
-                change!!.setOnClickListener {
-                    val intent = Intent(prevAl.context, ChangeAttendanceActivity::class.java)
-                    val bundle = Bundle()
-                    bundle.putParcelable("lecture",this.prevLecture)
-                    intent.putExtra("lecture",bundle)
-                    prevAl.context.startActivity(intent)
-                    prevAl.dismiss()
-                    prevAl.cancel()
-                    prevAl.hide()
-                }
-                this.setRunning(false)
+                prevAl.dismiss()
+                prevAl.cancel()
+                prevAl.setEnabled(false)
+                prevAl.hide()
                 Repository.addAttendance(lecture, false)
+                this.setRunning(false)
+
+//
+//                prevAl.setMessage("You have been marked absent as we got no response from you. Tap me to change!!- " + this.lecture.name)
+////                   val items = arrayOf("Change")
+////                   prevAl.setItems(items, object : DialogInterface.OnClickListener {
+////                       override fun onClick(dialog: DialogInterface?, which: Int) {
+////                           dialog!!.dismiss()
+////                       }
+////
+////                   })
+//
+//                prevAl.setTitle("No Response!")
+//                prevAl.setCancelable(true)
+////                prevAl.setEnabled(false)
+//
+//                this.setPrevLecture(lecture)
+//                prevAl.setContentView(R.layout.my_alert_dialog)
+//                val change = prevAl.findViewById<Button>(R.id.change)
+//
+////                val present = prevAl.findViewById<Button>(R.id.present)
+////                val absent = prevAl.findViewById<Button>(R.id.absent)
+//
+////                present!!.setOnClickListener {
+////                    Repository.updateAttendance(this.prevLecture, true)
+////                    prevAl.dismiss()
+////                }
+////                absent!!.setOnClickListener {
+////                    Repository.updateAttendance(this.prevLecture, false)
+////                    prevAl.dismiss()
+////                }
+//                change!!.setOnClickListener {
+//                    val intent = Intent(prevAl.context, ChangeAttendanceActivity::class.java)
+//                    val bundle = Bundle()
+//                    bundle.putParcelable("lecture",this.prevLecture)
+//                    intent.putExtra("lecture",bundle)
+//                    prevAl.dismiss()
+//                    prevAl.cancel()
+//                    prevAl.hide()
+//                    prevAl.context.startActivity(intent)
+//                }
+//                //this.setRunning(false)
+//                //Repository.addAttendance(lecture, false)
             }
         }
-//        this.setLecture(nLecture)
-//        this.setAlertView(nAlertView)
-//        this.setRunning(true)
+        this.setLecture(nLecture)
+        this.setAlertView(nAlertView)
+        this.setRunning(true)
 
     }
 

@@ -1,5 +1,6 @@
 package com.attendance.letmeattend.firebase
 
+import android.app.Notification
 import android.content.Intent
 import android.location.Location
 import android.util.Log
@@ -10,6 +11,7 @@ import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.notifications.NotificationBuilder
 import com.attendance.letmeattend.alarms.AlarmFunctions
 import com.attendance.letmeattend.helpers.AttendanceMarkingStatus
+import com.attendance.letmeattend.helpers.ForegroundServiceStatus
 import com.attendance.letmeattend.services.backgroundservices.MyForegroundServiceExecutor
 import com.attendance.letmeattend.utils.toast
 import com.google.firebase.database.*
@@ -271,11 +273,16 @@ class FirebaseSetData(val userId: String) {
             .removeValue()
     }
 
-    fun addAttendance(lecture: Lecture, attended: Boolean) {
+    fun addAttendance(lecture: Lecture, attended: Boolean, intent: Intent = Intent()) {
 
         getAttendanceStatusForRecheck(lecture, attended)
         AttendanceMarkingStatus.setLecture(lecture)
         AttendanceMarkingStatus.setAttendanceMarking(true)
+        if (intent.hasExtra("intent")) {
+            notifBuilder.removeNotification(lecture.id.hashCode()-2)
+            AppApplication.context?.stopService(intent)
+            //ForegroundServiceStatus.setRunning(false)
+        }
 
     }
 
@@ -369,7 +376,8 @@ class FirebaseSetData(val userId: String) {
                 }
 
                 override fun onCancelled(p0: DatabaseError) {
-
+                    notifBuilder.removeNotification(lecture.id.hashCode())
+                    AppApplication?.context?.stopService(intent)
                 }
             })
     }

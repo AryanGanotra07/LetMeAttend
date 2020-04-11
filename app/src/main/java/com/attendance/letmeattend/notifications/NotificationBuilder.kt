@@ -218,6 +218,7 @@ class NotificationBuilder() {
         bundle.putParcelable("lecture",lecture)
         val notifyIntent = Intent(context, ChangeAttendanceActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            action = "MARK_ATTENDANCE_ACTIVITY-"+lecture.name
             putExtra("lecture", bundle)
         }
         val notifyPendingIntent = PendingIntent.getActivity(
@@ -258,16 +259,30 @@ class NotificationBuilder() {
         var message = "Checking attendance status for " + lecture.name + " from " + lecture.s_time + " to " + lecture.e_time
         var builder = NotificationCompat.Builder(context!!,MyNotificationChannel.FIREBASE_FOREGROUND_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_create_black_24dp)
-            .setContentTitle("")
+            .setContentTitle("Let Me Attend")
             .setContentText(message)
-            .setStyle(NotificationCompat.BigTextStyle()
-                .bigText(message))
             .setCategory(NotificationCompat.CATEGORY_REMINDER)
             .setPriority(NotificationCompat.PRIORITY_MIN)
         val notif = builder.build()
         with(NotificationManagerCompat.from(context)) {
             // notificationId is a unique int for each notification that you must define
             notify(lecture.id.hashCode(), notif)
+        }
+        return notif
+    }
+
+    fun markAttendanceNotification(lecture : Lecture) : Notification {
+        var message = "Marking attendance for " + lecture.name + " from " + lecture.s_time + " to " + lecture.e_time
+        var builder = NotificationCompat.Builder(context!!,MyNotificationChannel.MARK_ATTENDANCE_CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_create_black_24dp)
+            .setContentTitle("Let Me Attend")
+            .setContentText(message)
+            .setCategory(NotificationCompat.CATEGORY_REMINDER)
+            .setPriority(NotificationCompat.PRIORITY_MIN)
+        val notif = builder.build()
+        with(NotificationManagerCompat.from(context)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(lecture.id.hashCode()-2, notif)
         }
         return notif
     }

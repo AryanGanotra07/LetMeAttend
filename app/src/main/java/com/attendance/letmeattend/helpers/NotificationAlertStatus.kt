@@ -56,7 +56,7 @@ object NotificationAlertStatus  {
                 prevAl.cancel()
                 prevAl.setEnabled(false)
                 prevAl.hide()
-                Repository.addAttendance(lecture, false)
+                Repository.addAttendance(lecture, 0)
                 this.setRunning(false)
 
 //

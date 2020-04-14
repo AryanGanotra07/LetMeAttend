@@ -45,14 +45,14 @@ class DatabaseService() : JobIntentService() {
             Log.i("DatabaseStatus","Yes Clicked from intent service")
             val lat = intent.getDoubleExtra("lat",0.0)
             val lng = intent.getDoubleExtra("lng",0.0)
-            database.addAttendance(lecture,true)
+            database.addAttendance(lecture,1)
             database.setLocation(lect_id,location)
 
         }
         else if (intent.action == builder.ACTION_NO)
         {
             Log.i("DatabaseStatus","No Clicked from intent service")
-            database.addAttendance(lecture,false)
+            database.addAttendance(lecture,0)
         }
         else if (intent.action == builder.ACTION_NO_CLASS)
         {

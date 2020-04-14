@@ -71,7 +71,7 @@ class MyForegroundService() : Service(){
             if (lecture.id != ForegroundServiceStatus.getLecture().id) {
                 notifBuilder.buildNoResponseNotification(ForegroundServiceStatus.getLecture())
                 Log.d(TAG, "Building notification" + ForegroundServiceStatus.getLecture().name)
-                Repository.addAttendance(ForegroundServiceStatus.getLecture(), false)
+                Repository.addAttendance(ForegroundServiceStatus.getLecture(), 0)
                 ForegroundServiceStatus.setRunning(false)
             }
         }

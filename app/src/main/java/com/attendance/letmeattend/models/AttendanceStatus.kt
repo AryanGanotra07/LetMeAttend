@@ -7,7 +7,7 @@ import java.util.*
 data class AttendanceStatus (var id : String = "",
                              var lect_id : String = "",
                              var sub_id : String = "",
-                             var attended : Boolean = false,
+                             var attended : Int = 0,
                              var s_time : String = "",
                              var e_time : String = "",
                              var day : Int = 0,

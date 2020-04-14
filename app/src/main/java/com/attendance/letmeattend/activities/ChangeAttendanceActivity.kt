@@ -63,7 +63,7 @@ class ChangeAttendanceActivity : AppCompatActivity(), DialogInterface.OnCancelLi
     private val onPresentClick = object  : DialogInterface.OnClickListener {
         override fun onClick(dialog: DialogInterface?, which: Int) {
             if (db != null && lecture != null) {
-                db.updateAttendance(lecture, true)
+                db.updateAttendance(lecture, 1)
                 notifBuilder.removeNotification(lecture.id.hashCode()-1)
 
             }
@@ -73,7 +73,7 @@ class ChangeAttendanceActivity : AppCompatActivity(), DialogInterface.OnCancelLi
     private val onAbsentClick = object  : DialogInterface.OnClickListener {
         override fun onClick(dialog: DialogInterface?, which: Int) {
             if (db != null && lecture != null) {
-                db.updateAttendance(lecture, false)
+                db.updateAttendance(lecture, 0)
                 notifBuilder.removeNotification(lecture.id.hashCode()-1)
             }
         }

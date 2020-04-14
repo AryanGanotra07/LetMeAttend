@@ -178,10 +178,11 @@ class NotificationBuilder() {
         return notif
     }
 
-    fun buildAttendanceStatusNotification(lecture : Lecture, attended : Boolean, id : Int) : Notification {
+    fun buildAttendanceStatusNotification(lecture : Lecture, attended : Int, id : Int) : Notification {
 
         var message = "Present! You have been marked present for lecture - " + lecture.name
-        if (!attended) message = "Absent!! You should regularly attend classes dude - " + lecture.name
+        if (attended == 0) message = "Absent!! You should regularly attend classes dude - " + lecture.name
+        else if(attended == -1) message = "No Class! Definitely some good times for you!-"  + lecture.name
         var builder = NotificationCompat.Builder(context!!,MyNotificationChannel.ATTENDANCE_STATUS_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_create_black_24dp)
             .setContentTitle("Let Me Attend")
@@ -218,7 +219,7 @@ class NotificationBuilder() {
         bundle.putParcelable("lecture",lecture)
         val notifyIntent = Intent(context, ChangeAttendanceActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            action = "MARK_ATTENDANCE_ACTIVITY-"+lecture.name
+            action = "MARK_ATTENDANCE_ACTIVITY-"+lecture.id
             putExtra("lecture", bundle)
         }
         val notifyPendingIntent = PendingIntent.getActivity(

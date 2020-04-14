@@ -14,6 +14,7 @@ import com.attendance.letmeattend.helpers.AttendanceMarkingStatus
 import com.attendance.letmeattend.helpers.ForegroundServiceStatus
 import com.attendance.letmeattend.services.backgroundservices.MyForegroundServiceExecutor
 import com.attendance.letmeattend.utils.toast
+import com.attendance.letmeattend.views.NotificationAlert
 import com.google.firebase.database.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -43,8 +44,6 @@ class FirebaseSetData(val userId: String) {
         childUpdates["/attendanceStatus/$key"] = attendanceStatus.toMap()
         ref?.updateChildren(childUpdates)?.addOnCompleteListener {
             if (it.isSuccessful) {
-
-
                 AppApplication.context?.toast("Attendance Status Added")
 
             } else AppApplication.context?.toast("Error in adding attendance status")
@@ -273,7 +272,7 @@ class FirebaseSetData(val userId: String) {
             .removeValue()
     }
 
-    fun addAttendance(lecture: Lecture, attended: Boolean, intent: Intent = Intent()) {
+    fun addAttendance(lecture: Lecture, attended: Int, intent: Intent = Intent()) {
 
         getAttendanceStatusForRecheck(lecture, attended)
         AttendanceMarkingStatus.setLecture(lecture)
@@ -286,7 +285,7 @@ class FirebaseSetData(val userId: String) {
 
     }
 
-    private fun createAttendanceStatus(lecture: Lecture, attended: Boolean ) : AttendanceStatus {
+    private fun createAttendanceStatus(lecture: Lecture, attended: Int ) : AttendanceStatus {
         val attendanceStatus = AttendanceStatus("",lecture.id, lecture.sub_id, attended, lecture.s_time, lecture.e_time, lecture.day)
         return attendanceStatus
     }
@@ -390,7 +389,7 @@ class FirebaseSetData(val userId: String) {
 
     }
 
-    fun getAttendanceStatusForRecheck(lecture : Lecture, attended: Boolean) {
+    fun getAttendanceStatusForRecheck(lecture : Lecture, attended: Int) {
         ref?.child("attendanceStatus").orderByChild("lect_id").equalTo(lecture.id)
 //            orderByChild("s_time").equalTo(lecture.s_time)
 //            .orderByChild("e_time").equalTo(lecture.e_time)
@@ -409,10 +408,18 @@ class FirebaseSetData(val userId: String) {
                             }
                             Log.d(TAG, "Attendence status list size is "+attendanceStatusList.size)
                             if (attendanceStatusList.isEmpty()) {
-                                if (attended) {
+                                if (attended == 1) {
                                     addCurrentAttendance(lecture)
+                                    addTotalAttendance(lecture, attended)
                                 }
-                                addTotalAttendance(lecture, attended)
+                                else if (attended == 0) {
+                                    addTotalAttendance(lecture, attended)
+                                }
+                                else if(attended == -1) {
+                                    addAttendanceStatus(createAttendanceStatus(lecture, -1))
+                                    NotificationAlertStatus.setAttendanceMarkedAlready(lecture)
+
+                                }
                             }
                             else {
                                AppApplication?.context?.toast("Attendance has been marked already!")
@@ -422,10 +429,18 @@ class FirebaseSetData(val userId: String) {
                         Log.d(TAG,attendanceStatusList.size.toString())
                     }
                     else {
-                        if (attended) {
+                        if (attended == 1) {
                             addCurrentAttendance(lecture)
+                            addTotalAttendance(lecture, attended)
                         }
-                        addTotalAttendance(lecture, attended)
+                        else if (attended == 0) {
+                            addTotalAttendance(lecture, attended)
+                        }
+                        else if(attended == -1) {
+                            addAttendanceStatus(createAttendanceStatus(lecture, -1))
+                            NotificationAlertStatus.setAttendanceMarkedAlready(lecture)
+                            notifBuilder.buildAttendanceStatusNotification(lecture,attended,notifBuilder.ATTENDANCE_STATUS_NOTIF_ID)
+                        }
                     }
 
                 }
@@ -460,9 +475,9 @@ class FirebaseSetData(val userId: String) {
                                 str = "Current attendance incremented Successfully"
                                 notifBuilder.buildAttendanceStatusNotification(
                                     lecture,
-                                    true,
+                                    1,
                                     notifBuilder.ATTENDANCE_STATUS_NOTIF_ID )
-                                addAttendanceStatus(createAttendanceStatus(lecture, true))
+                                addAttendanceStatus(createAttendanceStatus(lecture, 1))
 
                             } else {
                                 str = "Current attendance updation failed"
@@ -505,7 +520,8 @@ class FirebaseSetData(val userId: String) {
 
     }
 
-    private fun addTotalAttendance(lecture: Lecture, attended: Boolean) {
+
+    private fun addTotalAttendance(lecture: Lecture, attended: Int) {
         val id = lecture.id
         val sub_id = lecture.sub_id
         ref?.child("lectures")
@@ -524,14 +540,17 @@ class FirebaseSetData(val userId: String) {
                         if (it.isSuccessful) {
                             str = "Total attendance incremented Successfully"
 
-                            if (!attended) {
+                            if (attended == 0) {
                                 notifBuilder.buildAttendanceStatusNotification(
                                     lecture,
-                                    false,
+                                    0,
                                     notifBuilder.ATTENDANCE_STATUS_NOTIF_ID
                                 )
-                                addAttendanceStatus(createAttendanceStatus(lecture, false))
+                                addAttendanceStatus(createAttendanceStatus(lecture, 0))
 
+                            }
+                            else {
+                              //  addAttendanceStatus(createAttendanceStatus(lecture, -1))
                             }
                             Log.d(TAG, NotificationAlertStatus.isRunning().toString())
                             Log.d(TAG, NotificationAlertStatus.getLecture().name)
@@ -606,7 +625,7 @@ class FirebaseSetData(val userId: String) {
             }
     }
 
-    fun updateAttendance(lecture: Lecture, attended: Boolean) {
+    fun updateAttendance(lecture: Lecture, attended: Int) {
 
         ref?.child("attendanceStatus").orderByChild("lect_id").equalTo(lecture.id)
 //            orderByChild("s_time").equalTo(lecture.s_time)
@@ -628,7 +647,7 @@ class FirebaseSetData(val userId: String) {
                             if (attendanceStatusList.isEmpty()) {
                                AppApplication?.context?.toast("No attendance status found")
                             }
-                            else if (attendanceStatusList.size == 1 && attended) {
+                            else if (attendanceStatusList.size == 1 && attended == 1) {
                                val attendanceStatus = attendanceStatusList.get(0)
                                 updateAttendanceByAttendanceStatus(attendanceStatus, attended)
                                 updateCurrentAttendance(lecture, attended)
@@ -648,7 +667,7 @@ class FirebaseSetData(val userId: String) {
             })
     }
 
-    private fun updateAttendanceByAttendanceStatus(attendanceStatus: AttendanceStatus, attended: Boolean) {
+    private fun updateAttendanceByAttendanceStatus(attendanceStatus: AttendanceStatus, attended: Int) {
         attendanceStatus.attended = attended
         ref?.
             child("attendanceStatus")
@@ -665,7 +684,7 @@ class FirebaseSetData(val userId: String) {
             }
     }
 
-    private fun updateCurrentAttendance(lecture: Lecture, attended: Boolean) {
+    private fun updateCurrentAttendance(lecture: Lecture, attended: Int) {
         val id = lecture.id
         val sub_id = lecture.sub_id
         Log.i("ID", id)
@@ -681,7 +700,7 @@ class FirebaseSetData(val userId: String) {
                     if (p0.exists()) {
                         Log.i("P0VALUE", p0.value.toString())
                         var att = p0.value.toString().toInt()
-                        if (attended)
+                        if (attended == 1)
                             att = att + 1
                         p0.ref.setValue(att).addOnCompleteListener {
                             var str: String = ""
@@ -689,7 +708,7 @@ class FirebaseSetData(val userId: String) {
                                 str = "Current attendance decremented Successfully"
                                 notifBuilder.buildAttendanceStatusNotification(
                                     lecture,
-                                    true,
+                                    1,
                                     notifBuilder.ATTENDANCE_STATUS_NOTIF_ID )
                                 //addAttendanceStatus(createAttendanceStatus(lecture, true))
 
@@ -715,7 +734,7 @@ class FirebaseSetData(val userId: String) {
                     if (p0.exists()) {
                         Log.i("P0VALUE", p0.value.toString())
                         var att = p0.value.toString().toInt()
-                        if (attended)
+                        if (attended == 1)
                             att = att + 1
                         p0.ref.setValue(att).addOnCompleteListener {
                             var str: String = ""

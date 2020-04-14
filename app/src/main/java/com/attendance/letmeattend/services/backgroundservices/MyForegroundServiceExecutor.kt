@@ -32,7 +32,7 @@ class MyForegroundServiceExecutor() : JobIntentService() {
     override fun onHandleWork(intent: Intent) {
         Log.d(TAG, "Executing helper handle work")
         val myIntent = intent.getParcelableExtra<Intent>("intent")
-            AlarmFunctions.execute(myIntent)
+           // AlarmFunctions.execute(myIntent)
 
     }
 }

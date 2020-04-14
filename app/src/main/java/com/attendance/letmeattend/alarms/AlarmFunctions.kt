@@ -16,7 +16,7 @@ object AlarmFunctions {
 
     private val TAG = "AlarmFunction"
 
-    fun execute(intent: Intent, shouldRun : Boolean = true) {
+    fun execute(intent: Intent, shouldRun : Boolean) {
 
         val context = AppApplication?.context
         val alarmMgr =

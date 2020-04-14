@@ -43,17 +43,18 @@ class MarkAttendanceForegroundService()  :  Service() {
             Log.i("DatabaseStatus","Yes Clicked from intent service")
             val lat = myIntent.getDoubleExtra("lat",0.0)
             val lng = myIntent.getDoubleExtra("lng",0.0)
-            database.addAttendance(lecture,true, intent)
+            database.addAttendance(lecture,1, intent)
             database.setLocation(lect_id,location)
 
         }
         else if (myIntent.action == builder.ACTION_NO)
         {
             Log.i("DatabaseStatus","No Clicked from intent service")
-            database.addAttendance(lecture,false, intent)
+            database.addAttendance(lecture,0, intent)
         }
         else if (myIntent.action == builder.ACTION_NO_CLASS)
         {
+            database.addAttendance(lecture, -1, intent)
             Log.i("DatabaseStatus","No Class Clicked from intent service")
         }
 

@@ -22,7 +22,7 @@ class NotificationAlert(val context : Context) {
             .addButton("Present", -1, -1, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED,object : DialogInterface.OnClickListener {
                 override fun onClick(dialog: DialogInterface?, which: Int) {
                     context?.toast("Clicked");
-                    Repository.addAttendance(lecture!!, true)
+                    Repository.addAttendance(lecture!!, 1)
                     val notifBuilder = NotificationBuilder()
                     val id = intent.getIntExtra("intid",0)
                     context?.stopService(intent)
@@ -35,7 +35,21 @@ class NotificationAlert(val context : Context) {
             .addButton("Absent", -1, -1, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED,object : DialogInterface.OnClickListener {
                 override fun onClick(dialog: DialogInterface?, which: Int) {
                     context?.toast("Clicked");
-                    Repository.addAttendance(lecture!!, false)
+                    Repository.addAttendance(lecture!!, 0)
+                    val notifBuilder = NotificationBuilder()
+                    val id = intent.getIntExtra("intid",0)
+                    context?.stopService(intent)
+                    notifBuilder.removeNotification(id)
+                    ForegroundServiceStatus.setRunning(false)
+                    NotificationAlertStatus.setRunning(false)
+                    dialog?.dismiss()
+
+                }
+            })
+            .addButton("Class Cancelled", -1, -1, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED,object : DialogInterface.OnClickListener {
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+                    context?.toast("Clicked");
+                    Repository.addAttendance(lecture!!, -1)
                     val notifBuilder = NotificationBuilder()
                     val id = intent.getIntExtra("intid",0)
                     context?.stopService(intent)

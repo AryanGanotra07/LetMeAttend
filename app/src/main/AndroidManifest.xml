@@ -46,6 +46,10 @@
         <receiver android:name=".notifications.NotificationReciever" />
         <receiver android:name=".geofencing.GeofenceBroadcastReceiver" />
 
+        <service android:name=".services.backgroundservices.AttendanceResults"
+            android:exported="false"
+            android:permission="android:permission.BIND_JOB_SERVICE" />
+
         <service
                 android:name=".services.backgroundservices.LocationService"
                 android:exported="false"

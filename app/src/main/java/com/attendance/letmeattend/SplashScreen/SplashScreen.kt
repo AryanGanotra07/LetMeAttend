@@ -1,22 +1,26 @@
 package com.attendance.letmeattend.SplashScreen
 
+import android.R
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MediatorLiveData
-import com.attendance.letmeattend.authentication.FirebaseLogin
 import com.attendance.letmeattend.activities.EnterDetailsActivity
-import com.attendance.letmeattend.firebase.Repository
 import com.attendance.letmeattend.activities.MapFragment
+import com.attendance.letmeattend.authentication.FirebaseLogin
 import com.attendance.letmeattend.models.CollegeLocation
 import com.attendance.letmeattend.notifications.MyNotificationChannel
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.iid.InstanceIdResult
 
 
 private lateinit var collegeLocationLiveData : MediatorLiveData<CollegeLocation>
@@ -30,21 +34,23 @@ class SplashScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true)
+//        FirebaseDatabase.getInstance().setPersistenceEnabled(true)
         MyNotificationChannel.createAllNotificationChannels()
-        Log.d(TAG, FirebaseAuth.getInstance().currentUser.toString())
-        if (FirebaseAuth.getInstance().currentUser != null) {
-            collegeLocationLiveData = Repository.getCollegeLocation()
-            collegeLocationLiveData.observe(this, collegeLocationObserver)
-//            if(getLocationPermission()) {
-//                startActivity(Intent(this, EnterDetailsActivity::class.java))
-//                finish()
-//            }
-
-        } else {
-            startActivity(Intent(this, FirebaseLogin::class.java))
-            finish()
-        }
+//        Log.d(TAG, FirebaseAuth.getInstance().currentUser.toString())
+//        if (FirebaseAuth.getInstance().currentUser != null) {
+//            collegeLocationLiveData = Repository.getCollegeLocation()
+//            collegeLocationLiveData.observe(this, collegeLocationObserver)
+////            if(getLocationPermission()) {
+////                startActivity(Intent(this, EnterDetailsActivity::class.java))
+////                finish()
+////            }
+//
+//        } else {
+//            startActivity(Intent(this, FirebaseLogin::class.java))
+//            finish()
+//        }
+        startActivity(Intent(this, FirebaseLogin::class.java))
+        finish()
     }
 
 

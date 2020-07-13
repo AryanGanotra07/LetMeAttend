@@ -34,7 +34,7 @@ class NotificationAlert(val context : Context) {
             })
             .addButton("Absent", -1, -1, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED,object : DialogInterface.OnClickListener {
                 override fun onClick(dialog: DialogInterface?, which: Int) {
-                    context?.toast("Clicked");
+                    context.toast("Clicked");
                     Repository.addAttendance(lecture!!, 0)
                     val notifBuilder = NotificationBuilder()
                     val id = intent.getIntExtra("intid",0)

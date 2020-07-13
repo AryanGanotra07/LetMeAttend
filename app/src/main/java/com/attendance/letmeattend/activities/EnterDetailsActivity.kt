@@ -101,17 +101,17 @@ if (NotificationAlertStatus.getLecture().id != lecture!!.id) {
 
         registerReceiver(broadcastReceiver, IntentFilter("NEW_NOTIFICATION"))
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val intent = Intent()
-            val packageName = packageName
-            val pm =
-                getSystemService(Context.POWER_SERVICE) as PowerManager
-            if (!pm.isIgnoringBatteryOptimizations(packageName)) {
-                intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-                intent.data = Uri.parse("package:$packageName")
-                startActivity(intent)
-            }
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            val intent = Intent()
+//            val packageName = packageName
+//            val pm =
+//                getSystemService(Context.POWER_SERVICE) as PowerManager
+//            if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+//                intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+//                intent.data = Uri.parse("package:$packageName")
+//                startActivity(intent)
+//            }
+//        }
 
         val binding : EnterDetailsActivityBinding = DataBindingUtil.setContentView(this, R.layout.enter_details_activity)
 
@@ -122,17 +122,17 @@ if (NotificationAlertStatus.getLecture().id != lecture!!.id) {
         tabLayout = binding.tabLayout
         alertView = LayoutInflater.from(this).inflate(R.layout.alert_save_subject,null,false)
         dialogHelper = SubjectDialogHelper(this@EnterDetailsActivity,alertView,viewModel)
+//
+//        viewModel.getSubjects().observe(this, Observer {
+//            if (it!=null)
+//            {
+//
+//            }
+//        })
 
-        viewModel.getSubjects().observe(this, Observer {
-            if (it!=null)
-            {
-
-            }
-        })
-
-        attendanceLiveData = viewModel.getAttendance()
-
-        attendanceLiveData.observe(this, attendanceObserver)
+//        attendanceLiveData = viewModel.getAttendance()
+//
+//        attendanceLiveData.observe(this, attendanceObserver)
 
 
 

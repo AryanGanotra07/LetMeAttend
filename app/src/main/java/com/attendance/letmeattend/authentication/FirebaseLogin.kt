@@ -8,29 +8,40 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.attendance.letmeattend.R
 import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.activities.EnterDetailsActivity
 import com.attendance.letmeattend.firebase.Repository
 import com.attendance.letmeattend.activities.MapFragment
 import com.attendance.letmeattend.models.CollegeLocation
+import com.attendance.letmeattend.models.User
 import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.services.boot.BootCompleteReciever
 import com.attendance.letmeattend.sharedpreferences.LocalRepository
 import com.attendance.letmeattend.utils.toast
+import com.attendance.letmeattend.viewmodels.LoginViewModel
 import com.firebase.ui.auth.AuthUI
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.iid.FirebaseInstanceId
 import com.judemanutd.autostarter.AutoStartPermissionHelper
 import kotlinx.android.synthetic.main.screen_login.*
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class FirebaseLogin: AppCompatActivity(),View.OnClickListener {
 
     private  val TAG = "FirebaseLogin"
     private lateinit var collegeLocationLiveData : MediatorLiveData<CollegeLocation>
+    private lateinit var viewModel : LoginViewModel
 
     override fun onClick(v: View?) {
 
@@ -92,6 +103,7 @@ class FirebaseLogin: AppCompatActivity(),View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?)  {
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         setContentView(R.layout.screen_login)
        // setTheme(R.style.FirebaseAuthUi)
        // createSignInIntent()
@@ -178,8 +190,39 @@ class FirebaseLogin: AppCompatActivity(),View.OnClickListener {
 
     private fun loginUser() {
 
-        collegeLocationLiveData = Repository.getCollegeLocation()
-        collegeLocationLiveData.observe(this, collegeLocationObserver)
+        FirebaseInstanceId.getInstance().instanceId
+            .addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w(TAG, "getInstanceId failed", task.exception)
+                    return@OnCompleteListener
+                }
+
+                // Get new Instance ID token
+                val token = task.result?.token
+
+                // Log and toast
+//                val msg = getString(R.string.msg_token_fmt, token)
+                Log.d(TAG, token)
+                Toast.makeText(baseContext, token, Toast.LENGTH_SHORT).show()
+                viewModel.registerUser(User(FirebaseAuth.getInstance().currentUser!!.uid, token!!)).enqueue(object :
+                    Callback<JSONObject> {
+                    override fun onResponse(call: Call<JSONObject>, response: Response<JSONObject>) {
+                        AppApplication.context!!.toast("User registered")
+                        startActivity(Intent(this@FirebaseLogin, EnterDetailsActivity::class.java))
+                        finish()
+                    }
+
+                    override fun onFailure(call: Call<JSONObject>, t: Throwable) {
+                        AppApplication.context!!.toast("User not registered -" + t.message)
+                        Log.d(TAG, "User not registered -" + t.message )
+                    }
+                })
+            })
+
+
+
+//        collegeLocationLiveData = Repository.getCollegeLocation()
+//        collegeLocationLiveData.observe(this, collegeLocationObserver)
     }
 
     private val collegeLocationObserver  = Observer<CollegeLocation> {

@@ -12,12 +12,14 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.MediatorLiveData
 import com.attendance.letmeattend.activities.EnterDetailsActivity
 import com.attendance.letmeattend.activities.MapFragment
+import com.attendance.letmeattend.activities.details.EnterDetails
 import com.attendance.letmeattend.authentication.FirebaseLogin
 import com.attendance.letmeattend.models.CollegeLocation
 import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.iid.InstanceIdResult
@@ -49,7 +51,12 @@ class SplashScreen : AppCompatActivity() {
 //            startActivity(Intent(this, FirebaseLogin::class.java))
 //            finish()
 //        }
-        startActivity(Intent(this, FirebaseLogin::class.java))
+        if (FirebaseAuth.getInstance().currentUser == null) {
+            startActivity(Intent(this, FirebaseLogin::class.java))
+        }
+        else {
+            startActivity(Intent(this, EnterDetails::class.java))
+        }
         finish()
     }
 

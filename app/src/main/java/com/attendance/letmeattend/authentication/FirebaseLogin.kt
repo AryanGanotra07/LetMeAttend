@@ -18,7 +18,9 @@ import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.activities.EnterDetailsActivity
 import com.attendance.letmeattend.firebase.Repository
 import com.attendance.letmeattend.activities.MapFragment
+import com.attendance.letmeattend.activities.details.EnterDetails
 import com.attendance.letmeattend.models.CollegeLocation
+import com.attendance.letmeattend.models.LoginResponse
 import com.attendance.letmeattend.models.User
 import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.services.boot.BootCompleteReciever
@@ -204,18 +206,41 @@ class FirebaseLogin: AppCompatActivity(),View.OnClickListener {
 //                val msg = getString(R.string.msg_token_fmt, token)
                 Log.d(TAG, token)
                 Toast.makeText(baseContext, token, Toast.LENGTH_SHORT).show()
-                viewModel.registerUser(User(FirebaseAuth.getInstance().currentUser!!.uid, token!!)).enqueue(object :
-                    Callback<JSONObject> {
-                    override fun onResponse(call: Call<JSONObject>, response: Response<JSONObject>) {
-                        AppApplication.context!!.toast("User registered")
-                        startActivity(Intent(this@FirebaseLogin, EnterDetailsActivity::class.java))
+                viewModel.registerUser(User(FirebaseAuth.getInstance().currentUser!!.uid, token!!)).enqueue(object:Callback<LoginResponse> {
+                    override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                        startActivity(
+                            Intent(
+                                this@FirebaseLogin,
+                                EnterDetails::class.java
+                            )
+                        )
                         finish()
                     }
 
-                    override fun onFailure(call: Call<JSONObject>, t: Throwable) {
-                        AppApplication.context!!.toast("User not registered -" + t.message)
-                        Log.d(TAG, "User not registered -" + t.message )
+                    override fun onResponse(
+                        call: Call<LoginResponse>,
+                        response: Response<LoginResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val data = response.body()
+//                            val access_token = data?.get("access_token")
+                            Log.d(TAG,"got access token-"+data?.access_token)
+                            LocalRepository.setAuthenticationToken(data?.access_token.toString())
+                            AppApplication.context!!.toast("User registered")
+                            startActivity(
+                                Intent(
+                                    this@FirebaseLogin,
+                                    EnterDetails::class.java
+                                )
+                            )
+                            finish()
+                        }
+                        else {
+                            AppApplication.context!!.toast("User not registered -" + response.errorBody())
+                            Log.d(TAG, "User not registered -" +response.errorBody())
+                        }
                     }
+
                 })
             })
 

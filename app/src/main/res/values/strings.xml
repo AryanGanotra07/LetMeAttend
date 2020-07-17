@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">LetMeAttend</string>
     <string name="sub_title">Allow me to mark your attendance and keep a track on it! </string>
     <string name="connect_with">\u2014\u2014QUICKLY CONNECT WITH\u2014\u2014</string>
@@ -24,7 +24,20 @@
     <string name="yes">YES</string>
     <string name="no">NO</string>
     <string name="no_class">CANCELED</string>
+    <string name="add_attendance">Attendance Criteria In Your College (%)</string>
+    <string name="day_name">Monday</string>
     <string name="are_you_attending">Are you attending</string>
+    <string name="logout">Logout</string>
+    <string name="your_subjects">Your Courses</string>
+    <string name="lectures_today">Lectures Today</string>
+    <string name="TimeTable">TimeTable</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+
 
 
     <!-- Copied from colorpickerlibrary -->

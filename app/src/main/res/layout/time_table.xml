@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+                name="vm"
+                type="com.attendance.letmeattend.activities.details.TimeTableViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            app:elevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints">
+
+        <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/toolbar"
+                app:layout_scrollFlags="scroll|enterAlways|snap"
+                android:background="@color/colorPrimary">
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                <TextView
+
+                        style="@style/LoginTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/TimeTable"
+                        android:textSize="40sp"
+                        android:gravity="center_vertical"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        />
+
+            </RelativeLayout>
+
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+    <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            app:layout_constraintTop_toBottomOf="@+id/app_bar"
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@color/colorAccent"
+        android:clickable="true"
+        android:backgroundTint="@color/windowBackground"
+        android:layout_width="match_parent" android:layout_height="0dp">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/monday"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/day_name"
+                android:textColor="@color/quantum_white_100"
+                android:layout_alignParentLeft="true"
+                android:id="@+id/monday_tv"
+                android:textSize="28sp" />
+        <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:tint="@color/colorAccent"
+                android:layout_alignParentRight="true"
+            android:src="@drawable/ic_add_black_24dp"/>
+        <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:adapter="@{vm.mondayLectureRecyclerAdapter}"
+                app:lectures="@{vm.mondayLectures}"
+                android:nestedScrollingEnabled="false"
+                app:setupLectureAdapter="@{vm.mondayLectureRecyclerAdapter}"
+                android:layout_below="@id/monday_tv"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:id="@+id/tuesday"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/monday">
+
+        <TextView
+                android:id="@+id/tuesday_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="@string/tuesday"
+                android:textColor="@color/quantum_white_100"
+                android:textSize="28sp" />
+
+        <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_add_black_24dp"
+                android:tint="@color/colorAccent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:adapter="@{vm.tuesdayLectureRecyclerAdapter}"
+                app:lectures="@{vm.tuesdayLectures}"
+                android:nestedScrollingEnabled="false"
+                app:setupLectureAdapter="@{vm.tuesdayLectureRecyclerAdapter}"
+                android:layout_below="@id/tuesday_tv" />
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:id="@+id/wednesday"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tuesday">
+
+        <TextView
+                android:id="@+id/wednesday_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="@string/wednesday"
+                android:textColor="@color/quantum_white_100"
+                android:textSize="28sp" />
+
+        <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_add_black_24dp"
+                android:tint="@color/colorAccent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:adapter="@{vm.wednesdayLectureRecyclerAdapter}"
+                app:lectures="@{vm.wednesdayLectures}"
+                android:nestedScrollingEnabled="false"
+                app:setupLectureAdapter="@{vm.wednesdayLectureRecyclerAdapter}"
+                android:layout_below="@id/wednesday_tv" />
+    </RelativeLayout>
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:id="@+id/thursday"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/wednesday">
+
+        <TextView
+                android:id="@+id/thursday_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="@string/thursday"
+                android:textColor="@color/quantum_white_100"
+                android:textSize="28sp" />
+
+        <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_add_black_24dp"
+                android:tint="@color/colorAccent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:adapter="@{vm.thursdayLectureRecyclerAdapter}"
+                app:lectures="@{vm.thursdayLectures}"
+                android:nestedScrollingEnabled="false"
+                app:setupLectureAdapter="@{vm.thursdayLectureRecyclerAdapter}"
+                android:layout_below="@id/thursday_tv" />
+    </RelativeLayout>
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:id="@+id/friday"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/thursday">
+
+        <TextView
+                android:id="@+id/friday_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="@string/friday"
+                android:textColor="@color/quantum_white_100"
+                android:textSize="28sp" />
+
+        <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_add_black_24dp"
+                android:tint="@color/colorAccent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:adapter="@{vm.fridayLectureRecyclerAdapter}"
+                app:lectures="@{vm.fridayLectures}"
+                android:nestedScrollingEnabled="false"
+                app:setupLectureAdapter="@{vm.fridayLectureRecyclerAdapter}"
+
+                android:layout_below="@id/friday_tv" />
+    </RelativeLayout>
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:id="@+id/saturday"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/friday">
+
+        <TextView
+                android:id="@+id/saturday_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="@string/saturday"
+                android:textColor="@color/quantum_white_100"
+                android:textSize="28sp" />
+
+        <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_add_black_24dp"
+                android:tint="@color/colorAccent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:adapter="@{vm.saturdayLectureRecyclerAdapter}"
+                app:lectures="@{vm.saturdayLectures}"
+                android:nestedScrollingEnabled="false"
+                app:setupLectureAdapter="@{vm.saturdayLectureRecyclerAdapter}"
+                android:layout_below="@id/saturday_tv" />
+    </RelativeLayout>
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:id="@+id/sunday"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/saturday">
+
+        <TextView
+                android:id="@+id/sunday_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="@string/sunday"
+                android:textColor="@color/quantum_white_100"
+                android:textSize="28sp" />
+
+        <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_add_black_24dp"
+                android:tint="@color/colorAccent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:adapter="@{vm.sundayLectureRecyclerAdapter}"
+                app:lectures="@{vm.sundayLectures}"
+                android:nestedScrollingEnabled="false"
+                app:setupLectureAdapter="@{vm.sundayLectureRecyclerAdapter}"
+                android:layout_below="@id/sunday_tv" />
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

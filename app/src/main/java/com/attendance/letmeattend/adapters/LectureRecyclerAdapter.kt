@@ -16,7 +16,7 @@ import com.attendance.letmeattend.viewmodels.LectureViewModel
 
 class LectureRecyclerAdapter() : RecyclerView.Adapter<LectureRecyclerAdapter.ViewHolder>() {
 
-    private lateinit var lectures : ArrayList<Lecture>
+    private lateinit var lectures : List<Lecture>
     private lateinit var clickListener: OnLectureClickListener
 
     private var position = 0

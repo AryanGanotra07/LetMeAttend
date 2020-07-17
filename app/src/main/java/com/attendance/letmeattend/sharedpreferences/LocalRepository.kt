@@ -6,6 +6,7 @@ import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.utils.Constants
 import com.attendance.letmeattend.utils.Constants.DEVICE_TOKEN
 import com.attendance.letmeattend.utils.Constants.ENTRY_KEY
+import com.attendance.letmeattend.utils.Constants.JWT_TOKEN
 import com.attendance.letmeattend.utils.Constants.PREFERENCE_NAME
 
 
@@ -34,5 +35,14 @@ object LocalRepository {
 
     fun getGeofenceState() : Boolean {
         return sharedPref.getBoolean(ENTRY_KEY,true)
+    }
+
+    fun setAuthenticationToken(token: String)  {
+        val editor = sharedPref.edit()
+        editor.putString(JWT_TOKEN, token)
+        editor.commit()
+    }
+    fun getAuthenticationToken() : String {
+        return sharedPref.getString(JWT_TOKEN, null)
     }
 }

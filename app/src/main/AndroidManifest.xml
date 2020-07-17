@@ -101,6 +101,12 @@
                 android:name=".activities.EnterDetailsActivity"
                 android:theme="@style/FirebaseAuthUi"></activity>
         <activity
+                android:name=".activities.details.EnterDetails"
+                android:theme="@style/FirebaseAuthUi">
+
+        </activity>
+
+        <activity
                 android:name=".SplashScreen.SplashScreen"
                 android:theme="@style/splashscreen">
             <intent-filter>

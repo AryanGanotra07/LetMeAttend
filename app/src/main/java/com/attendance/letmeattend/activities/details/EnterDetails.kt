@@ -67,7 +67,7 @@ class EnterDetails : AppCompatActivity() {
 
             customView(R.layout.add_course, scrollable = true, horizontalPadding = true)
             val nameET = getCustomView().findViewById<EditText>(R.id.course_name)
-            var my_color : Int = Color.GRAY
+            var my_color : Int = Color.RED
             positiveButton(R.string.add_course) { dialog ->
                 val json = HashMap<String, Any>()
                 json.put("name", nameET.text.toString())
@@ -76,6 +76,7 @@ class EnterDetails : AppCompatActivity() {
                 viewModel.addSubject(json)
             }
             val color_button = getCustomView().findViewById<FloatingActionButton>(R.id.color_view)
+            color_button.setBackgroundTintList(ColorStateList.valueOf(Color.RED))
             color_button.setOnClickListener {
                 MaterialDialog(this@EnterDetails).show {
                     title(R.string.choose_color)

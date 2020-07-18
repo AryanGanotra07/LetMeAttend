@@ -47,7 +47,7 @@ class DetailsViewModel : ViewModel() {
 
     }
 
-    fun addSubject(subject : HashMap<String, String>) {
+    fun addSubject(subject : HashMap<String, Any>) {
         NewRepository.addSubject(subject).enqueue(object : Callback<SubjectModel> {
             override fun onFailure(call: Call<SubjectModel>, t: Throwable) {
                 Log.d(TAG, "Subject adding failed" + t.message)

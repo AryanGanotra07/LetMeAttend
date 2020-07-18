@@ -67,9 +67,9 @@ class EnterDetails : AppCompatActivity() {
 
             customView(R.layout.add_course, scrollable = true, horizontalPadding = true)
             val nameET = getCustomView().findViewById<EditText>(R.id.course_name)
-            var my_color : String = "#000000"
+            var my_color : Int = Color.GRAY
             positiveButton(R.string.add_course) { dialog ->
-                val json = HashMap<String, String>()
+                val json = HashMap<String, Any>()
                 json.put("name", nameET.text.toString())
                 json.put("color", my_color)
                 Log.d(TAG, json.toString())
@@ -83,7 +83,7 @@ class EnterDetails : AppCompatActivity() {
                         ColorPalette.Accent
                     ) { _, color ->
                         toast("Selected color: ${color}")
-                        my_color = color.toHexString()
+                        my_color = color
                         color_button.setBackgroundColor(Color.BLACK)
                         color_button.setBackgroundTintList(ColorStateList.valueOf(color))
 

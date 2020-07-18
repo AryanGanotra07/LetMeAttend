@@ -9,7 +9,7 @@ import com.attendance.letmeattend.models.SubjectModel
 class SubjectViewModel() : ViewModel() {
 
      val subjectName : MediatorLiveData<String> = MediatorLiveData()
-     val subjectColor : MediatorLiveData<String> = MediatorLiveData()
+     val subjectColor : MediatorLiveData<Int> = MediatorLiveData()
      val currentAttendance : MediatorLiveData<Int> = MediatorLiveData()
      val totalAttendance : MediatorLiveData<Int> = MediatorLiveData()
      val lectures : MediatorLiveData<List<LectureModel>> = MediatorLiveData()

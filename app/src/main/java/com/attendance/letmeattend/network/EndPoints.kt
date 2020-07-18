@@ -25,6 +25,6 @@ interface EndPoints {
     @GET("/lecture/all")
     fun getAllLectures() : Call<List<LectureModel>>
     @POST("/subject")
-    fun addSubject(@Body subject: HashMap<String, String>) : Call<SubjectModel>
+    fun addSubject(@Body subject: HashMap<String, Any>) : Call<SubjectModel>
 
 }

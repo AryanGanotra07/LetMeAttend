@@ -3,12 +3,12 @@ package com.attendance.letmeattend.models
 import android.os.Parcel
 import android.os.Parcelable
 
-data class SubjectModel(var id : Int, var current_attendance : Int, var total_attendance : Int, var color : String, var name : String, var lectures : List<LectureModel> ): Parcelable {
+data class SubjectModel(var id : Int, var current_attendance : Int, var total_attendance : Int, var color : Int, var name : String, var lectures : List<LectureModel> ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readInt(),
         parcel.readInt(),
-        parcel.readString(),
+        parcel.readInt(),
         parcel.readString(),
         parcel.createTypedArrayList(LectureModel)
     ) {
@@ -18,7 +18,7 @@ data class SubjectModel(var id : Int, var current_attendance : Int, var total_at
         parcel.writeInt(id)
         parcel.writeInt(current_attendance)
         parcel.writeInt(total_attendance)
-        parcel.writeString(color)
+        parcel.writeInt(color)
         parcel.writeString(name)
         parcel.writeTypedList(lectures)
     }

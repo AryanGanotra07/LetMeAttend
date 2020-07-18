@@ -3,14 +3,14 @@ package com.attendance.letmeattend.models
 import android.os.Parcel
 import android.os.Parcelable
 
-data class LectureModel(var id : Int, var day : Int, var start_time : String, var end_time : String,var name: String = "Maths", var color : String = "#000000") : Parcelable {
+data class LectureModel(var id : Int, var day : Int, var start_time : String, var end_time : String,var name: String = "Maths", var color : Int) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readInt(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString()
+        parcel.readInt()
     ) {
     }
 
@@ -20,7 +20,7 @@ data class LectureModel(var id : Int, var day : Int, var start_time : String, va
         parcel.writeString(start_time)
         parcel.writeString(end_time)
         parcel.writeString(name)
-        parcel.writeString(color)
+        parcel.writeInt(color)
     }
 
     override fun describeContents(): Int {

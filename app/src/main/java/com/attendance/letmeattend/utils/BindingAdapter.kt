@@ -58,7 +58,7 @@ fun setColor(view: CardView, color:MediatorLiveData<Int>?) {
 }
 
 @BindingAdapter("setSubjectColor")
-fun setSubjectColor(view: CardView, color:String) {
+fun setSubjectColor(view: CardView, color:Int) {
 
 //    val parentActivity: AppCompatActivity? = view.getParentActivity()
 //    if (parentActivity != null && color != null) {
@@ -66,7 +66,7 @@ fun setSubjectColor(view: CardView, color:String) {
 //            view.setCardBackgroundColor(Color.parseColor(value)) })
 //    }
     try {
-        view.setCardBackgroundColor(Color.parseColor(color))
+        view.setCardBackgroundColor(color)
     }
     catch (e : Exception) {
 

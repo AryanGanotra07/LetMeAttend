@@ -29,7 +29,7 @@ object NewRepository {
         return service.getAllLectures()
     }
 
-    fun addSubject(subject : HashMap<String, String>) : Call<SubjectModel> {
+    fun addSubject(subject : HashMap<String, Any>) : Call<SubjectModel> {
         return service.addSubject(subject)
     }
 

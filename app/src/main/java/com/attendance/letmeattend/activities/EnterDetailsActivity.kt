@@ -350,6 +350,4 @@ if (NotificationAlertStatus.getLecture().id != lecture!!.id) {
         return super.onContextItemSelected(item)
     }
 
-
-
 }

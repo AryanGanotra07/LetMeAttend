@@ -9,6 +9,7 @@ import android.view.animation.AnimationUtils
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.attendance.letmeattend.R
+import com.attendance.letmeattend.activities.details.SubjectListeners
 import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.databinding.LectureTtBinding
 import com.attendance.letmeattend.databinding.SubjectResourceBinding
@@ -24,7 +25,7 @@ import javax.security.auth.Subject
 class SubjectRecyclerAdapter() : RecyclerView.Adapter<SubjectRecyclerAdapter.ViewHolder>() {
 
     private lateinit var subjects : List<SubjectModel>
-    private lateinit var clickListener: OnLectureClickListener
+    private lateinit var clickListener: SubjectListeners
     private  val animation : Animation = AnimationUtils.loadAnimation(AppApplication?.context!!.applicationContext , R.anim.abc_slide_in_bottom)
 
     private var position = 0
@@ -42,7 +43,7 @@ class SubjectRecyclerAdapter() : RecyclerView.Adapter<SubjectRecyclerAdapter.Vie
         this.position = position
     }
 
-    fun setClickListener(callback : OnLectureClickListener)
+    fun setClickListener(callback : SubjectListeners)
     {
         this.clickListener = callback
         notifyDataSetChanged()
@@ -72,13 +73,19 @@ class SubjectRecyclerAdapter() : RecyclerView.Adapter<SubjectRecyclerAdapter.Vie
 //        notifyDataSetChanged()
 //    }
 
-    class ViewHolder(val binding: SubjectResourceBinding) : RecyclerView.ViewHolder(binding.root), View.OnCreateContextMenuListener {
+    class ViewHolder(val binding: SubjectResourceBinding, val clickListener: SubjectListeners) : RecyclerView.ViewHolder(binding.root), View.OnCreateContextMenuListener {
         val vm : SubjectViewModel = SubjectViewModel()
         private var day = 0
         fun bind(subject : SubjectModel)
         {
             binding.vm = vm
             vm.bind(subject)
+            if (clickListener != null)
+            {
+                itemView.setOnClickListener {
+                    clickListener.onSubjectClicked(subject)
+                }
+            }
             itemView.context
             itemView.setOnCreateContextMenuListener(this)
 
@@ -102,7 +109,7 @@ class SubjectRecyclerAdapter() : RecyclerView.Adapter<SubjectRecyclerAdapter.Vie
             R.layout.subject_resource,parent,false)
         binding.root.startAnimation(animation)
         parent.context.toast(itemCount.toString())
-        return ViewHolder(binding)
+        return ViewHolder(binding, clickListener)
     }
 
     override fun getItemCount(): Int {

@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.EditText
 import com.afollestad.materialdialogs.color.colorChooser
 import android.widget.TextView
@@ -59,6 +60,42 @@ class EnterDetails : AppCompatActivity() {
             showCustomViewDialog(BottomSheet())
 
         }
+    }
+
+    private fun showCustomEditDialog(position: Int,subjectModel: SubjectModel, dialogBehavior: DialogBehavior = ModalDialog) {
+
+            val dialog = MaterialDialog(this, dialogBehavior).show {
+                title(R.string.edit_course)
+
+                customView(R.layout.add_course, scrollable = true, horizontalPadding = true)
+                val nameET = getCustomView().findViewById<EditText>(R.id.course_name)
+                nameET.setText(subjectModel.name)
+                positiveButton(R.string.add_course) { dialog ->
+                    val json = HashMap<String, Any>()
+                    json.put("id", subjectModel.id)
+                    json.put("name", nameET.text.toString())
+                    json.put("color", subjectModel.color)
+                    Log.d(TAG, json.toString())
+                    viewModel.updateSubject(position,json)
+                }
+                val color_button = getCustomView().findViewById<FloatingActionButton>(R.id.color_view)
+                color_button.setBackgroundTintList(ColorStateList.valueOf(subjectModel.color))
+//               color_button.visibility = View.GONE
+                color_button.isEnabled = false
+                color_button.isClickable = false
+
+
+//            getCustomView().findViewById<TextView>(R.id.monday_tv).setOnClickListener {
+//                Log.d(TAG, viewModel.getDay())
+//                viewModel.getUserCourses()
+//            }
+                negativeButton(android.R.string.cancel)
+                lifecycleOwner(this@EnterDetails)
+            }
+
+        dialog.getCustomView().setBackgroundColor(subjectModel.color)
+
+
     }
 
     private fun showCustomViewDialog(dialogBehavior: DialogBehavior = ModalDialog) {
@@ -122,6 +159,21 @@ class EnterDetails : AppCompatActivity() {
             Toast.makeText(this, "OnBAckPressed Works", Toast.LENGTH_SHORT).show()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onContextItemSelected(item: MenuItem?): Boolean {
+        Log.d(TAG, item!!.itemId.toString())
+        val position = viewModel.subjectRecyclerAdapter.getPosition()
+        val subject = viewModel.subjectRecyclerAdapter.getLecture(position)
+        if (item.itemId == R.id.delete_lecture) {
+            viewModel.onSubjectDelete(subject)
+        }
+        else if (item.itemId == R.id.edit_lecture) {
+
+            viewModel.onSubjectEdit(subject)
+            showCustomEditDialog(position, subject, BottomSheet())
+        }
+        return super.onContextItemSelected(item)
     }
 
 //    override fun onSupportNavigateUp(): Boolean {

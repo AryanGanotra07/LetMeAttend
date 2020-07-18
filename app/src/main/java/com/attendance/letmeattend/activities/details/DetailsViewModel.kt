@@ -25,7 +25,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class DetailsViewModel : ViewModel() {
+class DetailsViewModel : ViewModel(), SubjectListeners {
     private val service  = RetrofitServiceBuilder.buildServiceWithAuth(EndPoints::class.java)
     private val TAG = "DetailsViewModel"
     var attendanceCriteria : Int = 0
@@ -39,12 +39,78 @@ class DetailsViewModel : ViewModel() {
     init {
         progressVisibility.value = View.GONE
         attendanceCriteriaLiveData.value = AttendanceCriteria(75)
+        subjectRecyclerAdapter.setClickListener(this)
         getUserAttendanceCriteria()
         getUserCourses()
         getUserLecturesToday()
     }
     val updateAttendanceCriteriaClickListener = View.OnClickListener {
 
+    }
+
+    fun deleteSubject(subject: SubjectModel) {
+        NewRepository.deleteSubject(subject).enqueue(object : Callback<JSONObject> {
+            override fun onFailure(call: Call<JSONObject>, t: Throwable) {
+                Log.d(TAG, " Deleting subject failed" + t.message)
+            }
+
+            override fun onResponse(call: Call<JSONObject>, response: Response<JSONObject>) {
+                if (response.isSuccessful) {
+                    Log.d(TAG, "Subject Deleted")
+                   val subjects =  subjectsLiveData.value?.toMutableList()
+                    subjects?.remove(subject)
+                    subjectsLiveData.postValue(subjects)
+                }
+                else{
+                    Log.d(TAG, "SUbject deletion failed-"+response.message())
+                }
+            }
+
+        })
+    }
+
+    fun updateSubject(position: Int,subject : HashMap<String, Any>) {
+        NewRepository.updateSubject(subject).enqueue(object : Callback<SubjectModel> {
+            override fun onFailure(call: Call<SubjectModel>, t: Throwable) {
+                Log.d(TAG, "Subject updation failed" + t.message)
+            }
+
+            override fun onResponse(call: Call<SubjectModel>, response: Response<SubjectModel>) {
+                if (response.isSuccessful) {
+                    Log.d(TAG, "Subject updated successuly")
+                    val subjectModel = response.body()
+                    var subjects = subjectsLiveData.value!!.toMutableList()
+                    subjects.set(position, subjectModel!!)
+                    subjectsLiveData.postValue(subjects)
+//                    if (subjects.isNullOrEmpty()) {
+//                        subjects = listOf(subjectModel!!)
+//                        subjectsLiveData.postValue(subjects)
+//                    }
+//                    else {
+//                        val subjectsML = subjects.toMutableList()
+//                        subjectsML.add(0, subjectModel!!)
+//                        subjectsLiveData.postValue(subjectsML)
+//
+//                    }
+//                    var subjectsArrayList : MutableList<SubjectModel> = ArrayList()
+//                    if (subjects != null)
+//                    {
+//                        subjectsArrayList = subjects!!.toMutableList()
+//                    }
+//                    if (subjectsArrayList!=null) {
+//                        subjectsArrayList.add(0, subjectModel!!)
+//                        subjectsLiveData.postValue(subjectsArrayList)
+//                    }
+//                    subjectRecyclerAdapter.addSubject(subjectModel!!)
+
+//                    subjectRecyclerAdapter.addSubject(subjectModel!!)
+                }
+                else {
+                    Log.d(TAG, "Subject adding failed" + response.message())
+                }
+            }
+
+        })
     }
 
     fun addSubject(subject : HashMap<String, Any>) {
@@ -205,5 +271,18 @@ class DetailsViewModel : ViewModel() {
             }
 
         })
+    }
+
+    override fun onSubjectEdit(subjectModel: SubjectModel) {
+
+    }
+
+    override fun onSubjectDelete(subjectModel: SubjectModel) {
+        Log.d(TAG, "Deleting subject")
+        deleteSubject(subjectModel)
+    }
+
+    override fun onSubjectClicked(subjectModel: SubjectModel) {
+        Log.d(TAG, "Clicked subject")
     }
 }

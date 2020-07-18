@@ -33,6 +33,14 @@ object NewRepository {
         return service.addSubject(subject)
     }
 
+    fun deleteSubject(subjectModel: SubjectModel) : Call<JSONObject> {
+        return service.deleteSubject(subjectModel.id)
+    }
+
+    fun updateSubject(subject : HashMap<String, Any>) : Call<SubjectModel> {
+        return service.updateSubject(subject)
+    }
+
     fun logout(){
         FirebaseAuth.getInstance().signOut()
         LocalRepository.logout()

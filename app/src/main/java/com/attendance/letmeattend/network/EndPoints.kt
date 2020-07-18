@@ -3,10 +3,7 @@ package com.attendance.letmeattend.network
 import com.attendance.letmeattend.models.*
 import org.json.JSONObject
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface EndPoints {
 
@@ -26,5 +23,9 @@ interface EndPoints {
     fun getAllLectures() : Call<List<LectureModel>>
     @POST("/subject")
     fun addSubject(@Body subject: HashMap<String, Any>) : Call<SubjectModel>
+    @HTTP(method = "DELETE", path = "/subject", hasBody = true)
+    fun deleteSubject(@Body id:Int) : Call<JSONObject>
+    @PUT("/subject")
+    fun updateSubject(@Body subject: HashMap<String, Any>) : Call<SubjectModel>
 
 }

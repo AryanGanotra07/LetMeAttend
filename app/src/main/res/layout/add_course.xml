@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="@string/course_name"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
+            android:textColor="?android:textColorSecondary"
+            android:textSize="@dimen/title_size"
+            />
+
+
+
+    <EditText
+            android:id="@+id/course_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:inputType="textAutoComplete"
+            android:text="Hello World"
+            android:textColor="?android:textColorPrimary"
+            android:textSize="@dimen/title_size"
+            tools:ignore="Autofill,HardcodedText,LabelFor"
+            />
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="@string/choose_color"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
+            android:textColor="?android:textColorSecondary"
+            android:textSize="@dimen/title_size"
+            />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/color_view"
+        android:layout_marginTop="4dp"/>
+
+
+
+
+</LinearLayout>

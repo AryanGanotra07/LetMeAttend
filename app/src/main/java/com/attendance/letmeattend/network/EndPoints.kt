@@ -24,5 +24,7 @@ interface EndPoints {
     fun getLecturesByDay(@Query("day") day: Int) : Call<List<LectureModel>>
     @GET("/lecture/all")
     fun getAllLectures() : Call<List<LectureModel>>
+    @POST("/subject")
+    fun addSubject(@Body subject: HashMap<String, String>) : Call<SubjectModel>
 
 }

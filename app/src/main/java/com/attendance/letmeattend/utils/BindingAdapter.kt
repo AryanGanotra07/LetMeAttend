@@ -29,6 +29,7 @@ import com.nightonke.boommenu.BoomButtons.OnBMClickListener
 import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton
 import com.nightonke.boommenu.BoomMenuButton
 import com.ramotion.fluidslider.FluidSlider
+import java.lang.Exception
 import java.security.AccessController.getContext
 import kotlin.math.abs
 
@@ -64,7 +65,13 @@ fun setSubjectColor(view: CardView, color:String) {
 //        color.observe(parentActivity, Observer { value ->
 //            view.setCardBackgroundColor(Color.parseColor(value)) })
 //    }
-    view.setCardBackgroundColor(Color.parseColor(color))
+    try {
+        view.setCardBackgroundColor(Color.parseColor(color))
+    }
+    catch (e : Exception) {
+
+    }
+
 
 }
 

@@ -16,15 +16,16 @@ import androidx.lifecycle.ViewModelProviders
 import com.attendance.letmeattend.R
 import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.activities.EnterDetailsActivity
-import com.attendance.letmeattend.firebase.Repository
 import com.attendance.letmeattend.activities.MapFragment
 import com.attendance.letmeattend.activities.details.EnterDetails
+import com.attendance.letmeattend.activities.details.NewRepository
 import com.attendance.letmeattend.models.CollegeLocation
 import com.attendance.letmeattend.models.LoginResponse
 import com.attendance.letmeattend.models.User
 import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.services.boot.BootCompleteReciever
 import com.attendance.letmeattend.sharedpreferences.LocalRepository
+import com.attendance.letmeattend.utils.Constants
 import com.attendance.letmeattend.utils.toast
 import com.attendance.letmeattend.viewmodels.LoginViewModel
 import com.firebase.ui.auth.AuthUI
@@ -225,7 +226,9 @@ class FirebaseLogin: AppCompatActivity(),View.OnClickListener {
                             val data = response.body()
 //                            val access_token = data?.get("access_token")
                             Log.d(TAG,"got access token-"+data?.access_token)
-                            LocalRepository.setAuthenticationToken(data?.access_token.toString())
+                            LocalRepository.setAuthenticationToken(data?.access_token!!)
+                            Constants.setAuthToken(data?.access_token!!)
+                            NewRepository.refreshService()
                             AppApplication.context!!.toast("User registered")
                             startActivity(
                                 Intent(

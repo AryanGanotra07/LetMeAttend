@@ -4,9 +4,12 @@ import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.attendance.letmeattend.R
+import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.databinding.LectureResourceBinding
 import com.attendance.letmeattend.databinding.LectureTtBinding
 import com.attendance.letmeattend.databinding.SubjectResourceBinding
@@ -25,6 +28,7 @@ class LectureNewRecyclerAdapter() : RecyclerView.Adapter<LectureNewRecyclerAdapt
 
     private lateinit var lectures : List<LectureModel>
     private lateinit var clickListener: OnLectureClickListener
+    private  val animation : Animation = AnimationUtils.loadAnimation(AppApplication?.context!!.applicationContext , R.anim.abc_slide_in_bottom)
 
     private var position = 0
 
@@ -82,6 +86,7 @@ class LectureNewRecyclerAdapter() : RecyclerView.Adapter<LectureNewRecyclerAdapt
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding : LectureResourceBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context),
             R.layout.lecture_resource,parent,false)
+        binding.root.startAnimation(animation)
         parent.context.toast(itemCount.toString())
         return ViewHolder(binding)
     }

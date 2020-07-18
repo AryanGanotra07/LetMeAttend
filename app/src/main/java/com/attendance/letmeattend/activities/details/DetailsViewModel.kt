@@ -22,6 +22,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class DetailsViewModel : ViewModel() {
     private val service  = RetrofitServiceBuilder.buildServiceWithAuth(EndPoints::class.java)
@@ -44,6 +46,48 @@ class DetailsViewModel : ViewModel() {
     val updateAttendanceCriteriaClickListener = View.OnClickListener {
 
     }
+
+    fun addSubject(subject : HashMap<String, String>) {
+        NewRepository.addSubject(subject).enqueue(object : Callback<SubjectModel> {
+            override fun onFailure(call: Call<SubjectModel>, t: Throwable) {
+                Log.d(TAG, "Subject adding failed" + t.message)
+            }
+
+            override fun onResponse(call: Call<SubjectModel>, response: Response<SubjectModel>) {
+                if (response.isSuccessful) {
+                    Log.d(TAG, "Subject added successuly")
+                    val subjectModel = response.body()
+                    var subjects = subjectsLiveData.value
+                    if (subjects.isNullOrEmpty()) {
+                        subjects = listOf(subjectModel!!)
+                        subjectsLiveData.postValue(subjects)
+                    }
+                    else {
+                        val subjectsML = subjects.toMutableList()
+                        subjectsML.add(0, subjectModel!!)
+                        subjectsLiveData.postValue(subjectsML)
+
+                    }
+//                    var subjectsArrayList : MutableList<SubjectModel> = ArrayList()
+//                    if (subjects != null)
+//                    {
+//                        subjectsArrayList = subjects!!.toMutableList()
+//                    }
+//                    if (subjectsArrayList!=null) {
+//                        subjectsArrayList.add(0, subjectModel!!)
+//                        subjectsLiveData.postValue(subjectsArrayList)
+//                    }
+//                    subjectRecyclerAdapter.addSubject(subjectModel!!)
+
+//                    subjectRecyclerAdapter.addSubject(subjectModel!!)
+                }
+               else {
+                    Log.d(TAG, "Subject adding failed" + response.message())
+                }
+            }
+
+        })
+    }
     private fun updateAttendanceCriteria(attendance : Int) : Call<JSONObject>  {
         return service.updateUserAttendanceCriteria(AttendanceCriteria(attendance))
     }
@@ -56,11 +100,7 @@ class DetailsViewModel : ViewModel() {
     }
 
     fun logout() {
-        FirebaseAuth.getInstance().signOut()
-        val intent = Intent(AppApplication.context, FirebaseLogin::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        AppApplication.context!!.startActivity(intent)
-
+        NewRepository.logout()
     }
 
     fun updateAttendanceCriteriaMethod() {
@@ -118,7 +158,7 @@ class DetailsViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     val subjects = response.body()
                     subjectsLiveData.postValue(subjects)
-                    Log.d(TAG, " Got subjects with length - " + subjects!!.get(0).lectures.size)
+//                    Log.d(TAG, " Got subjects with length - " + subjects!!.get(0).lectures.size)
                 }
                 else {
                     Log.d(TAG, "Subject Response failed..")
@@ -126,6 +166,12 @@ class DetailsViewModel : ViewModel() {
             }
 
         })
+    }
+
+    fun refreshData() {
+        getUserAttendanceCriteria()
+        getUserCourses()
+        getUserLecturesToday()
     }
 
     fun showTimetable() {

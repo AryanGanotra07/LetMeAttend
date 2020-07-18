@@ -14,6 +14,7 @@
 
         android:layout_width="match_parent"
         android:id="@+id/frame"
+
         android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -74,6 +75,7 @@
             android:layout_width="match_parent"
             app:layout_constraintTop_toBottomOf="@+id/app_bar"
             android:fillViewport="true"
+
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_height="match_parent">
 
@@ -81,6 +83,7 @@
             android:id="@+id/contraint"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             >
 
@@ -108,7 +111,6 @@
                 app:bubble_color="@color/colorAccent"
                 app:bubble_text_color="@color/textColorPrimary"
                 app:initial_position="0.75"
-
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:setPosition="@{vm.attendanceCriteriaLiveData}"
@@ -193,7 +195,7 @@
 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+android:id="@+id/add_course_fb"
                     android:background="@color/colorAccent"
                     android:clickable="true"
                     android:src="@drawable/ic_add_black_24dp"
@@ -242,6 +244,7 @@
                 android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+
                 app:layout_constraintTop_toBottomOf="@+id/textView2"
                 android:nestedScrollingEnabled="false"
                 app:lectures="@{vm.lecturesLiveData}"

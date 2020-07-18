@@ -45,4 +45,8 @@ object LocalRepository {
     fun getAuthenticationToken() : String {
         return sharedPref.getString(JWT_TOKEN, null)
     }
+
+    fun logout() {
+        sharedPref.edit().remove(JWT_TOKEN).commit()
+    }
 }

@@ -4,9 +4,12 @@ import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.attendance.letmeattend.R
+import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.databinding.LectureTtBinding
 import com.attendance.letmeattend.databinding.SubjectResourceBinding
 import com.attendance.letmeattend.listeners.OnLectureClickListener
@@ -22,6 +25,7 @@ class SubjectRecyclerAdapter() : RecyclerView.Adapter<SubjectRecyclerAdapter.Vie
 
     private lateinit var subjects : List<SubjectModel>
     private lateinit var clickListener: OnLectureClickListener
+    private  val animation : Animation = AnimationUtils.loadAnimation(AppApplication?.context!!.applicationContext , R.anim.abc_slide_in_bottom)
 
     private var position = 0
 
@@ -38,11 +42,28 @@ class SubjectRecyclerAdapter() : RecyclerView.Adapter<SubjectRecyclerAdapter.Vie
         this.position = position
     }
 
+    fun setClickListener(callback : OnLectureClickListener)
+    {
+        this.clickListener = callback
+        notifyDataSetChanged()
+    }
+
     fun setSubjects(subjects : List<SubjectModel>)
     {
         this.subjects = subjects
         notifyDataSetChanged()
 
+    }
+
+    fun addSubject(subject : SubjectModel) {
+//        if (!subjects.isNullOrEmpty()) {
+//            subjects.
+//
+//        }
+//        else {
+//            subjects = listOf(subject)
+//        }
+//        notifyDataSetChanged()
     }
 //
 //    fun setClickListener(callback : OnLectureClickListener)
@@ -79,6 +100,7 @@ class SubjectRecyclerAdapter() : RecyclerView.Adapter<SubjectRecyclerAdapter.Vie
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding : SubjectResourceBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context),
             R.layout.subject_resource,parent,false)
+        binding.root.startAnimation(animation)
         parent.context.toast(itemCount.toString())
         return ViewHolder(binding)
     }
@@ -98,6 +120,7 @@ class SubjectRecyclerAdapter() : RecyclerView.Adapter<SubjectRecyclerAdapter.Vie
             setPosition(holder.adapterPosition)
             false
         }
+        //holder.binding.root.startAnimation(animation)
         holder.bind(subjects.get(position))
 
     }

@@ -3,7 +3,10 @@ package com.attendance.letmeattend.network
 
 
 import android.util.Log
+import com.attendance.letmeattend.activities.details.NewRepository
+import com.attendance.letmeattend.authentication.AuthenticationHelper
 import com.attendance.letmeattend.sharedpreferences.LocalRepository
+import com.attendance.letmeattend.utils.Constants
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -19,7 +22,7 @@ object RetrofitServiceBuilder {
 
     fun <T> buildService(service: Class<T>): T {
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.100.3:5000")
+            .baseUrl("http://192.168.0.105:5000")
             .addConverterFactory(GsonConverterFactory.create())
             .client(client.build())
             .build()
@@ -27,7 +30,9 @@ object RetrofitServiceBuilder {
     }
 
     fun <T> buildServiceWithAuth(service: Class<T>): T {
-        val token = LocalRepository.getAuthenticationToken()
+
+        var  token = LocalRepository.getAuthenticationToken()
+
         Log.d(TAG, "Got token-" +token)
             var interceptor: Interceptor = object : Interceptor {
                 override fun intercept(chain: Interceptor.Chain): Response {
@@ -40,7 +45,7 @@ object RetrofitServiceBuilder {
             }
             client.addInterceptor(interceptor)
             val retrofit = Retrofit.Builder()
-                .baseUrl("http://192.168.100.3:5000")
+                .baseUrl("http://192.168.0.105:5000")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client.build())
                 .build()

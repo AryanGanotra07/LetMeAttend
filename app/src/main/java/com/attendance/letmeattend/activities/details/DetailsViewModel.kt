@@ -1,6 +1,7 @@
 package com.attendance.letmeattend.activities.details
 
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -284,5 +285,10 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
 
     override fun onSubjectClicked(subjectModel: SubjectModel) {
         Log.d(TAG, "Clicked subject")
+        val fragment = TimeTable()
+        val bundle = Bundle()
+        bundle.putParcelable("subject", subjectModel)
+        fragment.arguments = bundle
+        fragmentDisplayer.postValue(fragment)
     }
 }

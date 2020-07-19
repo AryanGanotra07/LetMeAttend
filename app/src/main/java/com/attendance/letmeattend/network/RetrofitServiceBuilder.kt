@@ -22,7 +22,7 @@ object RetrofitServiceBuilder {
 
     fun <T> buildService(service: Class<T>): T {
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.43.103:5000")
+            .baseUrl("http://192.168.0.104:5000")
             .addConverterFactory(GsonConverterFactory.create())
             .client(client.build())
             .build()
@@ -45,7 +45,7 @@ object RetrofitServiceBuilder {
             }
             client.addInterceptor(interceptor)
             val retrofit = Retrofit.Builder()
-                .baseUrl("http://192.168.43.103:5000")
+                .baseUrl("http://192.168.0.104:5000")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client.build())
                 .build()

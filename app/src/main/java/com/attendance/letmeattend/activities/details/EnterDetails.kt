@@ -104,7 +104,7 @@ class EnterDetails : AppCompatActivity() {
 
             customView(R.layout.add_course, scrollable = true, horizontalPadding = true)
             val nameET = getCustomView().findViewById<EditText>(R.id.course_name)
-            var my_color : Int = Color.RED
+            var my_color : Int = Color.DKGRAY
             positiveButton(R.string.add_course) { dialog ->
                 val json = HashMap<String, Any>()
                 json.put("name", nameET.text.toString())
@@ -112,14 +112,14 @@ class EnterDetails : AppCompatActivity() {
                 Log.d(TAG, json.toString())
                 viewModel.addSubject(json)
             }
+            val topLevel = intArrayOf(Color.DKGRAY,Color.parseColor("#62af97"),Color.parseColor("#69b5e1"),Color.parseColor("#00587f"),Color.parseColor("#cfe1af"),Color.parseColor("#d1d8e1"),Color.parseColor("#e1c6b0"),Color.parseColor("#bbe1df"),Color.parseColor("#4a4c7f"),Color.parseColor("#a8a7e1"),Color.parseColor("#e2c09e"),Color.parseColor("#566be2"))
             val color_button = getCustomView().findViewById<FloatingActionButton>(R.id.color_view)
-            color_button.setBackgroundTintList(ColorStateList.valueOf(Color.RED))
+            color_button.setBackgroundTintList(ColorStateList.valueOf(topLevel.get(0)))
             color_button.setOnClickListener {
                 MaterialDialog(this@EnterDetails).show {
                     title(R.string.choose_color)
-                    colorChooser(
-                        ColorPalette.Accent
-                    ) { _, color ->
+                    colorChooser(topLevel)
+                    { _, color ->
                         toast("Selected color: ${color}")
                         my_color = color
                         color_button.setBackgroundColor(Color.BLACK)

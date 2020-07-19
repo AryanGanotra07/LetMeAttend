@@ -41,6 +41,10 @@ object NewRepository {
         return service.updateSubject(subject)
     }
 
+    fun getLecturesBySubject(id : Int) : Call<List<LectureModel>> {
+        return service.getLecturesBySubject(id)
+    }
+
     fun logout(){
         FirebaseAuth.getInstance().signOut()
         LocalRepository.logout()

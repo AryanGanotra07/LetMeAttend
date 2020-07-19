@@ -20,6 +20,8 @@ interface EndPoints {
     @GET("/lecture/all")
     fun getLecturesByDay(@Query("day") day: Int) : Call<List<LectureModel>>
     @GET("/lecture/all")
+    fun getLecturesBySubject(@Query("sub_id") id: Int) : Call<List<LectureModel>>
+    @GET("/lecture/all")
     fun getAllLectures() : Call<List<LectureModel>>
     @POST("/subject")
     fun addSubject(@Body subject: HashMap<String, Any>) : Call<SubjectModel>

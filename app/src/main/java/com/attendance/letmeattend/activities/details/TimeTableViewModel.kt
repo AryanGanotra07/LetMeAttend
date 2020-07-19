@@ -86,4 +86,55 @@ class TimeTableViewModel : ViewModel() {
 
         })
     }
+
+    fun getLecturesBySubjects(id: Int) {
+        NewRepository.getLecturesBySubject(id).enqueue(object : retrofit2.Callback<List<LectureModel>> {
+            override fun onFailure(call: Call<List<LectureModel>>, t: Throwable) {
+                Log.d(TAG,"Lectures getting failed"+t.message)
+            }
+
+            override fun onResponse(
+                call: Call<List<LectureModel>>,
+                response: Response<List<LectureModel>>
+            ) {
+                if (response.isSuccessful) {
+                    val lectures = response.body()
+//                   lectures!!.forEach { lecture ->
+//                       when(lecture.day) {
+//                           0 -> monday.plus(lecture)
+//                           1 -> tueday.plus(lecture)
+//                           2 -> wednesday.plus(lecture)
+//                           3 -> thursday.plus(lecture)
+//                           4 -> friday.plus(lecture)
+//                           5 -> saturday.plus(lecture)
+//                           6 -> sunday.plus(lecture)
+//                       }
+//                   }
+                    monday = lectures!!.filter { lectureModel -> lectureModel.day == 0 }
+                    tueday = lectures!!.filter { lectureModel -> lectureModel.day == 1 }
+                    wednesday = lectures!!.filter { lectureModel -> lectureModel.day == 2 }
+                    thursday = lectures!!.filter { lectureModel -> lectureModel.day == 3 }
+                    friday = lectures!!.filter { lectureModel -> lectureModel.day == 4 }
+                    saturday = lectures!!.filter { lectureModel -> lectureModel.day == 5 }
+                    sunday = lectures!!.filter { lectureModel -> lectureModel.day == 6 }
+
+                    mondayLectures.postValue(monday)
+                    tuesdayLectures.postValue(tueday)
+                    wednesdayLectures.postValue(wednesday)
+                    thursdayLectures.postValue(thursday)
+                    fridayLectures.postValue(friday)
+                    saturdayLectures.postValue(saturday)
+                    sundayLectures.postValue(sunday)
+                    Log.d(TAG, " Got lectures" + monday.size + " " + tueday.size + " " + wednesday.size + " " + thursday.size + " " + friday.size + " " +saturday.size)
+
+                }
+                else {
+                    Log.d(TAG, "Lectures getting failed"+response.message())
+                }
+            }
+
+        })
+    }
+
+
 }

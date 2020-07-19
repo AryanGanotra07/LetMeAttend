@@ -17,11 +17,11 @@ class LectureNewViewModel() : ViewModel() {
 
     fun bind(lecture: LectureModel)
     {
-        lectureName.value = lecture.name
-        lectureColor.value = lecture.color
-        day.value = lecture.day
-        startTime.value = lecture.start_time
-        endTime.value = lecture.end_time
+//        lectureName.value = lecture.name
+//        lectureColor.value = lecture.color
+//        day.value = lecture.day
+//        startTime.value = lecture.start_time
+//        endTime.value = lecture.end_time
         this.lecture = lecture
     }
 

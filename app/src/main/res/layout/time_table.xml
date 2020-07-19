@@ -22,6 +22,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             app:elevation="0dp"
+            android:background="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -32,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/toolbar"
                 app:layout_scrollFlags="scroll|enterAlways|snap"
-                android:background="@color/colorPrimary">
+                >
 
             <RelativeLayout
                     android:layout_width="match_parent"
@@ -47,6 +48,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/TimeTable"
                         android:textSize="40sp"
+                        android:id="@+id/title_toolbar"
                         android:gravity="center_vertical"
                         android:layout_centerVertical="true"
                         android:layout_alignParentLeft="true"

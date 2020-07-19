@@ -17,11 +17,11 @@ class SubjectViewModel() : ViewModel() {
 
     fun bind(subject: SubjectModel)
     {
-        subjectName.value = subject.name
-        subjectColor.value = subject.color
-        currentAttendance.value = subject.current_attendance
-        totalAttendance.value = subject.total_attendance
-        lectures.value = subject.lectures
+//        subjectName.value = subject.name
+//        subjectColor.value = subject.color
+//        currentAttendance.value = subject.current_attendance
+//        totalAttendance.value = subject.total_attendance
+//        lectures.value = subject.lectures
         this.subject = subject
     }
 

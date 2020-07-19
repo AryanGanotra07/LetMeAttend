@@ -53,6 +53,13 @@
                         android:layout_centerVertical="true"
                         android:layout_alignParentLeft="true"
                         />
+                <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:tint="@color/colorAccent"
+                        android:id="@+id/add_lecture_fb"
+                        android:layout_alignParentRight="true"
+                        android:src="@drawable/ic_add_black_24dp"/>
 
             </RelativeLayout>
 
@@ -92,12 +99,12 @@
                 android:layout_alignParentLeft="true"
                 android:id="@+id/monday_tv"
                 android:textSize="28sp" />
-        <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:tint="@color/colorAccent"
-                android:layout_alignParentRight="true"
-            android:src="@drawable/ic_add_black_24dp"/>
+<!--        <ImageView-->
+<!--                android:layout_width="50dp"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:tint="@color/colorAccent"-->
+<!--                android:layout_alignParentRight="true"-->
+<!--            android:src="@drawable/ic_add_black_24dp"/>-->
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -128,12 +135,12 @@
                 android:textColor="@color/quantum_white_100"
                 android:textSize="28sp" />
 
-        <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/ic_add_black_24dp"
-                android:tint="@color/colorAccent" />
+<!--        <ImageView-->
+<!--                android:layout_width="50dp"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_alignParentRight="true"-->
+<!--                android:src="@drawable/ic_add_black_24dp"-->
+<!--                android:tint="@color/colorAccent" />-->
 
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
@@ -165,12 +172,12 @@
                 android:textColor="@color/quantum_white_100"
                 android:textSize="28sp" />
 
-        <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/ic_add_black_24dp"
-                android:tint="@color/colorAccent" />
+<!--        <ImageView-->
+<!--                android:layout_width="50dp"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_alignParentRight="true"-->
+<!--                android:src="@drawable/ic_add_black_24dp"-->
+<!--                android:tint="@color/colorAccent" />-->
 
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
@@ -201,12 +208,12 @@
                 android:textColor="@color/quantum_white_100"
                 android:textSize="28sp" />
 
-        <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/ic_add_black_24dp"
-                android:tint="@color/colorAccent" />
+<!--        <ImageView-->
+<!--                android:layout_width="50dp"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_alignParentRight="true"-->
+<!--                android:src="@drawable/ic_add_black_24dp"-->
+<!--                android:tint="@color/colorAccent" />-->
 
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
@@ -237,12 +244,12 @@
                 android:textColor="@color/quantum_white_100"
                 android:textSize="28sp" />
 
-        <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/ic_add_black_24dp"
-                android:tint="@color/colorAccent" />
+<!--        <ImageView-->
+<!--                android:layout_width="50dp"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_alignParentRight="true"-->
+<!--                android:src="@drawable/ic_add_black_24dp"-->
+<!--                android:tint="@color/colorAccent" />-->
 
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
@@ -274,12 +281,12 @@
                 android:textColor="@color/quantum_white_100"
                 android:textSize="28sp" />
 
-        <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/ic_add_black_24dp"
-                android:tint="@color/colorAccent" />
+<!--        <ImageView-->
+<!--                android:layout_width="50dp"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_alignParentRight="true"-->
+<!--                android:src="@drawable/ic_add_black_24dp"-->
+<!--                android:tint="@color/colorAccent" />-->
 
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
@@ -310,12 +317,12 @@
                 android:textColor="@color/quantum_white_100"
                 android:textSize="28sp" />
 
-        <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/ic_add_black_24dp"
-                android:tint="@color/colorAccent" />
+<!--        <ImageView-->
+<!--                android:layout_width="50dp"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_alignParentRight="true"-->
+<!--                android:src="@drawable/ic_add_black_24dp"-->
+<!--                android:tint="@color/colorAccent" />-->
 
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"

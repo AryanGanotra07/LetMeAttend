@@ -42,6 +42,8 @@
     <string name="add_course">Add Course</string>
     <string name="select">Select</string>
     <string name="edit_course">Edit Course</string>
+    <string name="add_lectures">Add Lectures</string>
+    <string name="day">Select day</string>
 
 
 

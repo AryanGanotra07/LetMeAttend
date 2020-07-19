@@ -6,15 +6,25 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.*
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import com.afollestad.materialdialogs.DialogBehavior
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.ModalDialog
+import com.afollestad.materialdialogs.bottomsheets.BottomSheet
+import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.customview.getCustomView
+import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.attendance.letmeattend.R
 import com.attendance.letmeattend.databinding.TimeTableBinding
 import com.attendance.letmeattend.models.SubjectModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.time_table.*
 import kotlinx.android.synthetic.main.time_table.view.*
+import java.util.HashMap
 
 class TimeTable : Fragment() {
 
@@ -51,6 +61,10 @@ class TimeTable : Fragment() {
             binding.titleToolbar.setText(subject.name)
         }
 
+        binding.addLectureFb.setOnClickListener {
+            addLectureDialog(BottomSheet())
+        }
+
 
 
         binding.vm = viewModel
@@ -60,6 +74,30 @@ class TimeTable : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //(activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+
+    }
+
+    private fun addLectureDialog(dialogBehavior: DialogBehavior = ModalDialog) {
+
+        val dialog = MaterialDialog(this.context!!, dialogBehavior).show {
+            title(R.string.edit_course)
+
+            customView(R.layout.alert_save_subject, scrollable = true, horizontalPadding = true)
+            //nameET.setText(subjectModel.name)
+            positiveButton(R.string.add_course) { dialog ->
+
+            }
+
+
+//            getCustomView().findViewById<TextView>(R.id.monday_tv).setOnClickListener {
+//                Log.d(TAG, viewModel.getDay())
+//                viewModel.getUserCourses()
+//            }
+            negativeButton(android.R.string.cancel)
+            lifecycleOwner(this@TimeTable)
+        }
+
 
 
     }

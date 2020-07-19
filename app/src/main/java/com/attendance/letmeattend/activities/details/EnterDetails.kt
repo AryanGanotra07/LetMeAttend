@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.DialogBehavior
 import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
@@ -22,18 +24,23 @@ import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.color.ColorPalette
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
+import com.afollestad.materialdialogs.datetime.timePicker
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
+import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.attendance.letmeattend.R
+import com.attendance.letmeattend.adapters.LectureNewRecyclerAdapter
 import com.attendance.letmeattend.databinding.DetailsActivityBinding
+import com.attendance.letmeattend.models.LectureModel
 import com.attendance.letmeattend.models.SubjectModel
 import com.attendance.letmeattend.utils.toast
 import com.attendance.letmeattend.viewmodels.EnterDetailsViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.alert_save_subject.*
 import okhttp3.internal.proxy.NullProxySelector.select
 import okhttp3.internal.toHexString
 import org.json.JSONObject
 import org.w3c.dom.Text
-import java.util.HashMap
+import java.util.*
 
 
 class EnterDetails : AppCompatActivity() {
@@ -114,6 +121,11 @@ class EnterDetails : AppCompatActivity() {
             }
             val topLevel = intArrayOf(Color.DKGRAY,Color.parseColor("#62af97"),Color.parseColor("#69b5e1"),Color.parseColor("#00587f"),Color.parseColor("#cfe1af"),Color.parseColor("#d1d8e1"),Color.parseColor("#e1c6b0"),Color.parseColor("#bbe1df"),Color.parseColor("#4a4c7f"),Color.parseColor("#a8a7e1"),Color.parseColor("#e2c09e"),Color.parseColor("#566be2"))
             val color_button = getCustomView().findViewById<FloatingActionButton>(R.id.color_view)
+            val recyclerView = getCustomView().findViewById<RecyclerView>(R.id.recyclerView)
+            val layoutManager = LinearLayoutManager(this@EnterDetails, RecyclerView.HORIZONTAL, false)
+            val adapter = LectureNewRecyclerAdapter()
+            recyclerView.layoutManager = layoutManager
+            recyclerView.adapter = adapter
             color_button.setBackgroundTintList(ColorStateList.valueOf(topLevel.get(0)))
             color_button.setOnClickListener {
                 MaterialDialog(this@EnterDetails).show {
@@ -129,6 +141,67 @@ class EnterDetails : AppCompatActivity() {
                     positiveButton(R.string.select)
                     negativeButton(android.R.string.cancel)
                     lifecycleOwner(this@EnterDetails)
+                }
+            }
+
+            val add_lecture = getCustomView().findViewById<FloatingActionButton>(R.id.add_lecture_fb)
+            val lecture : LectureModel = LectureModel(-1,1,"","","",my_color)
+            add_lecture.setOnClickListener {
+                val dialog = MaterialDialog(this@EnterDetails).show {
+                    title(R.string.add_lectures)
+                    customView(R.layout.add_lecture, scrollable = true, horizontalPadding = true)
+                    positiveButton(R.string.add_lectures) { dialog ->
+                        adapter.addLecture(lecture)
+
+//                        val json = HashMap<String, Any>()
+//                        json.put("name", nameET.text.toString())
+//                        json.put("color", my_color)
+//                        Log.d(TAG, json.toString())
+//                        viewModel.addSubject(json)
+                    }
+                    negativeButton(android.R.string.cancel)
+                    val day_select = getCustomView().findViewById<TextView>(R.id.day_tv)
+                    val start_time_selet = getCustomView().findViewById<TextView>(R.id.start_time)
+                    val end_time_select = getCustomView().findViewById<TextView>(R.id.end_time)
+                    day_select.setOnClickListener {
+                        MaterialDialog(this@EnterDetails).show {
+                            title(R.string.day)
+                            listItemsSingleChoice(R.array.days, initialSelection = 0) { _, index, text ->
+                                toast("Selected item $text at index $index")
+                                day_select.setText(text)
+                                lecture.day = index
+                            }
+                            lifecycleOwner(this@EnterDetails)
+                        }
+                    }
+                    start_time_selet.setOnClickListener {
+                        MaterialDialog(this@EnterDetails).show {
+                            title(R.string.dialog_select_time)
+                            timePicker { _, time ->
+                                val hourOfDay = time.get(Calendar.HOUR_OF_DAY)
+                                val minute = time.get(Calendar.MINUTE)
+                                val seconds = time.get(Calendar.SECOND)
+                                start_time_selet.setText(String.format("%02d:%02d:%02d", hourOfDay,minute,seconds))
+                                lecture.start_time = String.format("%02d:%02d:%02d", hourOfDay,minute,seconds)
+                            }
+
+                            lifecycleOwner(this@EnterDetails)
+                        }
+                    }
+                    end_time_select.setOnClickListener {
+                        MaterialDialog(this@EnterDetails).show {
+                            title(R.string.choose_time)
+                            timePicker { _, time ->
+                                val hourOfDay = time.get(Calendar.HOUR_OF_DAY)
+                                val minute = time.get(Calendar.MINUTE)
+                                val seconds = time.get(Calendar.SECOND)
+                                end_time_select.setText(String.format("%02d:%02d:%02d", hourOfDay,minute,seconds))
+                                lecture.end_time = String.format("%02d:%02d:%02d", hourOfDay,minute,seconds)
+                            }
+                            lifecycleOwner(this@EnterDetails)
+                        }
+                    }
+
                 }
             }
 

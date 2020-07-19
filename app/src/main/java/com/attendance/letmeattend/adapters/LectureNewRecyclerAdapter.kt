@@ -45,6 +45,17 @@ class LectureNewRecyclerAdapter() : RecyclerView.Adapter<LectureNewRecyclerAdapt
         this.position = position
     }
 
+    fun addLecture(lecture: LectureModel) {
+        if (::lectures.isInitialized) {
+            val newLectures = lectures.plus(lecture)
+            this.lectures = newLectures
+        }
+        else {
+            this.lectures = arrayOf(lecture).toList()
+        }
+        notifyDataSetChanged()
+    }
+
     fun setLectures(lectures : List<LectureModel>)
     {
         this.lectures = lectures

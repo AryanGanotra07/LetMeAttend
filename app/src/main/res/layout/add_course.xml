@@ -50,6 +50,42 @@
             android:id="@+id/color_view"
         android:layout_marginTop="4dp"/>
 
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp">
+
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_lectures"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
+            android:textColor="?android:textColorSecondary"
+            android:textSize="@dimen/title_size"
+            />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_lecture_fb"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_add_black_24dp"
+                android:layout_marginTop="4dp"/>
+
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:id="@+id/recyclerView"
+            />
+
+
 
 
 

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+                name="vm"
+                type="com.attendance.letmeattend.viewmodels.LectureNewViewModel" />
+
+    </data>
+
+
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="20dp"
+            android:layout_marginRight="12dp"
+            app:cardCornerRadius="10dp"
+            app:setSubjectColor="@{vm.lecture.color}">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:orientation="vertical">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{vm.lecture.name}"
+                    android:layout_alignParentLeft="true"
+                    android:textSize="22sp"
+                    android:layout_marginTop="6dp"
+                    >
+
+            </TextView>
+
+<!--            <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_alignParentLeft="true"-->
+<!--                    android:textColor="@color/colorAccent"-->
+<!--                    app:startTimer="@{vm.lecture}"-->
+<!--                    android:textSize="18sp"-->
+<!--                    android:layout_marginTop="6dp"-->
+<!--                    >-->
+
+<!--            </TextView>-->
+
+
+                        <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:orientation="horizontal"
+                                >
+                            <!--                <TextView-->
+                            <!--                        android:layout_width="match_parent"-->
+                            <!--                        android:layout_height="wrap_content"-->
+
+                            <!--                        android:textColor="@color/quantum_white_100"-->
+                            <!--                        android:text="@{vm.lecture.name}"-->
+                            <!--                        android:textSize="20sp"-->
+                            <!--                        >-->
+                            <!--                    -->
+                            <!--                  -->
+
+
+                            <!--                </TextView>-->
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/start_time"
+                                    android:layout_alignParentLeft="true"
+                                    android:textColor="@color/colorAccent"
+                                    android:layout_weight="1"
+                                    android:id="@+id/start_time"
+                                    >
+
+                            </TextView>
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@{vm.lecture.start_time}"
+                                    android:layout_marginLeft="6dp"
+                                    android:layout_weight="1"
+                                    android:layout_toRightOf="@+id/start_time"
+
+                                    >
+
+                            </TextView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:orientation="horizontal"
+                                >
+                            <!--                <TextView-->
+                            <!--                        android:layout_width="match_parent"-->
+                            <!--                        android:layout_height="wrap_content"-->
+
+                            <!--                        android:textColor="@color/quantum_white_100"-->
+                            <!--                        android:text="@{vm.lecture.name}"-->
+                            <!--                        android:textSize="20sp"-->
+                            <!--                        >-->
+                            <!--                    -->
+                            <!--                  -->
+
+
+                            <!--                </TextView>-->
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/end_time"
+                                    android:layout_alignParentLeft="true"
+                                    android:id="@+id/end_time"
+                                    android:layout_weight="1"
+                                    android:textColor="@color/colorAccent"
+                                    >
+
+                            </TextView>
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@{vm.lecture.end_time}"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_marginLeft="6dp"
+                                    android:layout_weight="1"
+                                    android:layout_toRightOf="@+id/end_time"
+
+
+                                    >
+
+                            </TextView>
+                        </LinearLayout>
+
+            <!--            <RelativeLayout-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_marginTop="6dp">-->
+            <!--                &lt;!&ndash;                    <ImageView&ndash;&gt;-->
+            <!--                &lt;!&ndash;                            android:layout_width="wrap_content"&ndash;&gt;-->
+            <!--                &lt;!&ndash;                            android:layout_height="wrap_content"&ndash;&gt;-->
+            <!--                &lt;!&ndash;                            android:tint="@color/colorAccent"&ndash;&gt;-->
+            <!--                &lt;!&ndash;                            android:layout_marginRight="6dp"&ndash;&gt;-->
+            <!--                &lt;!&ndash;                            android:layout_toLeftOf="@id/delete_lecture"&ndash;&gt;-->
+            <!--                &lt;!&ndash;                            android:id="@+id/edit_lecture"&ndash;&gt;-->
+            <!--                &lt;!&ndash;                            android:src="@drawable/ic_edit_black_24dp"/>&ndash;&gt;-->
+
+            <!--            </RelativeLayout>-->
+
+
+
+
+            <!--                app:setMutableText = "@{vm.getLectureSTime()}"-->
+
+
+
+            <!--                app:setMutableText = "@{vm.getLectureETime()}"-->
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+                                    <ImageView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:tint="@color/colorAccent"
+                                            android:layout_marginRight="6dp"
+                                            android:layout_toLeftOf="@id/delete_lecture"
+                                            android:id="@+id/edit_lecture"
+                                            android:src="@drawable/ic_edit_black_24dp"/>
+
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:tint="@color/colorAccent"
+                        android:layout_alignParentRight="true"
+                        android:id="@+id/delete_lecture"
+                        android:src="@drawable/ic_delete_black_24dp"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+
+    </androidx.cardview.widget.CardView>
+
+
+</layout>

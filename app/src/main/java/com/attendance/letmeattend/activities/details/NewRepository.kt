@@ -10,8 +10,10 @@ import com.attendance.letmeattend.network.EndPoints
 import com.attendance.letmeattend.network.RetrofitServiceBuilder
 import com.attendance.letmeattend.sharedpreferences.LocalRepository
 import com.google.firebase.auth.FirebaseAuth
+import com.google.gson.JsonObject
 import org.json.JSONObject
 import retrofit2.Call
+import retrofit2.Callback
 import java.util.HashMap
 
 object NewRepository {
@@ -29,6 +31,10 @@ object NewRepository {
         return service.getAllLectures()
     }
 
+    fun addLectureBySubject(lectureModel: LectureModel, sub_id : Int) : Call<LectureModel> {
+return service.addLectureBySubject(sub_id, lectureModel.toJSON())
+    }
+
     fun addSubject(subject : HashMap<String, Any>) : Call<SubjectModel> {
         return service.addSubject(subject)
     }
@@ -43,6 +49,18 @@ object NewRepository {
 
     fun getLecturesBySubject(id : Int) : Call<List<LectureModel>> {
         return service.getLecturesBySubject(id)
+    }
+
+    fun addSubjectWithLectures(json : JsonObject) : Call<SubjectModel> {
+        return service.addSubjectWithLectures(json)
+    }
+
+    fun deleteLecture(lectureModel: LectureModel) : Call<JSONObject> {
+        return service.deleteLecture(lectureModel.id)
+    }
+
+    fun updateLecture(lectureModel: JsonObject) : Call<LectureModel> {
+        return service.updateLecture(lectureModel)
     }
 
     fun logout(){

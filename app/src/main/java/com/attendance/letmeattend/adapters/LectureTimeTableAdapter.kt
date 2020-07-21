@@ -6,14 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.attendance.letmeattend.R
 import com.attendance.letmeattend.application.AppApplication
-import com.attendance.letmeattend.databinding.LectureResourceBinding
-import com.attendance.letmeattend.databinding.LectureTodayBinding
-import com.attendance.letmeattend.databinding.LectureTtBinding
-import com.attendance.letmeattend.databinding.SubjectResourceBinding
+import com.attendance.letmeattend.databinding.*
+import com.attendance.letmeattend.listeners.LectureListeners
 import com.attendance.letmeattend.listeners.OnLectureClickListener
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.models.LectureModel
@@ -25,10 +24,10 @@ import com.attendance.letmeattend.viewmodels.SubjectViewModel
 import javax.security.auth.Subject
 
 
-class LectureNewRecyclerAdapter() : RecyclerView.Adapter<LectureNewRecyclerAdapter.ViewHolder>() {
+class LectureTimeTableAdapter() : RecyclerView.Adapter<LectureTimeTableAdapter.ViewHolder>() {
 
     private lateinit var lectures : List<LectureModel>
-    private lateinit var clickListener: OnLectureClickListener
+    private lateinit var clickListener: LectureListeners
     private  val animation : Animation = AnimationUtils.loadAnimation(AppApplication?.context!!.applicationContext , R.anim.abc_slide_in_bottom)
 
     private var position = 0
@@ -63,22 +62,23 @@ class LectureNewRecyclerAdapter() : RecyclerView.Adapter<LectureNewRecyclerAdapt
         notifyDataSetChanged()
 
     }
-//
-//    fun setClickListener(callback : OnLectureClickListener)
-//    {
-//        this.clickListener = callback
-//        notifyDataSetChanged()
-//    }
 
-    class ViewHolder(val binding: LectureTodayBinding) : RecyclerView.ViewHolder(binding.root), View.OnCreateContextMenuListener {
+    fun setClickListener(callback : LectureListeners)
+    {
+        this.clickListener = callback
+        notifyDataSetChanged()
+    }
+
+    class ViewHolder(val binding: LectureTimetableBinding) : RecyclerView.ViewHolder(binding.root), View.OnCreateContextMenuListener {
         val vm : LectureNewViewModel = LectureNewViewModel()
         private var day = 0
         fun bind(lecture : LectureModel)
         {
             binding.vm = vm
             vm.bind(lecture)
-            itemView.context
-            itemView.setOnCreateContextMenuListener(this)
+
+//            itemView.context
+//            itemView.setOnCreateContextMenuListener(this)
 
         }
 
@@ -96,21 +96,28 @@ class LectureNewRecyclerAdapter() : RecyclerView.Adapter<LectureNewRecyclerAdapt
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding : LectureTodayBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context),
-            R.layout.lecture_today,parent,false)
+        val binding : LectureTimetableBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context),
+            R.layout.lecture_timetable,parent,false)
         binding.root.startAnimation(animation)
         parent.context.toast(itemCount.toString())
         return ViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
-       if (::lectures.isInitialized)
-       {
-           return lectures.size
-       }
+        if (::lectures.isInitialized)
+        {
+            return lectures.size
+        }
         else{
-           return 0
-       }
+            return 0
+        }
+    }
+
+    fun deleteLecture(lecture: LectureModel) {
+       val mLectures =  lectures.toMutableList()
+        mLectures.remove(lecture)
+        setLectures(mLectures)
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -119,6 +126,18 @@ class LectureNewRecyclerAdapter() : RecyclerView.Adapter<LectureNewRecyclerAdapt
             false
         }
         holder.bind(lectures.get(position))
+        holder.itemView.findViewById<ImageView>(R.id.edit_lecture).setOnClickListener {
+                setPosition(holder.adapterPosition)
+            if (clickListener!=null) {
+                clickListener.onLectureEdit(holder.adapterPosition,lectures.get(holder.adapterPosition))
+            }
+        }
+        holder.itemView.findViewById<ImageView>(R.id.delete_lecture).setOnClickListener {
+                setPosition(holder.adapterPosition)
+            if (clickListener!=null) {
+                clickListener.onLectureDelete(lectures.get(holder.adapterPosition))
+            }
+        }
 
     }
 

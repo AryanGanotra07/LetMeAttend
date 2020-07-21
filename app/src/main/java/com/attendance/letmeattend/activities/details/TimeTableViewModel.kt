@@ -3,13 +3,18 @@ package com.attendance.letmeattend.activities.details
 import android.util.Log
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
+import com.afollestad.materialdialogs.MaterialDialog
 import com.attendance.letmeattend.adapters.LectureNewRecyclerAdapter
+import com.attendance.letmeattend.adapters.LectureTimeTableAdapter
+import com.attendance.letmeattend.listeners.LectureListeners
 import com.attendance.letmeattend.models.LectureModel
+import com.google.gson.JsonObject
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
 
-class TimeTableViewModel : ViewModel() {
+class TimeTableViewModel : ViewModel(), LectureListeners {
 
     val mondayLectures : MediatorLiveData<List<LectureModel>> = MediatorLiveData()
     val tuesdayLectures : MediatorLiveData<List<LectureModel>> = MediatorLiveData()
@@ -25,18 +30,18 @@ class TimeTableViewModel : ViewModel() {
     private var friday:List<LectureModel> = ArrayList()
     private var saturday:List<LectureModel> = ArrayList()
     private var sunday:List<LectureModel> = ArrayList()
-    val mondayLectureRecyclerAdapter : LectureNewRecyclerAdapter = LectureNewRecyclerAdapter()
-    val tuesdayLectureRecyclerAdapter : LectureNewRecyclerAdapter = LectureNewRecyclerAdapter()
-    val wednesdayLectureRecyclerAdapter : LectureNewRecyclerAdapter = LectureNewRecyclerAdapter()
-    val fridayLectureRecyclerAdapter : LectureNewRecyclerAdapter = LectureNewRecyclerAdapter()
-    val thursdayLectureRecyclerAdapter : LectureNewRecyclerAdapter = LectureNewRecyclerAdapter()
-    val saturdayLectureRecyclerAdapter : LectureNewRecyclerAdapter = LectureNewRecyclerAdapter()
-    val sundayLectureRecyclerAdapter : LectureNewRecyclerAdapter = LectureNewRecyclerAdapter()
+    val mondayLectureRecyclerAdapter : LectureTimeTableAdapter = LectureTimeTableAdapter()
+    val tuesdayLectureRecyclerAdapter : LectureTimeTableAdapter = LectureTimeTableAdapter()
+    val wednesdayLectureRecyclerAdapter : LectureTimeTableAdapter = LectureTimeTableAdapter()
+    val fridayLectureRecyclerAdapter : LectureTimeTableAdapter = LectureTimeTableAdapter()
+    val thursdayLectureRecyclerAdapter : LectureTimeTableAdapter = LectureTimeTableAdapter()
+    val saturdayLectureRecyclerAdapter : LectureTimeTableAdapter = LectureTimeTableAdapter()
+    val sundayLectureRecyclerAdapter : LectureTimeTableAdapter = LectureTimeTableAdapter()
     private val TAG = "TimeTableViewModel"
 
-    init {
-//        getAllLectures()
-    }
+   init {
+
+   }
 
     fun getAllLectures() {
         NewRepository.getAllLectures().enqueue(object : retrofit2.Callback<List<LectureModel>> {
@@ -87,6 +92,115 @@ class TimeTableViewModel : ViewModel() {
         })
     }
 
+    fun addLectureBySubject(lectureModel: LectureModel, sub_id : Int) {
+            NewRepository.addLectureBySubject(lectureModel, sub_id).enqueue(object : retrofit2.Callback<LectureModel> {
+                override fun onFailure(call: Call<LectureModel>, t: Throwable) {
+                    Log.d(TAG, "Lectures adding failed"+t.message)
+                }
+
+                override fun onResponse(
+                    call: Call<LectureModel>,
+                    response: Response<LectureModel>
+                ) {
+                    if (response.isSuccessful) {
+                        Log.d(TAG, "Lectures adding success")
+                        val lectureModel = response.body()
+                        when(lectureModel!!.day) {
+                            0 -> getLectureByLD(lectureModel, mondayLectures)
+                            1 -> getLectureByLD(lectureModel, tuesdayLectures)
+                            2 -> getLectureByLD(lectureModel, wednesdayLectures)
+                            3 -> getLectureByLD(lectureModel, thursdayLectures)
+                            4 -> getLectureByLD(lectureModel, fridayLectures)
+                            5 -> getLectureByLD(lectureModel, saturdayLectures)
+                            6 -> getLectureByLD(lectureModel, sundayLectures)
+                        }
+                    }
+                    else {
+                        Log.d(TAG, "Lectures adding failed"+response.message())
+                    }
+                }
+
+            })
+    }
+
+    private fun getLectureByLD(lectureModel: LectureModel, liveData: MediatorLiveData<List<LectureModel>>) {
+        val lectures = liveData.value
+        if (lectures!=null) {
+            val mLectures = lectures.toMutableList()
+            mLectures.add(lectureModel)
+            liveData.postValue(mLectures)
+        }
+        else {
+            liveData.postValue(arrayOf(lectureModel).toList())
+        }
+    }
+
+     fun deleteLecture(lectureModel: LectureModel) {
+        NewRepository.deleteLecture(lectureModel).enqueue(object : retrofit2.Callback<JSONObject> {
+            override fun onFailure(call: Call<JSONObject>, t: Throwable) {
+                Log.d(TAG, " Deleting lecture failed" + t.message)
+            }
+
+            override fun onResponse(call: Call<JSONObject>, response: Response<JSONObject>) {
+                if (response.isSuccessful) {
+                    Log.d(TAG, "lecture Deleted")
+                    when (lectureModel.day) {
+                        0 -> mondayLectureRecyclerAdapter.deleteLecture(lectureModel)
+                        1 -> tuesdayLectureRecyclerAdapter.deleteLecture(lectureModel)
+                        2 -> wednesdayLectureRecyclerAdapter.deleteLecture(lectureModel)
+                        3 -> thursdayLectureRecyclerAdapter.deleteLecture(lectureModel)
+                        4 -> fridayLectureRecyclerAdapter.deleteLecture(lectureModel)
+                        5 -> saturdayLectureRecyclerAdapter.deleteLecture(lectureModel)
+                        6 -> sundayLectureRecyclerAdapter.deleteLecture(lectureModel)
+                    }
+                }
+                else{
+                    Log.d(TAG, "Lecture deletion failed-"+response.message())
+                }
+            }
+
+        })
+    }
+
+    private fun editLectureFromLD(position: Int, lectureModel: LectureModel, ld : MediatorLiveData<List<LectureModel>>) {
+        var lectures = ld.value!!.toMutableList()
+        lectures[position]= lectureModel!!
+        ld.postValue(lectures)
+    }
+
+
+
+    fun editLecture(position: Int, lectureModel: JsonObject) {
+            NewRepository.updateLecture(lectureModel).enqueue(object : retrofit2.Callback<LectureModel> {
+                override fun onFailure(call: Call<LectureModel>, t: Throwable) {
+                    Log.d(TAG, "Lecture updated failed" + t.message)
+                }
+
+                override fun onResponse(
+                    call: Call<LectureModel>,
+                    response: Response<LectureModel>
+                ) {
+                   if (response.isSuccessful) {
+                       Log.d(TAG, "Lecture update successful")
+                       val lectureModel = response.body()
+                       when(lectureModel!!.day) {
+                           0 -> editLectureFromLD(position,lectureModel,mondayLectures)
+                           1 -> editLectureFromLD(position,lectureModel,tuesdayLectures)
+                           2 -> editLectureFromLD(position,lectureModel,wednesdayLectures)
+                           3 -> editLectureFromLD(position,lectureModel,thursdayLectures)
+                           4 -> editLectureFromLD(position,lectureModel,fridayLectures)
+                           5 -> editLectureFromLD(position,lectureModel,saturdayLectures)
+                           6 -> editLectureFromLD(position,lectureModel,sundayLectures)
+                       }
+                   }
+                    else{
+                       Log.d(TAG, "Lecture updated failed" + response.message())
+                   }
+                }
+
+            })
+    }
+
     fun getLecturesBySubjects(id: Int) {
         NewRepository.getLecturesBySubject(id).enqueue(object : retrofit2.Callback<List<LectureModel>> {
             override fun onFailure(call: Call<List<LectureModel>>, t: Throwable) {
@@ -134,6 +248,16 @@ class TimeTableViewModel : ViewModel() {
             }
 
         })
+    }
+
+
+    override fun onLectureEdit(position: Int, lecture: LectureModel) {
+
+    }
+
+    override fun onLectureDelete(lecture: LectureModel) {
+//        Log.d(TAG, "Edit lecture")
+//        deleteLecture(lecture)
     }
 
 

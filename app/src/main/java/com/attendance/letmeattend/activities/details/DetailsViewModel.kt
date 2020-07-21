@@ -17,6 +17,7 @@ import com.attendance.letmeattend.models.SubjectModel
 import com.attendance.letmeattend.network.EndPoints
 import com.attendance.letmeattend.network.RetrofitServiceBuilder
 import com.google.firebase.auth.FirebaseAuth
+import com.google.gson.JsonObject
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -41,9 +42,9 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
         progressVisibility.value = View.GONE
         attendanceCriteriaLiveData.value = AttendanceCriteria(75)
         subjectRecyclerAdapter.setClickListener(this)
-        getUserAttendanceCriteria()
-        getUserCourses()
-        getUserLecturesToday()
+//        getUserAttendanceCriteria()
+//        getUserCourses()
+//        getUserLecturesToday()
     }
     val updateAttendanceCriteriaClickListener = View.OnClickListener {
 
@@ -61,6 +62,7 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
                    val subjects =  subjectsLiveData.value?.toMutableList()
                     subjects?.remove(subject)
                     subjectsLiveData.postValue(subjects)
+                    getUserLecturesToday()
                 }
                 else{
                     Log.d(TAG, "SUbject deletion failed-"+response.message())
@@ -268,6 +270,105 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
                 }
                 else {
                     Log.d(TAG, "lectures Response failed..")
+                }
+            }
+
+        })
+    }
+
+    fun addSubjectWithLectures(json : JsonObject) {
+        NewRepository.addSubjectWithLectures(json).enqueue(object : Callback<SubjectModel> {
+            override fun onFailure(call: Call<SubjectModel>, t: Throwable) {
+                Log.d(TAG, "subject with lectures Response failed.." + t.message)
+            }
+
+            override fun onResponse(call: Call<SubjectModel>, response: Response<SubjectModel>) {
+                if (response.isSuccessful) {
+                    Log.d(TAG, "subject with lectures response good")
+                    val subjectModel = response.body()
+                    var subjects = subjectsLiveData.value
+                    if (subjects.isNullOrEmpty()) {
+                        subjects = listOf(subjectModel!!)
+                        subjectsLiveData.postValue(subjects)
+                    }
+                    else {
+                        val subjectsML = subjects.toMutableList()
+                        subjectsML.add(0, subjectModel!!)
+                        subjectsLiveData.postValue(subjectsML)
+
+                    }
+                    getUserLecturesToday()
+                }
+                else {
+                    Log.d(TAG, "lectures Response failed.."+response.message())
+                }
+            }
+
+        })
+    }
+
+    fun deleteLecture(lectureModel: LectureModel) {
+        NewRepository.deleteLecture(lectureModel).enqueue(object : Callback<JSONObject> {
+            override fun onFailure(call: Call<JSONObject>, t: Throwable) {
+                Log.d(TAG, " Deleting lecture failed" + t.message)
+            }
+
+            override fun onResponse(call: Call<JSONObject>, response: Response<JSONObject>) {
+                if (response.isSuccessful) {
+                    Log.d(TAG, "lecture Deleted")
+                    val lectures =  lecturesLiveData.value?.toMutableList()
+                    lectures?.remove(lectureModel)
+                    lecturesLiveData.postValue(lectures)
+                    getUserCourses()
+//                    getUserLecturesToday()
+                }
+                else{
+                    Log.d(TAG, "Lecture deletion failed-"+response.message())
+                }
+            }
+
+        })
+    }
+
+
+    fun editLecture(position: Int, lectureModel: JsonObject) {
+        NewRepository.updateLecture(lectureModel).enqueue(object : Callback<LectureModel> {
+            override fun onFailure(call: Call<LectureModel>, t: Throwable) {
+                Log.d(TAG, "lecture updation failed" + t.message)
+            }
+
+            override fun onResponse(call: Call<LectureModel>, response: Response<LectureModel>) {
+                if (response.isSuccessful) {
+                    Log.d(TAG, "lecture updated successuly")
+                    val lectureModel = response.body()
+                    var lectures = lecturesLiveData.value!!.toMutableList()
+                    lectures[position]= lectureModel!!
+                    lecturesLiveData.postValue(lectures)
+//                    if (subjects.isNullOrEmpty()) {
+//                        subjects = listOf(subjectModel!!)
+//                        subjectsLiveData.postValue(subjects)
+//                    }
+//                    else {
+//                        val subjectsML = subjects.toMutableList()
+//                        subjectsML.add(0, subjectModel!!)
+//                        subjectsLiveData.postValue(subjectsML)
+//
+//                    }
+//                    var subjectsArrayList : MutableList<SubjectModel> = ArrayList()
+//                    if (subjects != null)
+//                    {
+//                        subjectsArrayList = subjects!!.toMutableList()
+//                    }
+//                    if (subjectsArrayList!=null) {
+//                        subjectsArrayList.add(0, subjectModel!!)
+//                        subjectsLiveData.postValue(subjectsArrayList)
+//                    }
+//                    subjectRecyclerAdapter.addSubject(subjectModel!!)
+
+//                    subjectRecyclerAdapter.addSubject(subjectModel!!)
+                }
+                else {
+                    Log.d(TAG, "lecture adding failed" + response.message())
                 }
             }
 

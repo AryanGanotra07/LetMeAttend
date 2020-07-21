@@ -1,11 +1,9 @@
 package com.attendance.letmeattend.utils
 
-import android.animation.Animator
-import android.graphics.Color
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -15,12 +13,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.attendance.letmeattend.R
 import com.attendance.letmeattend.activities.details.DetailsViewModel
 import com.attendance.letmeattend.adapters.LectureNewRecyclerAdapter
 import com.attendance.letmeattend.adapters.LectureRecyclerAdapter
+import com.attendance.letmeattend.adapters.LectureTimeTableAdapter
 import com.attendance.letmeattend.adapters.SubjectRecyclerAdapter
 import com.attendance.letmeattend.models.*
 import com.attendance.letmeattend.utils.extentions.getParentActivity
@@ -29,9 +27,10 @@ import com.nightonke.boommenu.BoomButtons.OnBMClickListener
 import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton
 import com.nightonke.boommenu.BoomMenuButton
 import com.ramotion.fluidslider.FluidSlider
-import java.lang.Exception
-import java.security.AccessController.getContext
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.abs
+import kotlin.math.min
 
 
 @BindingAdapter("setMutableText")
@@ -85,6 +84,63 @@ fun openTimeTable(view : Button, fragment : Fragment) {
     }
 }
 
+@BindingAdapter("getDay")
+fun getDay(view : TextView, day : Int) {
+    val parentActivity : AppCompatActivity? = view.getParentActivity()
+    if (parentActivity!=null) {
+        view.setText(parentActivity.resources.getStringArray(R.array.days)[day])
+    }
+}
+
+@BindingAdapter("startTimer")
+fun startTimer(view: TextView, lectureModel: LectureModel) {
+    val hour: Int = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+    val minute: Int = Calendar.getInstance().get(Calendar.MINUTE)
+    val lectureTime = lectureModel.start_time.split(":")
+    val lectureHour = lectureTime[0]
+    val lectureMinute = lectureTime[1]
+    val millis = (Integer.valueOf(lectureHour) - hour) * 3600
+    val lectureT = Calendar.getInstance()
+    lectureT.set(Calendar.HOUR_OF_DAY, Integer.valueOf(lectureHour))
+    lectureT.set(Calendar.MINUTE, Integer.valueOf(lectureMinute))
+    val final = lectureT.timeInMillis - Calendar.getInstance().timeInMillis
+    if (final < 0) {
+        view.setText("Over")
+    } else if (final.equals(0)) {
+        view.setText("Now")
+    } else {
+        val seconds = final / 1000
+        if (seconds > 3600) {
+            val hours = seconds / 3600
+            view.setText(hours.toString() + "h")
+        } else if (seconds <= 3600) {
+            val minutes = seconds / 60
+
+            view.setText(minutes.toString() + "m")
+//        object : CountDownTimer(final, 1000) {
+//            override fun onFinish() {
+//                view.setText("Now")
+//            }
+//
+//            override fun onTick(millisUntilFinished: Long) {
+//                val seconds = millisUntilFinished / 1000
+//                if (seconds > 3600) {
+//                    val hours = seconds/3600
+//                    view.setText(hours.toString()+"h")
+//                }
+//                else if (seconds <= 3600 ) {
+//                    val minutes = seconds/60
+//                    if (minutes.rem(10).equals(0)) {
+//                        view.setText(minutes.toString() + "m")
+//                    }
+//                }
+//            }
+//
+//        }.start()
+        }
+    }
+}
+
 
 @BindingAdapter("setupAdapter")
 fun setupAdapter(view: RecyclerView, adapter : LectureRecyclerAdapter)
@@ -129,6 +185,43 @@ fun setupLectureAdapter(view: RecyclerView, adapter : LectureNewRecyclerAdapter)
 
         view.layoutManager = LinearLayoutManager(parentActivity,RecyclerView.HORIZONTAL,false)
         view.adapter = adapter
+    }
+}
+
+@BindingAdapter("setupTTLectureAdapter")
+fun setupTTLectureAdapter(view: RecyclerView, lectureAdapter : LectureTimeTableAdapter)
+{
+
+    val parentActivity : AppCompatActivity? = view.getParentActivity()
+    if (view!=null && lectureAdapter!=null)
+    {
+
+
+        //view.layoutManager = linearLayoutManager // Add your recycler view to this ZoomRecycler layout
+//        val snapHelper = LinearSnapHelper()
+//        snapHelper.attachToRecyclerView(view) // Add your recycler view here
+//        view.isNestedScrollingEnabled = false
+
+        view.layoutManager = LinearLayoutManager(parentActivity,RecyclerView.HORIZONTAL,false)
+        view.adapter = lectureAdapter
+
+//        if (parentActivity != null) {
+//
+//            lectures.observe(parentActivity, Observer { value ->
+//                if (value != null) {
+//                    lectureAdapter.setLectures(value)
+//                }
+//                else
+//                {
+//                    lectureAdapter.setLectures(ArrayList())
+//                }
+//            })
+//
+////            id.observe(parentActivity, Observer { value ->
+////                val lecturesFilter : List<Lecture> = lectures.value!!.filter { it -> it.day == value }
+////                adapter.setLectures(lecturesFilter as ArrayList<Lecture>)
+////            })
+//        }
     }
 }
 
@@ -289,6 +382,32 @@ fun updateLecturesData(view : RecyclerView, adapter : LectureNewRecyclerAdapter,
                 else
                 {
                     adapter.setLectures(ArrayList())
+                }
+            })
+
+//            id.observe(parentActivity, Observer { value ->
+//                val lecturesFilter : List<Lecture> = lectures.value!!.filter { it -> it.day == value }
+//                adapter.setLectures(lecturesFilter as ArrayList<Lecture>)
+//            })
+        }
+    }
+}
+
+@BindingAdapter("lectureAdapter","lectures",requireAll = true)
+fun updateLecturesTimeTable(view : RecyclerView, lectureAdapter : LectureTimeTableAdapter,lectures: MediatorLiveData<List<LectureModel>>)
+{
+    val parentActivity : AppCompatActivity? = view.getParentActivity()
+    if (view!=null && lectureAdapter!=null && lectures!=null)
+    {
+        if (parentActivity != null) {
+
+            lectures.observe(parentActivity, Observer { value ->
+                if (value != null) {
+                    lectureAdapter.setLectures(value)
+                }
+                else
+                {
+                    lectureAdapter.setLectures(ArrayList())
                 }
             })
 

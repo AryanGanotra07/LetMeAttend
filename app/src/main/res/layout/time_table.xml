@@ -108,10 +108,10 @@
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:adapter="@{vm.mondayLectureRecyclerAdapter}"
                 app:lectures="@{vm.mondayLectures}"
                 android:nestedScrollingEnabled="false"
-                app:setupLectureAdapter="@{vm.mondayLectureRecyclerAdapter}"
+                app:lectureAdapter="@{vm.mondayLectureRecyclerAdapter}"
+                app:setupTTLectureAdapter="@{vm.mondayLectureRecyclerAdapter}"
                 android:layout_below="@id/monday_tv"/>
     </RelativeLayout>
 
@@ -145,10 +145,11 @@
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:adapter="@{vm.tuesdayLectureRecyclerAdapter}"
+                app:lectureAdapter="@{vm.tuesdayLectureRecyclerAdapter}"
                 app:lectures="@{vm.tuesdayLectures}"
                 android:nestedScrollingEnabled="false"
-                app:setupLectureAdapter="@{vm.tuesdayLectureRecyclerAdapter}"
+
+                app:setupTTLectureAdapter="@{vm.tuesdayLectureRecyclerAdapter}"
                 android:layout_below="@id/tuesday_tv" />
     </RelativeLayout>
 
@@ -182,10 +183,11 @@
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:adapter="@{vm.wednesdayLectureRecyclerAdapter}"
+                app:lectureAdapter="@{vm.wednesdayLectureRecyclerAdapter}"
                 app:lectures="@{vm.wednesdayLectures}"
                 android:nestedScrollingEnabled="false"
-                app:setupLectureAdapter="@{vm.wednesdayLectureRecyclerAdapter}"
+
+                app:setupTTLectureAdapter="@{vm.wednesdayLectureRecyclerAdapter}"
                 android:layout_below="@id/wednesday_tv" />
     </RelativeLayout>
     <RelativeLayout
@@ -218,10 +220,11 @@
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:adapter="@{vm.thursdayLectureRecyclerAdapter}"
+                app:lectureAdapter="@{vm.thursdayLectureRecyclerAdapter}"
                 app:lectures="@{vm.thursdayLectures}"
                 android:nestedScrollingEnabled="false"
-                app:setupLectureAdapter="@{vm.thursdayLectureRecyclerAdapter}"
+
+                app:setupTTLectureAdapter="@{vm.thursdayLectureRecyclerAdapter}"
                 android:layout_below="@id/thursday_tv" />
     </RelativeLayout>
     <RelativeLayout
@@ -254,10 +257,11 @@
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:adapter="@{vm.fridayLectureRecyclerAdapter}"
+                app:lectureAdapter="@{vm.fridayLectureRecyclerAdapter}"
                 app:lectures="@{vm.fridayLectures}"
                 android:nestedScrollingEnabled="false"
-                app:setupLectureAdapter="@{vm.fridayLectureRecyclerAdapter}"
+
+                app:setupTTLectureAdapter="@{vm.fridayLectureRecyclerAdapter}"
 
                 android:layout_below="@id/friday_tv" />
     </RelativeLayout>
@@ -291,10 +295,11 @@
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:adapter="@{vm.saturdayLectureRecyclerAdapter}"
+                app:lectureAdapter="@{vm.saturdayLectureRecyclerAdapter}"
                 app:lectures="@{vm.saturdayLectures}"
+
                 android:nestedScrollingEnabled="false"
-                app:setupLectureAdapter="@{vm.saturdayLectureRecyclerAdapter}"
+                app:setupTTLectureAdapter="@{vm.saturdayLectureRecyclerAdapter}"
                 android:layout_below="@id/saturday_tv" />
     </RelativeLayout>
     <RelativeLayout
@@ -327,10 +332,11 @@
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:adapter="@{vm.sundayLectureRecyclerAdapter}"
+                app:lectureAdapter="@{vm.sundayLectureRecyclerAdapter}"
                 app:lectures="@{vm.sundayLectures}"
                 android:nestedScrollingEnabled="false"
-                app:setupLectureAdapter="@{vm.sundayLectureRecyclerAdapter}"
+
+                app:setupTTLectureAdapter="@{vm.sundayLectureRecyclerAdapter}"
                 android:layout_below="@id/sunday_tv" />
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

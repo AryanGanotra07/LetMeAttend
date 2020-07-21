@@ -2,12 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:title="Edit"
-            android:id="@+id/edit_lecture">
+        android:title="Edit subject"
+            android:id="@+id/edit_subject">
 
     </item>
-    <item android:title="Delete"
-        android:id="@+id/delete_lecture">
+    <item android:title="Delete subject"
+        android:id="@+id/delete_subject">
 </item>
+
+    <item android:title="Edit lecture"
+            android:id="@+id/edit_lecture">
+    </item>
+    <item android:title="Delete lecture"
+            android:id="@+id/delete_lecture">
+    </item>
 
 </menu>

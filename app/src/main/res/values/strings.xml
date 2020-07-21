@@ -44,6 +44,12 @@
     <string name="edit_course">Edit Course</string>
     <string name="add_lectures">Add Lectures</string>
     <string name="day">Select day</string>
+    <string name="start_time">Start time</string>
+    <string name="end_time">End time</string>
+    <string name="physics">Physics</string>
+    <string name="delete">Delete</string>
+    <string name="edit_lecture">Edit lecture</string>
+    <string name="delete_confirmation">Deleting the course will delete all the lectures and their attendance records</string>
 
 
 

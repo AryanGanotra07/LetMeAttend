@@ -97,8 +97,8 @@ class SubjectRecyclerAdapter() : RecyclerView.Adapter<SubjectRecyclerAdapter.Vie
             menuInfo: ContextMenu.ContextMenuInfo?
         ) {
             menu?.setHeaderTitle("Select The Action");
-            menu?.add(day,R.id.edit_lecture, 0, "Edit");//groupId, itemId, order, title
-            menu?.add(day, R.id.delete_lecture, 0, "Delete");
+            menu?.add(day,R.id.edit_subject, 0, "Edit");//groupId, itemId, order, title
+            menu?.add(day, R.id.delete_subject, 0, "Delete");
 
         }
 

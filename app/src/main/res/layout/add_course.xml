@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:inputType="textAutoComplete"
-            android:text="Hello World"
+            android:text="@string/physics"
             android:textColor="?android:textColorPrimary"
             android:textSize="@dimen/title_size"
             tools:ignore="Autofill,HardcodedText,LabelFor"
@@ -39,6 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             android:text="@string/choose_color"
+            android:id="@+id/color_choose_tv"
             android:gravity="center_vertical"
             android:layout_gravity="center_vertical"
             android:textColor="?android:textColorSecondary"
@@ -53,6 +54,7 @@
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/add_lecture_view"
             android:layout_marginTop="18dp">
 
 

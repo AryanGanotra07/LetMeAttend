@@ -43,8 +43,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.add_course.*
+import kotlinx.android.synthetic.main.add_course.recyclerView
 import kotlinx.android.synthetic.main.add_lecture.*
 import kotlinx.android.synthetic.main.alert_save_subject.*
+import kotlinx.android.synthetic.main.details_activity.*
 import okhttp3.internal.proxy.NullProxySelector.select
 import okhttp3.internal.toHexString
 import org.json.JSONArray
@@ -80,6 +82,9 @@ class EnterDetails : AppCompatActivity(), LectureListeners {
         binding.addCourseFb.setOnClickListener {
             showCustomViewDialog(BottomSheet())
 
+        }
+        empty_view.setOnClickListener {
+            showCustomViewDialog(BottomSheet())
         }
     }
 
@@ -145,7 +150,7 @@ class EnterDetails : AppCompatActivity(), LectureListeners {
 
             customView(R.layout.add_course, scrollable = true, horizontalPadding = true)
             val nameET = getCustomView().findViewById<EditText>(R.id.course_name)
-            var my_color : Int = Color.DKGRAY
+            var my_color : Int = Color.WHITE
             val adapter = AddLectureRecyclerAdapter()
             val lectures = ArrayList<LectureModel>()
             positiveButton(R.string.add_course) { dialog ->
@@ -196,7 +201,7 @@ class EnterDetails : AppCompatActivity(), LectureListeners {
                                     s_t,
                                     e_t,
                                     nameET.text.toString(),
-                                    Color.DKGRAY
+                                    Color.WHITE
                                 )
                                 //lectures.add(lecture)
                                 if (lectureModel!=null) {
@@ -281,7 +286,7 @@ class EnterDetails : AppCompatActivity(), LectureListeners {
 
             }
 
-            val topLevel = intArrayOf(Color.DKGRAY,Color.parseColor("#62af97"),Color.parseColor("#69b5e1"),Color.parseColor("#00587f"),Color.parseColor("#cfe1af"),Color.parseColor("#d1d8e1"),Color.parseColor("#e1c6b0"),Color.parseColor("#bbe1df"),Color.parseColor("#4a4c7f"),Color.parseColor("#a8a7e1"),Color.parseColor("#e2c09e"),Color.parseColor("#566be2"))
+            val topLevel = intArrayOf(Color.WHITE,Color.DKGRAY,Color.parseColor("#62af97"),Color.parseColor("#69b5e1"),Color.parseColor("#00587f"),Color.parseColor("#cfe1af"),Color.parseColor("#d1d8e1"),Color.parseColor("#e1c6b0"),Color.parseColor("#bbe1df"),Color.parseColor("#4a4c7f"),Color.parseColor("#a8a7e1"),Color.parseColor("#e2c09e"),Color.parseColor("#566be2"))
             val color_button = getCustomView().findViewById<FloatingActionButton>(R.id.color_view)
             val recyclerView = getCustomView().findViewById<RecyclerView>(R.id.recyclerView)
             val layoutManager = LinearLayoutManager(this@EnterDetails, RecyclerView.VERTICAL, false)

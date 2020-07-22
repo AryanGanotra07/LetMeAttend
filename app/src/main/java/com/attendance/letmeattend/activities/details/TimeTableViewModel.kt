@@ -1,6 +1,7 @@
 package com.attendance.letmeattend.activities.details
 
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import com.afollestad.materialdialogs.MaterialDialog
@@ -37,10 +38,11 @@ class TimeTableViewModel : ViewModel(), LectureListeners {
     val thursdayLectureRecyclerAdapter : LectureTimeTableAdapter = LectureTimeTableAdapter()
     val saturdayLectureRecyclerAdapter : LectureTimeTableAdapter = LectureTimeTableAdapter()
     val sundayLectureRecyclerAdapter : LectureTimeTableAdapter = LectureTimeTableAdapter()
+    val loadingVisibility : MediatorLiveData<Int> = MediatorLiveData()
     private val TAG = "TimeTableViewModel"
 
    init {
-
+loadingVisibility.value = View.VISIBLE
    }
 
     fun getAllLectures() {
@@ -81,6 +83,7 @@ class TimeTableViewModel : ViewModel(), LectureListeners {
                    fridayLectures.postValue(friday)
                    saturdayLectures.postValue(saturday)
                    sundayLectures.postValue(sunday)
+                   loadingVisibility.postValue(View.GONE)
                    Log.d(TAG, " Got lectures" + monday.size + " " + tueday.size + " " + wednesday.size + " " + thursday.size + " " + friday.size + " " +saturday.size)
 
                }
@@ -213,6 +216,7 @@ class TimeTableViewModel : ViewModel(), LectureListeners {
             ) {
                 if (response.isSuccessful) {
                     val lectures = response.body()
+                    loadingVisibility.postValue(View.GONE)
 //                   lectures!!.forEach { lecture ->
 //                       when(lecture.day) {
 //                           0 -> monday.plus(lecture)
@@ -239,6 +243,7 @@ class TimeTableViewModel : ViewModel(), LectureListeners {
                     fridayLectures.postValue(friday)
                     saturdayLectures.postValue(saturday)
                     sundayLectures.postValue(sunday)
+
                     Log.d(TAG, " Got lectures" + monday.size + " " + tueday.size + " " + wednesday.size + " " + thursday.size + " " + friday.size + " " +saturday.size)
 
                 }

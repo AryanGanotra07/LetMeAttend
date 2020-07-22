@@ -4,6 +4,7 @@ import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -253,11 +254,12 @@ fun updateValue(view: FluidSlider, vm : DetailsViewModel)
 }
 
 @BindingAdapter("setVisibility")
-fun setVisibility(view : ProgressBar , progressVisibility : MediatorLiveData<Int>) {
+fun setVisibility(view : View , progressVisibility : MediatorLiveData<Int>) {
     val parentActivity: AppCompatActivity? = view.getParentActivity()
     if (parentActivity != null) {
         progressVisibility.observe(parentActivity, object  : Observer<Int> {
             override fun onChanged(t: Int?) {
+                Log.d("Binding", t!!.toString())
                 if (t!= null) {
                     view.visibility = t!!
                 }
@@ -270,6 +272,23 @@ fun setVisibility(view : ProgressBar , progressVisibility : MediatorLiveData<Int
     }
 
 }
+
+@BindingAdapter("setLLVisibility")
+fun setLLVisibility(view : LinearLayout , loadingVisibility : MediatorLiveData<Int>) {
+    val parentActivity: AppCompatActivity? = view.getParentActivity()
+    if (parentActivity != null) {
+        loadingVisibility.observe(parentActivity, Observer<Int> { t ->
+            Log.d("Binding", t!!.toString())
+            if (t!= null) {
+                view.visibility = t!!
+            } else {
+                view.visibility = View.GONE
+            }
+        })
+    }
+
+}
+
 
 @BindingAdapter("setBuilders")
 fun setBuilders(view : BoomMenuButton, vm: DetailsViewModel) {

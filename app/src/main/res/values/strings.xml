@@ -4,7 +4,7 @@
     <string name="connect_with">\u2014\u2014QUICKLY CONNECT WITH\u2014\u2014</string>
     <string name="google_login">Continue with Google</string>
     <string name="email_login">Continue with Email</string>
-    <string name="skip_sign_in">\u2014\u2014OR SIGN IN LATER\u2014\u2014</string>
+    <string name="skip_sign_in">\u2014\u2014OR SIGN IN WITH PHONE NUMBER\u2014\u2014</string>
     <string name="next">Next</string>
     <string name="save">Save</string>
     <string name="attendance_criteria">Set Attendance Criteria</string>
@@ -49,6 +49,7 @@
     <string name="physics">Physics</string>
     <string name="delete">Delete</string>
     <string name="edit_lecture">Edit lecture</string>
+    <string name="no_today">No lectures found for today</string>
     <string name="delete_confirmation">Deleting the course will delete all the lectures and their attendance records</string>
 
 

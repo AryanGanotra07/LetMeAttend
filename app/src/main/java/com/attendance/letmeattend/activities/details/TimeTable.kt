@@ -45,7 +45,7 @@ class TimeTable : Fragment(), LectureListeners {
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
-        (context as AppCompatActivity)?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+//        (context as AppCompatActivity)?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(TimeTableViewModel::class.java)
         setListeners()
@@ -175,7 +175,7 @@ class TimeTable : Fragment(), LectureListeners {
                 end_time_select.setText(lectureModel.end_time)
             }
             day_select.setOnClickListener {
-                MaterialDialog(context!!).show {
+                MaterialDialog(activity as EnterDetails).show {
                     title(R.string.day)
                     listItemsSingleChoice(R.array.days, initialSelection = lectureModel.day) { _, index, text ->
                         context!!.toast("Selected item $text at index $index")
@@ -186,7 +186,7 @@ class TimeTable : Fragment(), LectureListeners {
                 }
             }
             start_time_selet.setOnClickListener {
-                MaterialDialog(context!!).show {
+                MaterialDialog(activity as EnterDetails).show {
                     title(R.string.dialog_select_time)
                     timePicker { _, time ->
                         val hourOfDay = time.get(Calendar.HOUR_OF_DAY)
@@ -200,7 +200,7 @@ class TimeTable : Fragment(), LectureListeners {
                 }
             }
             end_time_select.setOnClickListener {
-                MaterialDialog(context!!).show {
+                MaterialDialog(activity as EnterDetails).show {
                     title(R.string.choose_time)
                     timePicker { _, time ->
                         val hourOfDay = time.get(Calendar.HOUR_OF_DAY)
@@ -244,7 +244,7 @@ class TimeTable : Fragment(), LectureListeners {
             val end_time_select = getCustomView().findViewById<TextView>(R.id.end_time)
 
             day_select.setOnClickListener {
-                MaterialDialog(this.context!!).show {
+                MaterialDialog(activity as EnterDetails).show {
                     title(R.string.day)
                     listItemsSingleChoice(R.array.days, initialSelection = lectureModel.day) { _, index, text ->
 //                        toast("Selected item $text at index $index")
@@ -255,7 +255,7 @@ class TimeTable : Fragment(), LectureListeners {
                 }
             }
             start_time_selet.setOnClickListener {
-                MaterialDialog(this.context!!).show {
+                MaterialDialog(activity as EnterDetails).show {
                     title(R.string.dialog_select_time)
                     timePicker { _, time ->
                         val hourOfDay = time.get(Calendar.HOUR_OF_DAY)
@@ -269,7 +269,7 @@ class TimeTable : Fragment(), LectureListeners {
                 }
             }
             end_time_select.setOnClickListener {
-                MaterialDialog(this.context!!).show {
+                MaterialDialog(activity as EnterDetails).show {
                     title(R.string.choose_time)
                     timePicker { _, time ->
                         val hourOfDay = time.get(Calendar.HOUR_OF_DAY)

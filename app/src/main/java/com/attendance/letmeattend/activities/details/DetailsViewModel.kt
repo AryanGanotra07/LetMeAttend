@@ -41,8 +41,12 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
     val fragmentDisplayer : MediatorLiveData<Fragment> = MediatorLiveData()
     val loadingVisibility : MediatorLiveData<Int> = MediatorLiveData()
     val lectureLoadingVisibility : MediatorLiveData<Int> = MediatorLiveData()
+    val emptyview : MediatorLiveData<Int> = MediatorLiveData()
+    val emptyLecture : MediatorLiveData<Int> = MediatorLiveData()
     init {
         progressVisibility.value = View.GONE
+        emptyview.value = View.GONE
+        emptyLecture.value = View.GONE
         lectureLoadingVisibility.value = View.VISIBLE
         loadingVisibility.value = View.VISIBLE
         attendanceCriteriaLiveData.value = AttendanceCriteria(75)
@@ -66,6 +70,9 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
                     Log.d(TAG, "Subject Deleted")
                    val subjects =  subjectsLiveData.value?.toMutableList()
                     subjects?.remove(subject)
+                    if (subjects?.isEmpty()!!) {
+                        emptyview.postValue(View.VISIBLE)
+                    }
                     subjectsLiveData.postValue(subjects)
                     getUserLecturesToday()
                 }
@@ -133,6 +140,7 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
                     Log.d(TAG, "Subject added successuly")
                     val subjectModel = response.body()
                     var subjects = subjectsLiveData.value
+                    emptyview.postValue(View.GONE)
                     if (subjects.isNullOrEmpty()) {
                         subjects = listOf(subjectModel!!)
                         subjectsLiveData.postValue(subjects)
@@ -227,6 +235,7 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
             override fun onFailure(call: Call<List<SubjectModel>>, t: Throwable) {
                 Log.d(TAG, " Subject getting failed-"+t.message)
                 //loadingVisibility.postValue(View.GONE)
+
             }
 
             override fun onResponse(
@@ -236,9 +245,25 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
                 if (response.isSuccessful) {
 
                     val subjects = response.body()
-                    Handler().postDelayed(Runnable { subjectsLiveData.postValue(subjects)
+
+                    if (subjects!!.isEmpty()) {
+
                         loadingVisibility.postValue(View.INVISIBLE)
-                    }, 1000)
+                        emptyview.postValue(View.VISIBLE)
+                    }
+                    else {
+                        emptyview.postValue(View.GONE)
+                        if (loadingVisibility.value == View.VISIBLE) {
+                            Handler().postDelayed(Runnable {
+                                subjectsLiveData.postValue(subjects)
+                                loadingVisibility.postValue(View.INVISIBLE)
+                            }, 1000)
+                        } else {
+                            Handler().post(Runnable {
+                                subjectsLiveData.postValue(subjects)
+                            })
+                        }
+                    }
 
 
 //                    getUserLecturesToday()
@@ -256,6 +281,7 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
     fun refreshData() {
 //        subjectsLiveData.postValue(null)
 //        lecturesLiveData.postValue(null)
+
         loadingVisibility.postValue(View.VISIBLE)
         lectureLoadingVisibility.postValue(View.VISIBLE)
         getUserAttendanceCriteria()
@@ -285,11 +311,29 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
 //                        lecture.color = "#000000"
 //                        lecture.name = "Maths"
 //                      }
-                    Handler().postDelayed(Runnable {   lecturesLiveData.postValue(lectures)
-                        lectureLoadingVisibility.value = View.INVISIBLE }, 1000)
+                    if (lectures!!.isEmpty()) {
+                        lectureLoadingVisibility.value = View.INVISIBLE
+                        emptyLecture.value = View.VISIBLE
+                        Handler().post(Runnable {
+                            lecturesLiveData.postValue(lectures)
+                        })
+                    }
+                    else {
+                        emptyLecture.value = View.GONE
+                        if (lectureLoadingVisibility.value == View.VISIBLE) {
+                            Handler().postDelayed(Runnable {
+                                lecturesLiveData.postValue(lectures)
+                                lectureLoadingVisibility.value = View.INVISIBLE
+                            }, 1000)
+                        } else {
+                            Handler().post(Runnable {
+                                lecturesLiveData.postValue(lectures)
+                            })
+                        }
 
-                    //loadingVisibility.postValue(View.GONE)
-                    Log.d(TAG, " Got lectures with length - " + lectures!!.size)
+                        //loadingVisibility.postValue(View.GONE)
+                        Log.d(TAG, " Got lectures with length - " + lectures!!.size)
+                    }
                 }
                 else {
                     Log.d(TAG, "lectures Response failed..")
@@ -310,6 +354,7 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
                     Log.d(TAG, "subject with lectures response good")
                     val subjectModel = response.body()
                     var subjects = subjectsLiveData.value
+                    emptyview.postValue(View.GONE)
                     if (subjects.isNullOrEmpty()) {
                         subjects = listOf(subjectModel!!)
                         subjectsLiveData.postValue(subjects)
@@ -341,6 +386,13 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
                     Log.d(TAG, "lecture Deleted")
                     val lectures =  lecturesLiveData.value?.toMutableList()
                     lectures?.remove(lectureModel)
+                    if (lectures!!.isEmpty()) {
+                        emptyLecture.value = View.VISIBLE
+                    }
+                    else {
+                        emptyLecture.value = View.GONE
+
+                    }
                     lecturesLiveData.postValue(lectures)
                     getUserCourses()
 //                    getUserLecturesToday()

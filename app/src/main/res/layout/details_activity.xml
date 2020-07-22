@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             app:elevation="0dp"
-
+            android:background="@color/windowBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/toolbar"
                 app:layout_scrollFlags="scroll|enterAlways|snap"
-                android:background="@color/windowBackground">
+               >
 
             <RelativeLayout
                     android:layout_width="match_parent"
@@ -188,6 +188,13 @@
                 android:layout_centerInParent="true"
         app:lottie_loop="true"
         app:lottie_autoPlay="true" />
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="160dp"
+                    android:layout_centerInParent="true"
+                    android:id="@+id/empty_view"
+                    android:visibility="@{vm.emptyview}"
+                android:src="@drawable/empty"/>
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
@@ -268,10 +275,22 @@ android:id="@+id/add_course_fb"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:lottie_rawRes="@raw/loading"
-                android:visibility="@{vm.lectureLoadingVisibility}"
+                app:setVisibility="@{vm.lectureLoadingVisibility}"
                 android:layout_centerInParent="true"
                 app:lottie_loop="true"
                 app:lottie_autoPlay="true" />
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:textSize="18sp"
+                    android:layout_marginTop="16dp"
+                    android:visibility="@{vm.emptyLecture}"
+                    app:setVisibility="@{vm.emptyLecture}"
+                    android:textColor="@color/quantum_grey500"
+                    android:textAlignment="center"
+                android:text="@string/no_today"/>
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView2"

@@ -28,7 +28,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
-                        android:textColor="@color/quantum_white_100"
+
                         android:text="@{vm.subject.name}"
                         android:textSize="20sp"
                         >

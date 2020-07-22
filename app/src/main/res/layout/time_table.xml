@@ -16,7 +16,18 @@
 
             android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/add_lecture_fb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
+                android:src="@drawable/ic_add_black_24dp"
+                android:layout_gravity="end|bottom" />
+
+        <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,13 +64,7 @@
                         android:layout_centerVertical="true"
                         android:layout_alignParentLeft="true"
                         />
-                <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:tint="@color/colorAccent"
-                        android:id="@+id/add_lecture_fb"
-                        android:layout_alignParentRight="true"
-                        android:src="@drawable/ic_add_black_24dp"/>
+
 
             </RelativeLayout>
 
@@ -181,14 +186,16 @@
 <!--                android:tint="@color/colorAccent" />-->
 
         <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:lectureAdapter="@{vm.wednesdayLectureRecyclerAdapter}"
-                app:lectures="@{vm.wednesdayLectures}"
+                android:layout_below="@id/wednesday_tv"
                 android:nestedScrollingEnabled="false"
 
-                app:setupTTLectureAdapter="@{vm.wednesdayLectureRecyclerAdapter}"
-                android:layout_below="@id/wednesday_tv" />
+                app:lectureAdapter="@{vm.wednesdayLectureRecyclerAdapter}"
+                app:lectures="@{vm.wednesdayLectures}"
+                app:setupTTLectureAdapter="@{vm.wednesdayLectureRecyclerAdapter}" />
+
     </RelativeLayout>
     <RelativeLayout
             android:layout_width="match_parent"
@@ -341,6 +348,25 @@
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:clickable="true"
+                android:alpha="0.6"
+                android:visibility="gone"
+                app:setLLVisibility="@{vm.loadingVisibility}"
+                android:background="@color/quantum_grey50"
+                android:layout_height="match_parent">
+            <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/animation_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:lottie_rawRes="@raw/loading"
+                    android:layout_gravity="center"
+                    android:layout_alignParentRight="true"
+                    app:lottie_loop="true"
+                    android:layout_centerVertical="true"
+                    app:lottie_autoPlay="true" />
+        </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

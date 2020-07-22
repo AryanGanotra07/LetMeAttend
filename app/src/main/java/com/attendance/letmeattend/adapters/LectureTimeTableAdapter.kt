@@ -126,6 +126,12 @@ class LectureTimeTableAdapter() : RecyclerView.Adapter<LectureTimeTableAdapter.V
             false
         }
         holder.bind(lectures.get(position))
+        holder.itemView.setOnClickListener {
+            setPosition(holder.adapterPosition)
+            if (clickListener != null) {
+                clickListener.onLectureClick(lectures.get(holder.adapterPosition))
+            }
+        }
         holder.itemView.findViewById<ImageView>(R.id.edit_lecture).setOnClickListener {
                 setPosition(holder.adapterPosition)
             if (clickListener!=null) {

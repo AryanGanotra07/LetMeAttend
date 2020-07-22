@@ -250,6 +250,10 @@ class TimeTableViewModel : ViewModel(), LectureListeners {
         })
     }
 
+    override fun onLectureClick(lecture: LectureModel) {
+        TODO("Not yet implemented")
+    }
+
 
     override fun onLectureEdit(position: Int, lecture: LectureModel) {
 

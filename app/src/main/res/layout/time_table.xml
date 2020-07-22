@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             app:elevation="0dp"
-            android:background="@color/colorPrimary"
+            android:background="@color/windowBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -95,7 +95,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/day_name"
-                android:textColor="@color/quantum_white_100"
+
                 android:layout_alignParentLeft="true"
                 android:id="@+id/monday_tv"
                 android:textSize="28sp" />
@@ -132,7 +132,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:text="@string/tuesday"
-                android:textColor="@color/quantum_white_100"
+
                 android:textSize="28sp" />
 
 <!--        <ImageView-->
@@ -170,7 +170,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:text="@string/wednesday"
-                android:textColor="@color/quantum_white_100"
+
                 android:textSize="28sp" />
 
 <!--        <ImageView-->
@@ -207,7 +207,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:text="@string/thursday"
-                android:textColor="@color/quantum_white_100"
+
                 android:textSize="28sp" />
 
 <!--        <ImageView-->
@@ -244,7 +244,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:text="@string/friday"
-                android:textColor="@color/quantum_white_100"
+
                 android:textSize="28sp" />
 
 <!--        <ImageView-->
@@ -282,7 +282,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:text="@string/saturday"
-                android:textColor="@color/quantum_white_100"
+
                 android:textSize="28sp" />
 
 <!--        <ImageView-->
@@ -319,7 +319,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:text="@string/sunday"
-                android:textColor="@color/quantum_white_100"
+
                 android:textSize="28sp" />
 
 <!--        <ImageView-->

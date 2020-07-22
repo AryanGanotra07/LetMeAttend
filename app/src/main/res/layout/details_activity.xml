@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/toolbar"
                 app:layout_scrollFlags="scroll|enterAlways|snap"
-                android:background="@color/colorPrimary">
+                android:background="@color/windowBackground">
 
             <RelativeLayout
                     android:layout_width="match_parent"
@@ -166,20 +166,38 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/save_attendance" />
 
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:nestedScrollingEnabled="false"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:id="@+id/srl"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/floatingActionButton"
+                >
+
+        <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animation_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:lottie_rawRes="@raw/loading"
+                android:visibility="@{vm.loadingVisibility}"
+                android:layout_centerInParent="true"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true" />
+
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 adapter="@{vm.subjectRecyclerAdapter}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
                 android:nestedScrollingEnabled="false"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/floatingActionButton"
                 app:setupSubjectAdapter="@{vm.subjectRecyclerAdapter}"
                 app:subjects="@{vm.subjectsLiveData}" />
+        </RelativeLayout>
 
         <LinearLayout
                 android:id="@+id/floatingActionButton"
@@ -211,7 +229,7 @@ android:id="@+id/add_course_fb"
                 android:layout_marginEnd="16dp"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recyclerView">
+                app:layout_constraintTop_toBottomOf="@+id/srl">
 
             <Button
 
@@ -232,11 +250,9 @@ android:id="@+id/add_course_fb"
                 android:text="@string/lectures_today"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+                app:layout_constraintTop_toBottomOf="@+id/srl" />
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView2"
-                adapter="@{vm.lectureRecyclerAdapter}"
+        <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -245,12 +261,31 @@ android:id="@+id/add_course_fb"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
 
-                app:layout_constraintTop_toBottomOf="@+id/textView2"
+                app:layout_constraintTop_toBottomOf="@+id/textView2">
+>
+        <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animation_view2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:lottie_rawRes="@raw/loading"
+                android:visibility="@{vm.lectureLoadingVisibility}"
+                android:layout_centerInParent="true"
+                app:lottie_loop="true"
+                app:lottie_autoPlay="true" />
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView2"
+                adapter="@{vm.lectureRecyclerAdapter}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
                 android:nestedScrollingEnabled="false"
                 app:lectures="@{vm.lecturesLiveData}"
                 app:setupLectureAdapter="@{vm.lectureRecyclerAdapter}">
 
         </androidx.recyclerview.widget.RecyclerView>
+
+        </RelativeLayout>
 
         <FrameLayout
                 android:id="@+id/container"

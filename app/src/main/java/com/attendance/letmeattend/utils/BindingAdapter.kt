@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.attendance.letmeattend.R
 import com.attendance.letmeattend.activities.details.DetailsViewModel
+import com.attendance.letmeattend.activities.details.EnterDetails
 import com.attendance.letmeattend.adapters.LectureNewRecyclerAdapter
 import com.attendance.letmeattend.adapters.LectureRecyclerAdapter
 import com.attendance.letmeattend.adapters.LectureTimeTableAdapter
@@ -185,6 +186,7 @@ fun setupLectureAdapter(view: RecyclerView, adapter : LectureNewRecyclerAdapter)
 
         view.layoutManager = LinearLayoutManager(parentActivity,RecyclerView.HORIZONTAL,false)
         view.adapter = adapter
+        adapter.setClickListener(parentActivity as EnterDetails)
     }
 }
 
@@ -378,6 +380,7 @@ fun updateLecturesData(view : RecyclerView, adapter : LectureNewRecyclerAdapter,
             lectures.observe(parentActivity, Observer { value ->
                 if (value != null) {
                     adapter.setLectures(value)
+
                 }
                 else
                 {

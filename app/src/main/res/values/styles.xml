@@ -29,11 +29,12 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@color/windowBackground</item>
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
-        <item name="android:navigationBarColor">@color/windowBackground</item>
+        <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
        <item name="android:textColorSecondary">@color/colorAccent</item>
         <item name="android:textColorTertiary">@color/textColorPrimary</item>
        <item name="android:textColorHint">@color/colorAccent</item>
         <item name="colorError">@color/colorError</item>
+
         <item name="android:actionMenuTextColor">@color/colorAccent</item>
         <item name="android:itemTextAppearance">@style/myCustomMenuTextAppearance</item>
         <item name="android:statusBarColor">@color/windowBackground</item>

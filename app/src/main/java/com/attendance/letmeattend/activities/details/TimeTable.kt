@@ -1,6 +1,8 @@
 package com.attendance.letmeattend.activities.details
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.Handler
@@ -22,6 +24,7 @@ import com.afollestad.materialdialogs.datetime.timePicker
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.attendance.letmeattend.R
+import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.databinding.TimeTableBinding
 import com.attendance.letmeattend.listeners.LectureListeners
 import com.attendance.letmeattend.models.LectureModel
@@ -40,7 +43,9 @@ class TimeTable : Fragment(), LectureListeners {
     private val TAG = "TimeTable"
     private lateinit var subject : SubjectModel
 
+    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
+        (context as AppCompatActivity)?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(TimeTableViewModel::class.java)
         setListeners()
@@ -207,7 +212,7 @@ class TimeTable : Fragment(), LectureListeners {
                     lifecycleOwner(this@TimeTable)
                 }
             }
-           
+
 
 
         }
@@ -308,6 +313,14 @@ class TimeTable : Fragment(), LectureListeners {
         return super.onOptionsItemSelected(item)
 
 
+    }
+
+    override fun onLectureClick(lecture: LectureModel) {
+        val attendanceStatus = AttendanceStatus()
+        val bundle = Bundle()
+        bundle.putParcelable("lecture", lecture)
+        attendanceStatus.arguments = bundle
+        fragmentManager!!.beginTransaction().setCustomAnimations(R.anim.design_bottom_sheet_slide_in, R.anim.design_bottom_sheet_slide_out, R.anim.abc_popup_enter, R.anim.abc_popup_exit).add(R.id.frame, attendanceStatus).addToBackStack(null).commit()
     }
 
     override fun onLectureEdit(position: Int, lecture: LectureModel) {

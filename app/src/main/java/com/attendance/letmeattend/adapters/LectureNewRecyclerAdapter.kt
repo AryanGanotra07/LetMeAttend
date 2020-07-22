@@ -14,6 +14,7 @@ import com.attendance.letmeattend.databinding.LectureResourceBinding
 import com.attendance.letmeattend.databinding.LectureTodayBinding
 import com.attendance.letmeattend.databinding.LectureTtBinding
 import com.attendance.letmeattend.databinding.SubjectResourceBinding
+import com.attendance.letmeattend.listeners.LectureListeners
 import com.attendance.letmeattend.listeners.OnLectureClickListener
 import com.attendance.letmeattend.models.Lecture
 import com.attendance.letmeattend.models.LectureModel
@@ -28,7 +29,7 @@ import javax.security.auth.Subject
 class LectureNewRecyclerAdapter() : RecyclerView.Adapter<LectureNewRecyclerAdapter.ViewHolder>() {
 
     private lateinit var lectures : List<LectureModel>
-    private lateinit var clickListener: OnLectureClickListener
+    private lateinit var clickListener: LectureListeners
     private  val animation : Animation = AnimationUtils.loadAnimation(AppApplication?.context!!.applicationContext , R.anim.abc_slide_in_bottom)
 
     private var position = 0
@@ -63,12 +64,12 @@ class LectureNewRecyclerAdapter() : RecyclerView.Adapter<LectureNewRecyclerAdapt
         notifyDataSetChanged()
 
     }
-//
-//    fun setClickListener(callback : OnLectureClickListener)
-//    {
-//        this.clickListener = callback
-//        notifyDataSetChanged()
-//    }
+
+    fun setClickListener(callback : LectureListeners)
+    {
+        this.clickListener = callback
+        notifyDataSetChanged()
+    }
 
     class ViewHolder(val binding: LectureTodayBinding) : RecyclerView.ViewHolder(binding.root), View.OnCreateContextMenuListener {
         val vm : LectureNewViewModel = LectureNewViewModel()
@@ -117,6 +118,13 @@ class LectureNewRecyclerAdapter() : RecyclerView.Adapter<LectureNewRecyclerAdapt
         holder.itemView.setOnLongClickListener {
             setPosition(holder.adapterPosition)
             false
+        }
+        holder.itemView.setOnClickListener {
+            setPosition(holder.adapterPosition)
+            if (clickListener != null) {
+                clickListener.onLectureClick(lectures.get(holder.adapterPosition))
+            }
+
         }
         holder.bind(lectures.get(position))
 

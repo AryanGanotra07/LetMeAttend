@@ -2,6 +2,7 @@ package com.attendance.letmeattend.activities.details
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -38,8 +39,12 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
     val subjectsLiveData : MediatorLiveData<List<SubjectModel>> = MediatorLiveData()
     val lecturesLiveData : MediatorLiveData<List<LectureModel>> = MediatorLiveData()
     val fragmentDisplayer : MediatorLiveData<Fragment> = MediatorLiveData()
+    val loadingVisibility : MediatorLiveData<Int> = MediatorLiveData()
+    val lectureLoadingVisibility : MediatorLiveData<Int> = MediatorLiveData()
     init {
         progressVisibility.value = View.GONE
+        lectureLoadingVisibility.value = View.VISIBLE
+        loadingVisibility.value = View.VISIBLE
         attendanceCriteriaLiveData.value = AttendanceCriteria(75)
         subjectRecyclerAdapter.setClickListener(this)
 //        getUserAttendanceCriteria()
@@ -107,6 +112,7 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
 //                    subjectRecyclerAdapter.addSubject(subjectModel!!)
 
 //                    subjectRecyclerAdapter.addSubject(subjectModel!!)
+                    getUserLecturesToday()
                 }
                 else {
                     Log.d(TAG, "Subject adding failed" + response.message())
@@ -205,8 +211,10 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
                 call: Call<AttendanceCriteria>,
                 response: Response<AttendanceCriteria>
             ) {
+
                 val attendanceCriteria = response.body()
                 attendanceCriteriaLiveData.value = attendanceCriteria
+//                getUserCourses()
                 Log.d(TAG, " Attendance Updated done - " + attendanceCriteria?.attendanceCriteria)
             }
 
@@ -218,6 +226,7 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
         service.getSubjects().enqueue(object  : Callback<List<SubjectModel>> {
             override fun onFailure(call: Call<List<SubjectModel>>, t: Throwable) {
                 Log.d(TAG, " Subject getting failed-"+t.message)
+                //loadingVisibility.postValue(View.GONE)
             }
 
             override fun onResponse(
@@ -225,12 +234,19 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
                 response: Response<List<SubjectModel>>
             ) {
                 if (response.isSuccessful) {
+
                     val subjects = response.body()
-                    subjectsLiveData.postValue(subjects)
+                    Handler().postDelayed(Runnable { subjectsLiveData.postValue(subjects)
+                        loadingVisibility.postValue(View.INVISIBLE)
+                    }, 1000)
+
+
+//                    getUserLecturesToday()
 //                    Log.d(TAG, " Got subjects with length - " + subjects!!.get(0).lectures.size)
                 }
                 else {
                     Log.d(TAG, "Subject Response failed..")
+
                 }
             }
 
@@ -238,6 +254,10 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
     }
 
     fun refreshData() {
+//        subjectsLiveData.postValue(null)
+//        lecturesLiveData.postValue(null)
+        loadingVisibility.postValue(View.VISIBLE)
+        lectureLoadingVisibility.postValue(View.VISIBLE)
         getUserAttendanceCriteria()
         getUserCourses()
         getUserLecturesToday()
@@ -265,7 +285,10 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
 //                        lecture.color = "#000000"
 //                        lecture.name = "Maths"
 //                      }
-                    lecturesLiveData.postValue(lectures)
+                    Handler().postDelayed(Runnable {   lecturesLiveData.postValue(lectures)
+                        lectureLoadingVisibility.value = View.INVISIBLE }, 1000)
+
+                    //loadingVisibility.postValue(View.GONE)
                     Log.d(TAG, " Got lectures with length - " + lectures!!.size)
                 }
                 else {
@@ -366,6 +389,7 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
 //                    subjectRecyclerAdapter.addSubject(subjectModel!!)
 
 //                    subjectRecyclerAdapter.addSubject(subjectModel!!)
+
                 }
                 else {
                     Log.d(TAG, "lecture adding failed" + response.message())

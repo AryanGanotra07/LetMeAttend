@@ -3,6 +3,7 @@ package com.attendance.letmeattend.activities.details
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -53,10 +54,11 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class EnterDetails : AppCompatActivity() {
+class EnterDetails : AppCompatActivity(), LectureListeners {
     private val TAG = "EnterDetails"
     lateinit var viewModel : DetailsViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         val binding: DetailsActivityBinding =
             DataBindingUtil.setContentView(this, R.layout.details_activity)
@@ -70,6 +72,8 @@ class EnterDetails : AppCompatActivity() {
         viewModel.fragmentDisplayer.observe(this, Observer {
             Log.d(TAG, "Got fragment request")
             fragmentManager.beginTransaction().setCustomAnimations(R.anim.design_bottom_sheet_slide_in, R.anim.design_bottom_sheet_slide_out, R.anim.abc_popup_enter, R.anim.abc_popup_exit).replace(binding.frame.id, it).addToBackStack(null).commit()
+            viewModel.subjectsLiveData.postValue(ArrayList())
+            viewModel.lecturesLiveData.postValue(ArrayList())
             //showCustomViewDialog(BottomSheet(LayoutMode.WRAP_CONTENT))
         })
 
@@ -286,12 +290,17 @@ class EnterDetails : AppCompatActivity() {
             recyclerView.adapter = adapter
             adapter.setLectures(lectures)
             val lectureListeners : LectureListeners = object : LectureListeners {
-                override fun onLectureEdit(lecture: LectureModel) {
+
+                override fun onLectureEdit(position: Int, lecture: LectureModel) {
                     showLecture(lecture)
                 }
 
                 override fun onLectureDelete(lecture: LectureModel) {
                     adapter.removeLecture(adapter.getPosition())
+                }
+
+                override fun onLectureClick(lecture: LectureModel) {
+                    TODO("Not yet implemented")
                 }
 
             }
@@ -349,11 +358,12 @@ class EnterDetails : AppCompatActivity() {
         super.onResume()
 //        supportActionBar?.setDisplayHomeAsUpEnabled(false)
 //        supportActionBar?.setShowHideAnimationEnabled(false)
-        viewModel.refreshData()
+        Handler().post(Runnable { viewModel.refreshData()  })
+
     }
 
     fun refresh() {
-        onResume()
+        viewModel.refreshData()
     }
 
     override fun onResumeFragments() {
@@ -485,5 +495,21 @@ class EnterDetails : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
 
+    }
+
+    override fun onLectureEdit(position: Int, lecture: LectureModel) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onLectureDelete(lecture: LectureModel) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onLectureClick(lecture: LectureModel) {
+        val attendanceStatus = AttendanceStatus()
+        val bundle = Bundle()
+        bundle.putParcelable("lecture", lecture)
+        attendanceStatus.arguments = bundle
+        supportFragmentManager!!.beginTransaction().setCustomAnimations(R.anim.design_bottom_sheet_slide_in, R.anim.design_bottom_sheet_slide_out, R.anim.abc_popup_enter, R.anim.abc_popup_exit).add(R.id.frame, attendanceStatus).addToBackStack(null).commit()
     }
 }

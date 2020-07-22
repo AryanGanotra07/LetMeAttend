@@ -3,8 +3,8 @@
     <color name="colorPrimary">#673ab7</color>
     <color name="colorPrimaryDark">#311b92</color>
     <color name="colorAccent">#ff00a6</color>
-    <color name="windowBackground">#000022</color>
-    <color name="textColorPrimary">#ffffff</color>
+    <color name="windowBackground">#fff</color>
+    <color name="textColorPrimary">#000</color>
     <color name="colorError">#ff1744</color>
     <color name="mapStroke">#2196f3</color>
 

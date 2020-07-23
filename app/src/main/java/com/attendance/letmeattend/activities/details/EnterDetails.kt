@@ -7,6 +7,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import com.afollestad.materialdialogs.color.colorChooser
 import android.widget.TextView
@@ -94,7 +95,7 @@ class EnterDetails : AppCompatActivity(), LectureListeners {
                 title(R.string.edit_course)
 
                 customView(R.layout.add_course, scrollable = true, horizontalPadding = true)
-                val nameET = getCustomView().findViewById<EditText>(R.id.course_name)
+                val nameET = getCustomView().findViewById<AutoCompleteTextView>(R.id.course_name)
                 nameET.setText(subjectModel.name)
                 positiveButton(R.string.edit_course) { dialog ->
                     val json = HashMap<String, Any>()
@@ -149,7 +150,7 @@ class EnterDetails : AppCompatActivity(), LectureListeners {
             title(R.string.add_course)
 
             customView(R.layout.add_course, scrollable = true, horizontalPadding = true)
-            val nameET = getCustomView().findViewById<EditText>(R.id.course_name)
+            val nameET = getCustomView().findViewById<AutoCompleteTextView>(R.id.course_name)
             var my_color : Int = Color.WHITE
             val adapter = AddLectureRecyclerAdapter()
             val lectures = ArrayList<LectureModel>()

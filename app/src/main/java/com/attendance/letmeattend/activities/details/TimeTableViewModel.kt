@@ -9,6 +9,7 @@ import com.attendance.letmeattend.adapters.LectureNewRecyclerAdapter
 import com.attendance.letmeattend.adapters.LectureTimeTableAdapter
 import com.attendance.letmeattend.listeners.LectureListeners
 import com.attendance.letmeattend.models.LectureModel
+import com.attendance.letmeattend.models.SubjectQuery
 import com.google.gson.JsonObject
 import org.json.JSONObject
 import retrofit2.Call
@@ -124,6 +125,32 @@ loadingVisibility.value = View.VISIBLE
                 }
 
             })
+    }
+
+    val subjectsQuery : MediatorLiveData<List<SubjectQuery>> = MediatorLiveData()
+
+    fun getCoursesByName(name : String) {
+       NewRepository.getSubjectsByName(name).enqueue(object  : retrofit2.Callback<List<SubjectQuery>> {
+           override fun onFailure(call: Call<List<SubjectQuery>>, t: Throwable) {
+               Log.d(TAG, "Subjects query failed" + t.message)
+           }
+
+           override fun onResponse(
+               call: Call<List<SubjectQuery>>,
+               response: Response<List<SubjectQuery>>
+           ) {
+               if (response.isSuccessful) {
+                   Log.d(TAG, "Subjects query successful")
+                   val subjects = response.body()
+                   subjectsQuery.postValue(subjects!!)
+
+               }
+               else {
+                   Log.d(TAG, "Subjects query failed"+response.message())
+               }
+           }
+
+       })
     }
 
     private fun getLectureByLD(lectureModel: LectureModel, liveData: MediatorLiveData<List<LectureModel>>) {

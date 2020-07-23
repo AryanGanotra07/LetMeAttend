@@ -16,6 +16,8 @@ interface EndPoints {
     fun getUserAttendanceCriteria() : Call<AttendanceCriteria>
     @GET("/subject/all")
     fun getSubjects() : Call <List<SubjectModel>>
+    @GET("/subject/all")
+    fun getSubjectsByName(@Query("q") name : String) : Call <List<SubjectQuery>>
     @GET("/lecture/all")
     fun getLecturesToday(@Query("day") day : String): Call<List<LectureModel>>
     @GET("/lecture/all")

@@ -4,33 +4,45 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.*
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.DialogBehavior
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.ModalDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
+import com.afollestad.materialdialogs.callbacks.onShow
+import com.afollestad.materialdialogs.color.colorChooser
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.afollestad.materialdialogs.datetime.timePicker
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.attendance.letmeattend.R
+import com.attendance.letmeattend.adapters.AddLectureRecyclerAdapter
 import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.databinding.TimeTableBinding
 import com.attendance.letmeattend.listeners.LectureListeners
 import com.attendance.letmeattend.models.LectureModel
+import com.attendance.letmeattend.models.Subject
 import com.attendance.letmeattend.models.SubjectModel
+import com.attendance.letmeattend.models.SubjectQuery
 import com.attendance.letmeattend.utils.toast
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.add_lecture.*
 import kotlinx.android.synthetic.main.time_table.*
@@ -86,8 +98,11 @@ class TimeTable : Fragment(), LectureListeners {
         }
 
         binding.addLectureFb.setOnClickListener {
-            if (subject!=null) {
+            if (::subject.isInitialized && subject!=null) {
                 addLectureDialog()
+            }
+            else {
+                addLectureDialogWithSubject()
             }
         }
 
@@ -100,6 +115,257 @@ class TimeTable : Fragment(), LectureListeners {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //(activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+
+    }
+
+    private fun addLectureDialogWithSubject() {
+        val dialog = MaterialDialog(activity as EnterDetails, BottomSheet()).show {
+
+
+            title(R.string.add_lectures)
+
+            customView(R.layout.add_course, scrollable = true, horizontalPadding = true)
+            val nameET = getCustomView().findViewById<AutoCompleteTextView>(R.id.course_name)
+            val color_button = getCustomView().findViewById<FloatingActionButton>(R.id.color_view)
+            val subjectAdapter: ArrayAdapter<SubjectQuery> = ArrayAdapter(context, R.layout.textview_custom,ArrayList<SubjectQuery>())
+            var subjectQuery : SubjectQuery = SubjectQuery(-1, "", -1)
+            nameET.setAdapter(subjectAdapter)
+            nameET.addTextChangedListener {
+                subjectQuery.id = -1
+                color_button.isClickable = true
+                color_button.isEnabled = true
+viewModel.getCoursesByName(it!!.toString())
+            }
+
+            nameET.setOnItemClickListener { parent, view, position, id ->
+                color_button.setBackgroundTintList(ColorStateList.valueOf(subjectAdapter.getItem(position).color))
+                color_button.isClickable = false
+                color_button.isEnabled = false
+                subjectQuery = subjectAdapter.getItem(position)
+            }
+
+
+            viewModel.subjectsQuery.observe(this@TimeTable, androidx.lifecycle.Observer {
+                if (it!=null) {
+                    subjectAdapter.clear()
+                    subjectAdapter.addAll(it)
+                }
+            })
+
+            var my_color : Int = Color.WHITE
+            val adapter = AddLectureRecyclerAdapter()
+            val lectures = ArrayList<LectureModel>()
+            positiveButton(R.string.add_course) { dialog ->
+//                val json = HashMap<String, Any>()
+//                json.put("name", nameET.text.toString())
+//                json.put("color", my_color)
+//                Log.d(TAG, json.toString())
+//
+//                viewModel.addSubject(json)
+
+                val json = JsonObject()
+                val subjectJSON = JsonObject()
+                subjectJSON.addProperty("name" , nameET.text.toString())
+                subjectJSON.addProperty("color", my_color)
+                json.add("subject", subjectJSON)
+                val jsonArray = JsonArray()
+                val lectures = adapter.getLectures()
+                if (lectures!= null && lectures.isNotEmpty()) {
+                    for (lecture : LectureModel in lectures) {
+                        lecture.color = my_color
+                        lecture.name = nameET.text.toString()
+                        jsonArray.add(lecture.toJSON())
+                    }
+                }
+                json.add("lectures", jsonArray)
+                Log.d(TAG, json.toString())
+                //viewModel.addSubjectWithLectures(json)
+            }
+
+
+            fun showLecture(lectureModel: LectureModel?) {
+                var day : Int = 0
+                var s_t : String = ""
+                var e_t : String = ""
+                if (lectureModel!=null) {
+                    day = lectureModel.day
+                    s_t = lectureModel.start_time
+                    e_t = lectureModel.end_time
+                }
+                val add_lecture_dialog = MaterialDialog(activity as EnterDetails)
+                add_lecture_dialog.setOnShowListener {
+                    onShow {
+                        add_lecture_dialog.positiveButton(R.string.add_lectures) { dialog ->
+                            if (validate(day, s_t, e_t)) {
+                                val lecture = LectureModel(
+                                    Random().nextInt(),
+                                    day,
+                                    s_t,
+                                    e_t,
+                                    nameET.text.toString(),
+                                    Color.WHITE
+                                )
+                                //lectures.add(lecture)
+                                if (lectureModel!=null) {
+                                    adapter.setLecture(adapter.getPosition(), lecture)
+                                }
+                                else {
+                                    adapter.addLecture(lecture)
+                                }
+                                add_lecture_dialog.dismiss()
+                            }
+                            day = 0
+                            s_t = ""
+                            e_t = ""
+
+
+//                        val json = HashMap<String, Any>()
+//                        json.put("name", nameET.text.toString())
+//                        json.put("color", my_color)
+//                        Log.d(TAG, json.toString())
+//                        viewModel.addSubject(json)
+                        }
+                    }
+
+                }
+                add_lecture_dialog.show {
+                    title(R.string.add_lectures)
+                    customView(R.layout.add_lecture, scrollable = true, horizontalPadding = true)
+
+                    negativeButton(android.R.string.cancel)
+                    val day_select = getCustomView().findViewById<TextView>(R.id.day_tv)
+
+                    val start_time_selet = getCustomView().findViewById<TextView>(R.id.start_time)
+                    val end_time_select = getCustomView().findViewById<TextView>(R.id.end_time)
+                    if (lectureModel!=null) {
+                        day_select.setText(resources.getStringArray(R.array.days)[day])
+                        start_time_selet.setText(lectureModel.start_time)
+                        end_time_select.setText(lectureModel.end_time)
+                    }
+                    day_select.setOnClickListener {
+                        MaterialDialog(activity as EnterDetails).show {
+                            title(R.string.day)
+                            listItemsSingleChoice(R.array.days, initialSelection = day) { _, index, text ->
+                                context!!.toast("Selected item $text at index $index")
+                                day_select.setText(text)
+                                day = index
+                            }
+                            lifecycleOwner(this@TimeTable)
+                        }
+                    }
+                    start_time_selet.setOnClickListener {
+                        MaterialDialog(activity as EnterDetails).show {
+                            title(R.string.dialog_select_time)
+                            timePicker { _, time ->
+                                val hourOfDay = time.get(Calendar.HOUR_OF_DAY)
+                                val minute = time.get(Calendar.MINUTE)
+                                val seconds = time.get(Calendar.SECOND)
+                                start_time_selet.setText(String.format("%02d:%02d:%02d", hourOfDay,minute,seconds))
+                                s_t = String.format("%02d:%02d:%02d", hourOfDay,minute,seconds)
+                            }
+
+                            lifecycleOwner(this@TimeTable)
+                        }
+                    }
+                    end_time_select.setOnClickListener {
+                        MaterialDialog(activity as EnterDetails).show {
+                            title(R.string.choose_time)
+                            timePicker { _, time ->
+                                val hourOfDay = time.get(Calendar.HOUR_OF_DAY)
+                                val minute = time.get(Calendar.MINUTE)
+                                val seconds = time.get(Calendar.SECOND)
+                                end_time_select.setText(String.format("%02d:%02d:%02d", hourOfDay,minute,seconds))
+                                e_t = String.format("%02d:%02d:%02d", hourOfDay,minute,seconds)
+                            }
+                            lifecycleOwner(this@TimeTable)
+                        }
+                    }
+                    cancelOnTouchOutside(false)
+                    cancelable(false)
+
+
+                }
+
+            }
+
+            val topLevel = intArrayOf(
+                Color.WHITE,
+                Color.DKGRAY,
+                Color.parseColor("#62af97"),
+                Color.parseColor("#69b5e1"),
+                Color.parseColor("#00587f"),
+                Color.parseColor("#cfe1af"),
+                Color.parseColor("#d1d8e1"),
+                Color.parseColor("#e1c6b0"),
+                Color.parseColor("#bbe1df"),
+                Color.parseColor("#4a4c7f"),
+                Color.parseColor("#a8a7e1"),
+                Color.parseColor("#e2c09e"),
+                Color.parseColor("#566be2"))
+
+            val recyclerView = getCustomView().findViewById<RecyclerView>(R.id.recyclerView)
+            val layoutManager = LinearLayoutManager(activity as EnterDetails, RecyclerView.VERTICAL, false)
+
+            recyclerView.layoutManager = layoutManager
+            recyclerView.adapter = adapter
+            adapter.setLectures(lectures)
+            val lectureListeners : LectureListeners = object : LectureListeners {
+
+                override fun onLectureEdit(position: Int, lecture: LectureModel) {
+                    showLecture(lecture)
+                }
+
+                override fun onLectureDelete(lecture: LectureModel) {
+                    adapter.removeLecture(adapter.getPosition())
+                }
+
+                override fun onLectureClick(lecture: LectureModel) {
+                    TODO("Not yet implemented")
+                }
+
+            }
+            adapter.setClickListener(lectureListeners)
+
+            color_button.setBackgroundTintList(ColorStateList.valueOf(topLevel.get(0)))
+            color_button.setOnClickListener {
+                MaterialDialog(activity as EnterDetails).show {
+                    title(R.string.choose_color)
+                    colorChooser(topLevel)
+                    { _, color ->
+                        context!!.toast("Selected color: ${color}")
+                        my_color = color
+                        color_button.setBackgroundColor(Color.BLACK)
+                        color_button.setBackgroundTintList(ColorStateList.valueOf(color))
+//                        adapter.getLectures().forEach { lm -> lm.color = color }
+//                        adapter.notifyDataSetChanged()
+
+                    }
+                    positiveButton(R.string.select)
+                    negativeButton(android.R.string.cancel)
+                    lifecycleOwner(this@TimeTable)
+                }
+            }
+
+
+
+
+            val add_lecture = getCustomView().findViewById<FloatingActionButton>(R.id.add_lecture_fb)
+
+
+
+
+            add_lecture.setOnClickListener {
+                showLecture(null)
+            }
+
+//            getCustomView().findViewById<TextView>(R.id.monday_tv).setOnClickListener {
+//                Log.d(TAG, viewModel.getDay())
+//                viewModel.getUserCourses()
+//            }
+            negativeButton(android.R.string.cancel)
+            lifecycleOwner(this@TimeTable)
+        }
 
 
     }

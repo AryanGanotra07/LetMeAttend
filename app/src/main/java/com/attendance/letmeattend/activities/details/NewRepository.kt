@@ -6,6 +6,7 @@ import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.authentication.FirebaseLogin
 import com.attendance.letmeattend.models.LectureModel
 import com.attendance.letmeattend.models.SubjectModel
+import com.attendance.letmeattend.models.SubjectQuery
 import com.attendance.letmeattend.network.EndPoints
 import com.attendance.letmeattend.network.RetrofitServiceBuilder
 import com.attendance.letmeattend.sharedpreferences.LocalRepository
@@ -45,6 +46,10 @@ return service.addLectureBySubject(sub_id, lectureModel.toJSON())
 
     fun updateSubject(subject : HashMap<String, Any>) : Call<SubjectModel> {
         return service.updateSubject(subject)
+    }
+
+    fun getSubjectsByName(name : String) : Call<List<SubjectQuery>> {
+        return service.getSubjectsByName(name)
     }
 
     fun getLecturesBySubject(id : Int) : Call<List<LectureModel>> {

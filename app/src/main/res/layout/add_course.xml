@@ -22,7 +22,7 @@
 
 
 
-    <EditText
+    <AutoCompleteTextView
             android:id="@+id/course_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,7 +31,6 @@
             android:text="@string/physics"
             android:textColor="?android:textColorPrimary"
             android:textSize="@dimen/title_size"
-            tools:ignore="Autofill,HardcodedText,LabelFor"
             />
 
     <TextView

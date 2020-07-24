@@ -14,6 +14,7 @@ import com.attendance.letmeattend.R
 import com.attendance.letmeattend.activities.ChangeAttendanceActivity
 import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.models.Lecture
+import com.attendance.letmeattend.models.LectureModel
 import com.attendance.letmeattend.notifications.MyNotificationChannel.CHANNEL_ID
 import java.util.*
 
@@ -106,6 +107,75 @@ class NotificationBuilder() {
         Log.i(TAG,"Building notification with id" + id)
         return builder.build()
     }
+
+    fun buildNewNotif(lecture: LectureModel) : Notification
+        {
+
+            val bundle = Bundle()
+            bundle.putParcelable("lecture",lecture)
+
+            val yesIntent = Intent(context,NotificationReciever::class.java)
+            yesIntent.action = ACTION_YES
+            yesIntent.putExtra(EXTRA_NOTIFICATION_ID, lecture.id)
+            yesIntent.putExtra("lecture",bundle)
+            // yesIntent.putExtra("lat",location.latitude)
+
+
+            val noIntent = Intent(context,NotificationReciever::class.java)
+            noIntent.action = ACTION_NO
+            noIntent.putExtra(EXTRA_NOTIFICATION_ID,lecture.id)
+            noIntent.putExtra("lecture",bundle)
+
+            //noIntent.putExtra("lat",location.latitude)
+            //noIntent.putExtra("lng",location.longitude)
+
+            val noClassIntent = Intent(context,NotificationReciever::class.java)
+            noClassIntent.action = ACTION_NO_CLASS
+            noClassIntent.putExtra(EXTRA_NOTIFICATION_ID,lecture.id)
+            noClassIntent.putExtra("lecture", bundle)
+
+
+
+            val yesPendingIntent: PendingIntent =
+                PendingIntent.getBroadcast(context, 0, yesIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val noPendingIntent : PendingIntent =
+                PendingIntent.getBroadcast(context,1,noIntent,PendingIntent.FLAG_UPDATE_CURRENT)
+            val noClassPendingIntent : PendingIntent =
+                PendingIntent.getBroadcast(context,2,noClassIntent,PendingIntent.FLAG_UPDATE_CURRENT)
+            var builder = NotificationCompat.Builder(context!!, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_create_black_24dp)
+                .setContentTitle(lecture.name)
+                .setContentText("Have you attended "+lecture.name+" today from "+lecture.start_time+ " to "+lecture.end_time+"?")
+                .setStyle(NotificationCompat.BigTextStyle()
+                    .bigText("Have you attended "+lecture.name+" today from "+lecture.start_time+ " to "+lecture.end_time+"?"))
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .addAction(R.drawable.ic_add_black_24dp,context.getString(R.string.yes),yesPendingIntent)
+                .addAction(R.drawable.ic_add_black_24dp,context.getString(R.string.no),noPendingIntent)
+                .addAction(R.drawable.ic_add_black_24dp,context.getString(R.string.no_class),noClassPendingIntent)
+                .setCategory(NotificationCompat.CATEGORY_REMINDER)
+                .setColor(lecture.color)
+                .setVibrate(
+                    longArrayOf(
+                        100,
+                        200,
+                        300,
+                        400,
+                        500,
+                        400,
+                        300,
+                        200,
+                        400
+                    )
+                )
+            with(NotificationManagerCompat.from(context)) {
+                // notificationId is a unique int for each notification that you must define
+                notify(lecture.id, builder.build())
+            }
+            Log.i(TAG,"Building notification with id" + lecture.id)
+            return builder.build()
+        }
+
     fun removeNotification(id: Int)
     {
         Log.d(TAG, "Removing notification with id.. " + id)

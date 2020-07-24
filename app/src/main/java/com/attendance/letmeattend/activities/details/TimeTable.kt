@@ -166,21 +166,34 @@ viewModel.getCoursesByName(it!!.toString())
 
                 val json = JsonObject()
                 val subjectJSON = JsonObject()
-                subjectJSON.addProperty("name" , nameET.text.toString())
-                subjectJSON.addProperty("color", my_color)
+                if (subjectQuery.id!=-1) {
+                    subjectJSON.addProperty("id", subjectQuery.id)
+                    subjectJSON.addProperty("name", subjectQuery.name)
+                    subjectJSON.addProperty("color", subjectQuery.color)
+                }
+                else {
+                    subjectJSON.addProperty("name", nameET.text.toString())
+                    subjectJSON.addProperty("color", my_color)
+                }
                 json.add("subject", subjectJSON)
                 val jsonArray = JsonArray()
                 val lectures = adapter.getLectures()
                 if (lectures!= null && lectures.isNotEmpty()) {
                     for (lecture : LectureModel in lectures) {
-                        lecture.color = my_color
-                        lecture.name = nameET.text.toString()
+                        if (subjectQuery.id!=-1) {
+                            lecture.color = subjectQuery.color
+                            lecture.name = subjectQuery.name
+                        }
+                        else {
+                            lecture.color = my_color
+                            lecture.name = nameET.text.toString()
+                        }
                         jsonArray.add(lecture.toJSON())
                     }
                 }
                 json.add("lectures", jsonArray)
                 Log.d(TAG, json.toString())
-                //viewModel.addSubjectWithLectures(json)
+                viewModel.addSubjectWithLectures(json)
             }
 
 

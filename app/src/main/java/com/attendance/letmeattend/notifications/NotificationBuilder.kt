@@ -108,11 +108,12 @@ class NotificationBuilder() {
         return builder.build()
     }
 
-    fun buildNewNotif(lecture: LectureModel) : Notification
+    fun buildNewNotif(a_for:String, lecture: LectureModel) : Notification
         {
 
             val bundle = Bundle()
             bundle.putParcelable("lecture",lecture)
+            bundle.putString("a_for", a_for)
 
             val yesIntent = Intent(context,NotificationReciever::class.java)
             yesIntent.action = ACTION_YES
@@ -211,10 +212,10 @@ class NotificationBuilder() {
                 )
             )
         val notif = builder.build()
-        with(NotificationManagerCompat.from(context)) {
-            // notificationId is a unique int for each notification that you must define
-            notify(id, notif)
-        }
+//        with(NotificationManagerCompat.from(context)) {
+//            // notificationId is a unique int for each notification that you must define
+//            notify(id, notif)
+//        }
         return notif
     }
 

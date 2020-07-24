@@ -18,7 +18,8 @@ class FirebaseMessagingService() : FirebaseMessagingService() {
         val start_time = p0.data.get("start_time")
         val end_time = p0.data.get("end_time")
         val id = p0.data.get("id")
-        NotificationBuilder().buildNewNotif(LectureModel(id!!.toInt(),0,start_time!!,end_time!!,name!!,color!!.toInt()))
+        val a_for = p0.data.get("a_for")
+        NotificationBuilder().buildNewNotif(a_for!!,LectureModel(id!!.toInt(),0,start_time!!,end_time!!,name!!,color!!.toInt()))
 
     }
 }

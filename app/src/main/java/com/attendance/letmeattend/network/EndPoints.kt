@@ -40,5 +40,7 @@ interface EndPoints {
     fun deleteLecture(@Body id:Int) : Call<JSONObject>
     @POST("/lecture/{sub_id}")
     fun addLectureBySubject(@Path("sub_id") sub_id: Int, @Body lectureModel: JsonObject) : Call<LectureModel>
+    @POST("/attendance/{lect_id}")
+    fun postAttendanceByLecture(@Path("lect_id") lect_id : Int, @Body attendanceStatus: JsonObject) : Call<AttendanceStatusModel>
 
 }

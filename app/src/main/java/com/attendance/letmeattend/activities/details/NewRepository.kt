@@ -4,6 +4,7 @@ import android.content.Intent
 import android.util.Log
 import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.authentication.FirebaseLogin
+import com.attendance.letmeattend.models.AttendanceStatusModel
 import com.attendance.letmeattend.models.LectureModel
 import com.attendance.letmeattend.models.SubjectModel
 import com.attendance.letmeattend.models.SubjectQuery
@@ -30,6 +31,10 @@ object NewRepository {
 
     fun getAllLectures() : Call<List<LectureModel>> {
         return service.getAllLectures()
+    }
+
+    fun addAttendanceStatus(lect_id : Int, json : JsonObject) : Call<AttendanceStatusModel> {
+        return service.postAttendanceByLecture(lect_id, json)
     }
 
     fun addLectureBySubject(lectureModel: LectureModel, sub_id : Int) : Call<LectureModel> {

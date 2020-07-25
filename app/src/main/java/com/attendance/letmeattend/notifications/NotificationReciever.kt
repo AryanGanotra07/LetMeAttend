@@ -1,17 +1,12 @@
 package com.attendance.letmeattend.notifications
 
 import android.app.Notification.EXTRA_NOTIFICATION_ID
+import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import android.os.IBinder
-import android.util.Log
-import com.attendance.letmeattend.helpers.ForegroundServiceStatus
 import com.attendance.letmeattend.models.LectureModel
-import com.attendance.letmeattend.services.backgroundservices.DatabaseService
 import com.attendance.letmeattend.services.foregroundservices.AttendanceUpdateService
-import com.attendance.letmeattend.services.foregroundservices.MarkAttendanceForegroundService
 import com.attendance.letmeattend.utils.toast
 
 
@@ -42,6 +37,9 @@ class NotificationReciever() : BroadcastReceiver() {
         {
             context?.toast("YES CLICKED")
             status = "yes"
+//            val notifManager =
+//                context!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//            notifManager.cancel(lecture.id)
 
           //  attended = true
           //  dbService.enqueuework(context!!,intent!!)
@@ -65,13 +63,15 @@ class NotificationReciever() : BroadcastReceiver() {
         else if (intent?.action == builder.ACTION_NO_CLASS)
         {
             context?.toast("NO CLASS CLICKED")
-
+            //builder.removeNotification(intent.getIntExtra(EXTRA_NOTIFICATION_ID,0))
         }
         val lectureBundle = intent?.getBundleExtra("lecture")
         val service = Intent(context, AttendanceUpdateService::class.java)
         service.putExtra("lecture", lectureBundle)
         service.putExtra("status",status)
         context?.startService(service)
+
+
 
         builder.removeNotification(lecture.id)
 

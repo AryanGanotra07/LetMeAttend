@@ -18,62 +18,83 @@ import retrofit2.Call
 import retrofit2.Callback
 import java.util.HashMap
 
-object NewRepository {
+class NewRepositoryClass {
+    lateinit var service : EndPoints
+    constructor() {
+        Log.d(TAG, "Initialized")
+        service  = RetrofitServiceBuilder.buildServiceWithAuth(EndPoints::class.java, LocalRepository.getAuthenticationToken())
+    }
 
     val TAG = "NewRepository"
 
     init {
-        Log.d(TAG, "Initialized")
+
+        //service  = RetrofitServiceBuilder.buildServiceWithAuth(EndPoints::class.java)
     }
 
-    var service  = RetrofitServiceBuilder.buildServiceWithAuth(EndPoints::class.java)
+
 
 
     fun getAllLectures() : Call<List<LectureModel>> {
-        return service.getAllLectures()
+        return service!!.getAllLectures()
     }
 
     fun addAttendanceStatus(lect_id : Int, json : JsonObject) : Call<AttendanceStatusModel> {
-        return service.postAttendanceByLecture(lect_id, json)
+        return service!!.postAttendanceByLecture(lect_id, json)
+    }
+
+    fun getAttendanceByLecture(lect_id: Int) : Call<ArrayList<AttendanceStatusModel>> {
+        return service!!.getAttendanceByLecture(lect_id)
+    }
+
+    fun logoutApi() : Call<JsonObject> {
+        val json = JsonObject()
+        json.addProperty("logout", true)
+        return service!!.logout(json)
+    }
+
+    fun putAttendance(lect_id : Int, json : JsonObject) : Call<AttendanceStatusModel> {
+        return service!!.putAttendance(lect_id, json)
     }
 
     fun addLectureBySubject(lectureModel: LectureModel, sub_id : Int) : Call<LectureModel> {
-return service.addLectureBySubject(sub_id, lectureModel.toJSON())
+return service!!.addLectureBySubject(sub_id, lectureModel.toJSON())
     }
 
     fun addSubject(subject : HashMap<String, Any>) : Call<SubjectModel> {
-        return service.addSubject(subject)
+        return service!!.addSubject(subject)
     }
 
     fun deleteSubject(subjectModel: SubjectModel) : Call<JSONObject> {
-        return service.deleteSubject(subjectModel.id)
+        return service!!.deleteSubject(subjectModel.id)
     }
 
     fun updateSubject(subject : HashMap<String, Any>) : Call<SubjectModel> {
-        return service.updateSubject(subject)
+        return service!!.updateSubject(subject)
     }
 
     fun getSubjectsByName(name : String) : Call<List<SubjectQuery>> {
-        return service.getSubjectsByName(name)
+        return service!!.getSubjectsByName(name)
     }
 
     fun getLecturesBySubject(id : Int) : Call<List<LectureModel>> {
-        return service.getLecturesBySubject(id)
+        return service!!.getLecturesBySubject(id)
     }
 
     fun addSubjectWithLectures(json : JsonObject) : Call<SubjectModel> {
-        return service.addSubjectWithLectures(json)
+        return service!!.addSubjectWithLectures(json)
     }
 
     fun deleteLecture(lectureModel: LectureModel) : Call<JSONObject> {
-        return service.deleteLecture(lectureModel.id)
+        return service!!.deleteLecture(lectureModel.id)
     }
 
     fun updateLecture(lectureModel: JsonObject) : Call<LectureModel> {
-        return service.updateLecture(lectureModel)
+        return service!!.updateLecture(lectureModel)
     }
 
     fun logout(){
+
         FirebaseAuth.getInstance().signOut()
         LocalRepository.logout()
         val intent = Intent(AppApplication.context, FirebaseLogin::class.java)
@@ -81,9 +102,9 @@ return service.addLectureBySubject(sub_id, lectureModel.toJSON())
         AppApplication.context!!.startActivity(intent)
     }
 
-    fun refreshService(){
+    fun refreshService(endPoints: EndPoints){
         Log.d(TAG, "Refreshed")
 
-        service  = RetrofitServiceBuilder.buildServiceWithAuth(EndPoints::class.java)
+        service  = endPoints
     }
 }

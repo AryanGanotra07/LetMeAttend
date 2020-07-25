@@ -117,6 +117,7 @@ class NotificationBuilder() {
 
             val yesIntent = Intent(context,NotificationReciever::class.java)
             yesIntent.action = ACTION_YES
+//            yesIntent.action = lecture.id.toString()
             yesIntent.putExtra(EXTRA_NOTIFICATION_ID, lecture.id)
             yesIntent.putExtra("lecture",bundle)
             // yesIntent.putExtra("lat",location.latitude)
@@ -124,6 +125,7 @@ class NotificationBuilder() {
 
             val noIntent = Intent(context,NotificationReciever::class.java)
             noIntent.action = ACTION_NO
+//            noIntent.action = lecture.id.toString()
             noIntent.putExtra(EXTRA_NOTIFICATION_ID,lecture.id)
             noIntent.putExtra("lecture",bundle)
 
@@ -132,17 +134,18 @@ class NotificationBuilder() {
 
             val noClassIntent = Intent(context,NotificationReciever::class.java)
             noClassIntent.action = ACTION_NO_CLASS
+//            noClassIntent.action = lecture.id.toString()
             noClassIntent.putExtra(EXTRA_NOTIFICATION_ID,lecture.id)
             noClassIntent.putExtra("lecture", bundle)
 
 
 
             val yesPendingIntent: PendingIntent =
-                PendingIntent.getBroadcast(context, 0, yesIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+                PendingIntent.getBroadcast(context, kotlin.random.Random.nextInt(), yesIntent, PendingIntent.FLAG_UPDATE_CURRENT)
             val noPendingIntent : PendingIntent =
-                PendingIntent.getBroadcast(context,1,noIntent,PendingIntent.FLAG_UPDATE_CURRENT)
+                PendingIntent.getBroadcast(context,kotlin.random.Random.nextInt(),noIntent,PendingIntent.FLAG_UPDATE_CURRENT)
             val noClassPendingIntent : PendingIntent =
-                PendingIntent.getBroadcast(context,2,noClassIntent,PendingIntent.FLAG_UPDATE_CURRENT)
+                PendingIntent.getBroadcast(context,kotlin.random.Random.nextInt(),noClassIntent,PendingIntent.FLAG_UPDATE_CURRENT)
             var builder = NotificationCompat.Builder(context!!, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_create_black_24dp)
                 .setContentTitle(lecture.name)
@@ -169,6 +172,7 @@ class NotificationBuilder() {
                         400
                     )
                 )
+            Log.d(TAG, "Building notification with id"+lecture.id)
             with(NotificationManagerCompat.from(context)) {
                 // notificationId is a unique int for each notification that you must define
                 notify(lecture.id, builder.build())
@@ -249,11 +253,11 @@ class NotificationBuilder() {
         return notif
     }
 
-    fun buildAttendanceStatusNotification(lecture : Lecture, attended : Int, id : Int) : Notification {
+    fun buildAttendanceStatusNotification(lecture : LectureModel, attended : String, id : Int) : Notification {
 
         var message = "Present! You have been marked present for lecture - " + lecture.name
-        if (attended == 0) message = "Absent!! You should regularly attend classes dude - " + lecture.name
-        else if(attended == -1) message = "No Class! Definitely some good times for you!-"  + lecture.name
+        if (attended.equals("no")) message = "Absent!! You should regularly attend classes - " + lecture.name
+        else if(attended.equals("cancel")) message = "No Class! Definitely some good times for you!-"  + lecture.name
         var builder = NotificationCompat.Builder(context!!,MyNotificationChannel.ATTENDANCE_STATUS_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_create_black_24dp)
             .setContentTitle("Let Me Attend")
@@ -263,6 +267,7 @@ class NotificationBuilder() {
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setCategory(NotificationCompat.CATEGORY_REMINDER)
             .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setColor(lecture.color)
 
             .setVibrate(
                 longArrayOf(

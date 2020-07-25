@@ -439,7 +439,7 @@ class FirebaseSetData(val userId: String) {
                         else if(attended == -1) {
                             addAttendanceStatus(createAttendanceStatus(lecture, -1))
                             NotificationAlertStatus.setAttendanceMarkedAlready(lecture)
-                            notifBuilder.buildAttendanceStatusNotification(lecture,attended,notifBuilder.ATTENDANCE_STATUS_NOTIF_ID)
+                            //notifBuilder.buildAttendanceStatusNotification(lecture,attended,notifBuilder.ATTENDANCE_STATUS_NOTIF_ID)
                         }
                     }
 
@@ -473,10 +473,10 @@ class FirebaseSetData(val userId: String) {
                             var str: String = ""
                             if (it.isSuccessful) {
                                 str = "Current attendance incremented Successfully"
-                                notifBuilder.buildAttendanceStatusNotification(
-                                    lecture,
-                                    1,
-                                    notifBuilder.ATTENDANCE_STATUS_NOTIF_ID )
+//                                notifBuilder.buildAttendanceStatusNotification(
+//                                    lecture,
+//                                    1,
+//                                    notifBuilder.ATTENDANCE_STATUS_NOTIF_ID )
                                 addAttendanceStatus(createAttendanceStatus(lecture, 1))
 
                             } else {
@@ -541,11 +541,11 @@ class FirebaseSetData(val userId: String) {
                             str = "Total attendance incremented Successfully"
 
                             if (attended == 0) {
-                                notifBuilder.buildAttendanceStatusNotification(
-                                    lecture,
-                                    0,
-                                    notifBuilder.ATTENDANCE_STATUS_NOTIF_ID
-                                )
+//                                notifBuilder.buildAttendanceStatusNotification(
+//                                    lecture,
+//                                    0,
+//                                    notifBuilder.ATTENDANCE_STATUS_NOTIF_ID
+//                                )
                                 addAttendanceStatus(createAttendanceStatus(lecture, 0))
 
                             }
@@ -706,10 +706,10 @@ class FirebaseSetData(val userId: String) {
                             var str: String = ""
                             if (it.isSuccessful) {
                                 str = "Current attendance decremented Successfully"
-                                notifBuilder.buildAttendanceStatusNotification(
-                                    lecture,
-                                    1,
-                                    notifBuilder.ATTENDANCE_STATUS_NOTIF_ID )
+//                                notifBuilder.buildAttendanceStatusNotification(
+//                                    lecture,
+//                                    1,
+//                                    notifBuilder.ATTENDANCE_STATUS_NOTIF_ID )
                                 //addAttendanceStatus(createAttendanceStatus(lecture, true))
 
                             } else {

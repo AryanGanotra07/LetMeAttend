@@ -7,7 +7,9 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.attendance.letmeattend.adapters.LectureNewRecyclerAdapter
 import com.attendance.letmeattend.adapters.SubjectRecyclerAdapter
 import com.attendance.letmeattend.application.AppApplication
@@ -17,6 +19,7 @@ import com.attendance.letmeattend.models.LectureModel
 import com.attendance.letmeattend.models.SubjectModel
 import com.attendance.letmeattend.network.EndPoints
 import com.attendance.letmeattend.network.RetrofitServiceBuilder
+import com.attendance.letmeattend.sharedpreferences.LocalRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.JsonObject
 import org.json.JSONObject
@@ -29,7 +32,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 class DetailsViewModel : ViewModel(), SubjectListeners {
-    private val service  = RetrofitServiceBuilder.buildServiceWithAuth(EndPoints::class.java)
+    private val service  = RetrofitServiceBuilder.buildServiceWithAuth(EndPoints::class.java, LocalRepository.getAuthenticationToken())
     private val TAG = "DetailsViewModel"
     var attendanceCriteria : Int = 0
     val progressVisibility : MediatorLiveData<Int> = MediatorLiveData<Int>()
@@ -43,7 +46,11 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
     val lectureLoadingVisibility : MediatorLiveData<Int> = MediatorLiveData()
     val emptyview : MediatorLiveData<Int> = MediatorLiveData()
     val emptyLecture : MediatorLiveData<Int> = MediatorLiveData()
+    val isRefreshing : MutableLiveData<Boolean> = MutableLiveData()
+    private val NewRepository = NewRepositoryClass()
+
     init {
+        isRefreshing.value = false
         progressVisibility.value = View.GONE
         emptyview.value = View.GONE
         emptyLecture.value = View.GONE
@@ -51,9 +58,16 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
         loadingVisibility.value = View.VISIBLE
         attendanceCriteriaLiveData.value = AttendanceCriteria(75)
         subjectRecyclerAdapter.setClickListener(this)
+        Log.d(TAG, " Initialized viewmodel")
 //        getUserAttendanceCriteria()
 //        getUserCourses()
 //        getUserLecturesToday()
+    }
+
+    val swipeRefreshListener : SwipeRefreshLayout.OnRefreshListener = SwipeRefreshLayout.OnRefreshListener {
+
+        refreshData()
+
     }
     val updateAttendanceCriteriaClickListener = View.OnClickListener {
 
@@ -183,7 +197,19 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
     }
 
     fun logout() {
-        NewRepository.logout()
+        NewRepository.logoutApi().enqueue(object : Callback<JsonObject> {
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+
+            }
+
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                if (response.isSuccessful) {
+                    NewRepository.logout()
+                }
+            }
+
+        })
+
     }
 
     fun updateAttendanceCriteriaMethod() {
@@ -264,6 +290,8 @@ class DetailsViewModel : ViewModel(), SubjectListeners {
                             })
                         }
                     }
+
+                    isRefreshing.value = false
 
 
 //                    getUserLecturesToday()

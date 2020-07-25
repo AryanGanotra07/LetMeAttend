@@ -10,4 +10,10 @@
         <item>Sunday</item>
     </string-array>
 
+    <string-array name="status">
+        <item>Present</item>
+        <item>Absent</item>
+        <item>Class Cancelled</item>
+    </string-array>
+
 </resources>

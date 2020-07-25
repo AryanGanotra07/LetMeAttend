@@ -12,6 +12,8 @@ interface EndPoints {
     fun registerUser(@Body user: User) : Call<LoginResponse>
     @POST("/user")
     fun updateUserAttendanceCriteria(@Body attendanceCriteria : AttendanceCriteria) : Call<JSONObject>
+    @POST("/user")
+    fun logout(@Body logout : JsonObject) : Call<JsonObject>
     @GET("/user")
     fun getUserAttendanceCriteria() : Call<AttendanceCriteria>
     @GET("/subject/all")
@@ -42,5 +44,9 @@ interface EndPoints {
     fun addLectureBySubject(@Path("sub_id") sub_id: Int, @Body lectureModel: JsonObject) : Call<LectureModel>
     @POST("/attendance/{lect_id}")
     fun postAttendanceByLecture(@Path("lect_id") lect_id : Int, @Body attendanceStatus: JsonObject) : Call<AttendanceStatusModel>
+    @GET("/attendance/{lect_id}")
+    fun getAttendanceByLecture(@Path("lect_id") lect_id : Int) : Call<ArrayList<AttendanceStatusModel>>
+    @PUT("/attendance/{lect_id}")
+    fun putAttendance(@Path("lect_id") lect_id : Int, @Body attendanceStatus: JsonObject) : Call<AttendanceStatusModel>
 
 }

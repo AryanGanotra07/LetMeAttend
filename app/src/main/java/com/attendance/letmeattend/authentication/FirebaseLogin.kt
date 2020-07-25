@@ -18,10 +18,12 @@ import com.attendance.letmeattend.application.AppApplication
 import com.attendance.letmeattend.activities.EnterDetailsActivity
 import com.attendance.letmeattend.activities.MapFragment
 import com.attendance.letmeattend.activities.details.EnterDetails
-import com.attendance.letmeattend.activities.details.NewRepository
+
 import com.attendance.letmeattend.models.CollegeLocation
 import com.attendance.letmeattend.models.LoginResponse
 import com.attendance.letmeattend.models.User
+import com.attendance.letmeattend.network.EndPoints
+import com.attendance.letmeattend.network.RetrofitServiceBuilder
 import com.attendance.letmeattend.notifications.MyNotificationChannel
 import com.attendance.letmeattend.services.boot.BootCompleteReciever
 import com.attendance.letmeattend.sharedpreferences.LocalRepository
@@ -209,13 +211,13 @@ class FirebaseLogin: AppCompatActivity(),View.OnClickListener {
                 Toast.makeText(baseContext, token, Toast.LENGTH_SHORT).show()
                 viewModel.registerUser(User(FirebaseAuth.getInstance().currentUser!!.uid, token!!)).enqueue(object:Callback<LoginResponse> {
                     override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                        startActivity(
-                            Intent(
-                                this@FirebaseLogin,
-                                EnterDetails::class.java
-                            )
-                        )
-                        finish()
+//                        startActivity(
+//                            Intent(
+//                                this@FirebaseLogin,
+//                                EnterDetails::class.java
+//                            )
+//                        )
+//                        finish()
                     }
 
                     override fun onResponse(
@@ -227,8 +229,11 @@ class FirebaseLogin: AppCompatActivity(),View.OnClickListener {
 //                            val access_token = data?.get("access_token")
                             Log.d(TAG,"got access token-"+data?.access_token)
                             LocalRepository.setAuthenticationToken(data?.access_token!!)
-                            Constants.setAuthToken(data?.access_token!!)
-                            NewRepository.refreshService()
+                            AppApplication.access_token = data?.access_token!!
+//                            Constants.setAuthToken(data?.access_token!!)
+//                            RetrofitServiceBuilder.auth_token = data?.access_token!!
+//                            val service = RetrofitServiceBuilder.buildServiceWithAuth(EndPoints::class.java)
+//                            NewRepository.refreshService(service)
                             AppApplication.context!!.toast("User registered")
                             startActivity(
                                 Intent(

@@ -14,9 +14,14 @@ class AppApplication : Application() {
 
     companion object {
         var context: AppApplication? = null
+        var access_token : String? = null
     }
 
     fun getContext(): AppApplication? {
         return context
+    }
+
+    fun setToken(token : String) {
+        access_token = token
     }
 }

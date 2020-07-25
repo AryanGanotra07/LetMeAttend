@@ -12,16 +12,15 @@ import androidx.cardview.widget.CardView
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.attendance.letmeattend.R
 import com.attendance.letmeattend.activities.details.DetailsViewModel
 import com.attendance.letmeattend.activities.details.EnterDetails
-import com.attendance.letmeattend.adapters.LectureNewRecyclerAdapter
-import com.attendance.letmeattend.adapters.LectureRecyclerAdapter
-import com.attendance.letmeattend.adapters.LectureTimeTableAdapter
-import com.attendance.letmeattend.adapters.SubjectRecyclerAdapter
+import com.attendance.letmeattend.adapters.*
 import com.attendance.letmeattend.models.*
 import com.attendance.letmeattend.utils.extentions.getParentActivity
 import com.nightonke.boommenu.BoomButtons.HamButton
@@ -33,6 +32,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.abs
 import kotlin.math.min
+import kotlin.math.roundToInt
 
 
 @BindingAdapter("setMutableText")
@@ -236,7 +236,7 @@ fun lecturesCount(view : TextView, subject : SubjectModel) {
 @BindingAdapter("attendancePercent")
 fun attendancePercent(view: TextView, subject: SubjectModel) {
     if (subject.total_attendance != 0) {
-        view.setText(((subject.current_attendance / subject.total_attendance) * 100).toString() + "%")
+        view.setText((((subject.current_attendance.toFloat() / subject.total_attendance).toFloat()) * 100).roundToInt().toString() + "%")
     }
     else {
         view.setText("100%")
@@ -404,6 +404,69 @@ fun updateLecturesData(view : RecyclerView, adapter : LectureNewRecyclerAdapter,
                 else
                 {
                     adapter.setLectures(ArrayList())
+                }
+            })
+
+//            id.observe(parentActivity, Observer { value ->
+//                val lecturesFilter : List<Lecture> = lectures.value!!.filter { it -> it.day == value }
+//                adapter.setLectures(lecturesFilter as ArrayList<Lecture>)
+//            })
+        }
+    }
+}
+
+@BindingAdapter("isRefreshing")
+fun isRefreshing(view: SwipeRefreshLayout, boolean: MutableLiveData<Boolean>){
+
+    val parentActivity : AppCompatActivity? = view.getParentActivity()
+    if (parentActivity != null && boolean != null) {
+        boolean.observe(parentActivity, Observer { value -> view.isRefreshing = value?: false })
+
+    }
+
+}
+
+@BindingAdapter("refreshListener")
+fun refreshListener(view: SwipeRefreshLayout, listener : SwipeRefreshLayout.OnRefreshListener){
+    if (listener != null) {
+        view.setOnRefreshListener(listener)
+    }
+}
+
+
+@BindingAdapter("setupAttendanceAdapter")
+fun setupAttendanceAdapter(view: RecyclerView, adapter : AttendanceStatusRecyclerAdapter)
+{
+    val parentActivity : AppCompatActivity? = view.getParentActivity()
+    if (view!=null && adapter!=null)
+    {
+
+        //view.layoutManager = linearLayoutManager // Add your recycler view to this ZoomRecycler layout
+//        val snapHelper = LinearSnapHelper()
+//        snapHelper.attachToRecyclerView(view) // Add your recycler view here
+//        view.isNestedScrollingEnabled = false
+
+        view.layoutManager = LinearLayoutManager(parentActivity,RecyclerView.VERTICAL,false)
+        view.adapter = adapter
+
+    }
+}
+
+@BindingAdapter("attendanceAdapter","attendances",requireAll = true)
+fun updateAttendanceStatus(view : RecyclerView, attendanceAdapter : AttendanceStatusRecyclerAdapter,attendances: MediatorLiveData<ArrayList<AttendanceStatusModel>>)
+{
+    val parentActivity : AppCompatActivity? = view.getParentActivity()
+    if (view!=null && attendanceAdapter!=null && attendances!=null)
+    {
+        if (parentActivity != null) {
+
+            attendances.observe(parentActivity, Observer { value ->
+                if (value != null) {
+                   attendanceAdapter.setAttendanceStatus(value)
+                }
+                else
+                {
+                    attendanceAdapter.setAttendanceStatus(value)
                 }
             })
 

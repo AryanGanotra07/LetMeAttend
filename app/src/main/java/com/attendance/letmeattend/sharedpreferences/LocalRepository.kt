@@ -47,6 +47,7 @@ object LocalRepository {
     }
 
     fun logout() {
-        sharedPref.edit().remove(JWT_TOKEN).commit()
+        val editor = sharedPref.edit()
+        editor.clear().commit()
     }
 }

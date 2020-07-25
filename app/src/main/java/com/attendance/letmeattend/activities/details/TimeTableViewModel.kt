@@ -41,6 +41,7 @@ class TimeTableViewModel : ViewModel(), LectureListeners {
     val saturdayLectureRecyclerAdapter : LectureTimeTableAdapter = LectureTimeTableAdapter()
     val sundayLectureRecyclerAdapter : LectureTimeTableAdapter = LectureTimeTableAdapter()
     val loadingVisibility : MediatorLiveData<Int> = MediatorLiveData()
+    private val NewRepository = NewRepositoryClass()
     private val TAG = "TimeTableViewModel"
 
    init {
